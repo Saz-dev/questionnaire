@@ -47,10 +47,13 @@ def chat(rag: RAG) -> None:
         result = rag.answer(question)
         print(f"\nAssistant: {result['answer']}\n")
 
-        print("Sources:")
-        for hit in result["evidence"]:
-            print(f"  - [{hit['source']}] score={hit['score']:.3f} "
-                  f"-> {hit['text'][:90]}...")
+        if result["grounded"]:
+            print("Sources:")
+            for hit in result["evidence"]:
+                print(f"  - [{hit['source']}] score={hit['score']:.3f} "
+                      f"-> {hit['text'][:90]}...")
+        else:
+            print("(No sources met the relevance threshold — nothing to cite.)")
         print()
 
 

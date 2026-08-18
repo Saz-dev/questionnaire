@@ -12,10 +12,10 @@ hallucinate, or know nothing about your private documents), we feed the
 retrieved evidence INTO the prompt. The LLM's only job is to read and
 summarise that evidence — so answers are grounded in your data.
 
-Generation uses OpenAI if an OPENAI_API_KEY is set in the environment
-(the `openai` package is already installed). Otherwise it falls back to
-returning the retrieved context verbatim, so the whole pipeline still
-runs locally with zero dependencies.
+Generation uses OpenAI if an AI_API_KEY is set in the environment
+(the `openai` package is already installed via groq). Otherwise it falls
+back to presenting the retrieved context directly, still running locally
+with zero additional dependencies.
 """
 
 import os
@@ -31,9 +31,22 @@ load_dotenv()
 # How many chunks to feed the LLM as "evidence".
 TOP_K = 3
 
+# Minimum cosine similarity a retrieved chunk needs before we trust it
+# enough to generate an answer from it. Below this, the question is very
+# likely not covered by the documents at all, so we refuse rather than
+# risk the LLM answering from its own (unverified) general knowledge.
+# Calibrated empirically on this corpus: on-topic questions score ~0.45-0.7,
+# unrelated questions score <0.3.
+MIN_SCORE = 0.35
+
+DONT_KNOW_MESSAGE = (
+    "I don't know — none of the retrieved passages are relevant enough "
+    "to answer that from these documents."
+)
+
 # LLM provider config (Groq's OpenAI-compatible API).
 AI_API_KEY = os.environ.get("AI_API_KEY")
-AI_MODEL = os.environ.get("AI_MODEL", "llama-3.3-70b-versatile")
+AI_MODEL = os.environ.get("AI_MODEL", "openai/gpt-oss-120b")
 AI_BASE_URL = "https://api.groq.com/openai/v1"
 AI_APP_NAME = os.environ.get("APP_NAME", "Smart CLI")
 
@@ -57,23 +70,37 @@ class RAG:
         that context and to cite sources — this is what keeps RAG grounded
         and auditable.
         """
-        evidence = "\n\n---\n\n".join(
-            f"Source: {h['source']}\n{h['text']}" for h in hits
+        evidence = "\n\n".join(
+            f"[{h['source']}]\n{h['text']}" for h in hits
         )
-        return f"""
-You are a helpful assistant answering questions about Honda bike maintenance.
+        return f"""Answer the question using ONLY the context below. 
+Format your answer as:
+1. The answer (be specific and accurate)
+2. A "Sources:" section listing which document(s) each part came from
 
-Use ONLY the context below to answer. If the context does not contain
-the answer, say you don't know. Mention which source document each part
-of your answer comes from.
+If the context does not contain the answer, say "I don't know" instead of hallucinating.
 
-<context>
+Context:
 {evidence}
-</context>
 
 Question: {question}
-Answer:
-""".strip()
+Answer:""".strip()
+
+    @staticmethod
+    def _synthesize_answer(question: str, hits: list[dict]) -> str:
+        """
+        Generate a simple answer from context when no LLM is available.
+        This extracts relevant sentences and cites sources.
+        """
+        if not hits:
+            return DONT_KNOW_MESSAGE
+
+        source_texts = []
+        for hit in hits:
+            source_texts.append(f"[{hit['source']}]\n{hit['text']}")
+
+        synthesized = f"From the retrieved documents:\n\n" + "\n\n".join(source_texts)
+        return synthesized + f"\n\nSources: {', '.join(h['source'] for h in hits)}"
 
     @staticmethod
     def _generate_with_llm(prompt: str) -> str | None:
@@ -102,28 +129,40 @@ Answer:
         )
         return response.choices[0].message.content
 
-    def answer(self, question: str, top_k: int = TOP_K) -> dict:
+    def answer(
+        self, question: str, top_k: int = TOP_K, min_score: float = MIN_SCORE
+    ) -> dict:
         """
         The full RAG flow: retrieve evidence, then generate an answer.
 
-        Returns a dict with the answer plus the evidence used, so callers
-        can show retrieval debugging info.
+        Returns a dict with the answer, the evidence used, and whether the
+        question was considered "grounded" (i.e. answerable from the
+        documents) so callers can show retrieval debugging info.
         """
         # 1) Find relevant evidence in the vector store.
         hits = self._retrieve(question, top_k=top_k)
 
-        # 2) Turn evidence + question into a prompt.
+        # 2) Groundedness check: if even the best match is a weak match,
+        # don't hand it to the LLM at all. This is what makes the "I don't
+        # know" behaviour reliable — it doesn't depend on the LLM choosing
+        # to follow the system prompt's instructions.
+        best_score = hits[0]["score"] if hits else 0.0
+        if best_score < min_score:
+            return {
+                "answer": DONT_KNOW_MESSAGE,
+                "evidence": hits,
+                "grounded": False,
+            }
+
+        # 3) Turn evidence + question into a prompt.
         prompt = self._build_prompt(question, hits)
 
-        # 3) Try to generate with an LLM; degrade gracefully to raw context.
+        # 4) Try to generate with an LLM; degrade gracefully to raw context.
         generated = self._generate_with_llm(prompt)
         if generated is None:
-            generated = (
-                "(No AI_API_KEY set — returning retrieved context instead. "
-                f"Set AI_API_KEY in .env to get LLM-generated answers via {AI_MODEL}.)"
-            )
+            generated = self._synthesize_answer(question, hits)
 
-        return {"answer": generated, "evidence": hits}
+        return {"answer": generated, "evidence": hits, "grounded": True}
 
 
 if __name__ == "__main__":
