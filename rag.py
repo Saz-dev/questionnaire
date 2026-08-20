@@ -1,28 +1,10 @@
-"""
-STEP 5: RAG — RETRIEVAL-AUGMENTED GENERATION
-============================================
-This is the actual "RAG" step that ties everything together:
-
-  1. EMBED the user's question.
-  2. RETRIEVE the most relevant chunks from the vector DB (semantic search).
-  3. GENERATE an answer conditioned on those chunks (with an LLM).
-
-The trick of RAG: instead of asking an LLM from memory (where it may
-hallucinate, or know nothing about your private documents), we feed the
-retrieved evidence INTO the prompt. The LLM's only job is to read and
-summarise that evidence — so answers are grounded in your data.
-
-Generation uses OpenAI if an AI_API_KEY is set in the environment
-(the `openai` package is already installed via groq). Otherwise it falls
-back to presenting the retrieved context directly, still running locally
-with zero additional dependencies.
-"""
-
 import os
 
 from dotenv import load_dotenv
 
 from embedder import embed_text
+from queryrewrite import hyde, rewrite_llm
+from reranker import mmr_rerank, rerank
 from vectordb import VectorDB
 
 # Load AI_API_KEY / AI_MODEL / APP_NAME from .env (no-op if not present).
@@ -30,6 +12,9 @@ load_dotenv()
 
 # How many chunks to feed the LLM as "evidence".
 TOP_K = 3
+
+# How many candidates the cheap first pass returns before reranking.
+CANDIDATES = 50
 
 # Minimum cosine similarity a retrieved chunk needs before we trust it
 # enough to generate an answer from it. Below this, the question is very
@@ -44,6 +29,8 @@ DONT_KNOW_MESSAGE = (
     "to answer that from these documents."
 )
 
+DEFAULT_MODE = "rerank"
+
 # LLM provider config (Groq's OpenAI-compatible API).
 AI_API_KEY = os.environ.get("AI_API_KEY")
 AI_MODEL = os.environ.get("AI_MODEL", "openai/gpt-oss-120b")
@@ -54,13 +41,80 @@ AI_APP_NAME = os.environ.get("APP_NAME", "Smart CLI")
 class RAG:
     """End-to-end retrieval-augmented generation over one VectorDB."""
 
-    def __init__(self, db: VectorDB):
+    def __init__(self, db: VectorDB, mode: str = DEFAULT_MODE):
         self.db = db
+        self.mode = mode
 
-    def _retrieve(self, question: str, top_k: int = TOP_K) -> list[dict]:
-        """Return the top_k chunks most similar to the question."""
-        q_vector = embed_text(question)
-        return self.db.search(q_vector, top_k=top_k)
+    # ------------------------------------------------------------------
+    # Retrieval
+    # ------------------------------------------------------------------
+
+    def retrieve(
+        self,
+        question: str,
+        top_k: int = TOP_K,
+        mode: str | None = None,
+        candidates: int = CANDIDATES,
+        mmr_lambda: float = 0.7,
+    ) -> tuple[list[dict], dict]:
+        """
+        Retrieve evidence with a chosen strategy.
+
+        Returns (hits, meta) where meta explains HOW the hit list was
+        produced — mode name, candidate pool size, rewritten query /
+        hypothetical passage when applicable — so the inspection view can
+        show exactly what happened.
+        """
+        mode = mode or self.mode
+        meta = {"mode": mode}
+
+        if mode == "semantic":
+            hits = self.db.search(embed_text(question), top_k=top_k)
+
+        elif mode == "hybrid":
+            hits = self.db.hybrid_search(embed_text(question), question, top_k=top_k)
+
+        elif mode == "rerank":
+            pool = self.db.search(embed_text(question), top_k=candidates)
+            meta["candidate_pool"] = pool
+            hits = rerank(question, pool, top_k=top_k)
+
+        elif mode == "mmr":
+            pool = self.db.search(embed_text(question), top_k=candidates)
+            meta["candidate_pool"] = pool
+            hits = mmr_rerank(embed_text(question), pool, top_k=top_k, lambda_=mmr_lambda)
+
+        elif mode == "hybrid_mmr":
+            # Bonus (Task Set D §5): MMR over the FUSED (BM25+RRF) candidate
+            # list, not just semantic — so the diversity pass also sees
+            # keyword-only hits before it starts discounting near-duplicates.
+            pool = self.db.hybrid_search(embed_text(question), question, top_k=candidates)
+            meta["candidate_pool"] = pool
+            hits = mmr_rerank(embed_text(question), pool, top_k=top_k, lambda_=mmr_lambda)
+
+        elif mode == "hybrid_rerank":
+            pool = self.db.hybrid_search(embed_text(question), question, top_k=candidates)
+            meta["candidate_pool"] = pool
+            hits = rerank(question, pool, top_k=top_k)
+
+        elif mode == "rewrite":
+            rewritten = rewrite_llm(question)
+            meta["rewritten"] = rewritten
+            hits = self.db.search(embed_text(rewritten), top_k=top_k)
+
+        elif mode == "hyde":
+            passage = hyde(question)
+            meta["hypothetical"] = passage
+            hits = self.db.search(embed_text(passage), top_k=top_k)
+
+        else:
+            raise ValueError(f"Unknown retrieval mode: {mode!r}")
+
+        return hits, meta
+
+    # ------------------------------------------------------------------
+    # Generation
+    # ------------------------------------------------------------------
 
     @staticmethod
     def _build_prompt(question: str, hits: list[dict]) -> str:
@@ -114,43 +168,69 @@ Answer:""".strip()
         from openai import OpenAI
 
         client = OpenAI(api_key=AI_API_KEY, base_url=AI_BASE_URL)
-        response = client.chat.completions.create(
-            model=AI_MODEL,
-            messages=[
-                {
-                    "role": "system",
-                    "content": f"You are {AI_APP_NAME}, an assistant answering "
-                    "questions about honda bike maintenance. Use ONLY the context "
-                    "provided to answer.",
-                },
-                {"role": "user", "content": prompt},
-            ],
-            temperature=0.2,  # low temperature -> factual, reproducible answers
-        )
-        return response.choices[0].message.content
+        for attempt in range(8):
+            try:
+                response = client.chat.completions.create(
+                    model=AI_MODEL,
+                    messages=[
+                        {
+                            "role": "system",
+                            "content": f"You are {AI_APP_NAME}, an assistant answering "
+                            "questions about honda bike maintenance. Use ONLY the context "
+                            "provided to answer.",
+                        },
+                        {"role": "user", "content": prompt},
+                    ],
+                    temperature=0.2,  # low temp -> factual, reproducible answers
+                )
+                return response.choices[0].message.content
+            except Exception as exc:
+                if getattr(exc, "status_code", None) in (429, 503):
+                    import time
+
+                    time.sleep(min(30 * (2 ** attempt), 240))  # rate limit: back off
+                else:
+                    print(f"  ! LLM generation failed: {exc}")
+                    return None
+        return None
+
+    # ------------------------------------------------------------------
+    # End-to-end answer
+    # ------------------------------------------------------------------
 
     def answer(
-        self, question: str, top_k: int = TOP_K, min_score: float = MIN_SCORE
+        self,
+        question: str,
+        top_k: int = TOP_K,
+        min_score: float = MIN_SCORE,
+        mode: str | None = None,
+        mmr_lambda: float = 0.7,
     ) -> dict:
         """
         The full RAG flow: retrieve evidence, then generate an answer.
 
-        Returns a dict with the answer, the evidence used, and whether the
-        question was considered "grounded" (i.e. answerable from the
-        documents) so callers can show retrieval debugging info.
+        Returns a dict with the answer, the evidence used, retrieval meta
+        (mode, candidates, rewrites) and whether the question was
+        considered "grounded" (i.e. answerable from the documents) so
+        callers can show retrieval debugging info.
         """
         # 1) Find relevant evidence in the vector store.
-        hits = self._retrieve(question, top_k=top_k)
+        hits, meta = self.retrieve(question, top_k=top_k, mode=mode, mmr_lambda=mmr_lambda)
 
-        # 2) Groundedness check: if even the best match is a weak match,
-        # don't hand it to the LLM at all. This is what makes the "I don't
-        # know" behaviour reliable — it doesn't depend on the LLM choosing
-        # to follow the system prompt's instructions.
-        best_score = hits[0]["score"] if hits else 0.0
-        if best_score < min_score:
+        # 2) Groundedness check: if even the best candidate is a weak
+        # match, don't hand it to the LLM at all. Uses the RAW cosine of
+        # the candidate pool (not rerank scores, which are on a
+        # different scale).
+        pool = meta.get("candidate_pool") or hits
+        best_cosine = max(
+            (h.get("cosine") for h in pool if h.get("cosine") is not None),
+            default=0.0,
+        )
+        if best_cosine < min_score:
             return {
                 "answer": DONT_KNOW_MESSAGE,
                 "evidence": hits,
+                "meta": meta,
                 "grounded": False,
             }
 
@@ -162,7 +242,7 @@ Answer:""".strip()
         if generated is None:
             generated = self._synthesize_answer(question, hits)
 
-        return {"answer": generated, "evidence": hits, "grounded": True}
+        return {"answer": generated, "evidence": hits, "meta": meta, "grounded": True}
 
 
 if __name__ == "__main__":
@@ -176,5 +256,5 @@ if __name__ == "__main__":
     db = VectorDB()
     db.add_chunks(chunks, embed_texts([c["text"] for c in chunks]))
 
-    result = RAG(db).answer("What documents are needed for a total loss claim?")
+    result = RAG(db).answer("What brake fluid does the bike use?")
     print("ANSWER:", result["answer"][:400])
