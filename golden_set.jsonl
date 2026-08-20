@@ -1,0 +1,12 @@
+{"question": "What is the recommended engine oil for the motorcycle?", "chunk_id": "OMHness.pdf::126", "keywords": ["10w-30", "5w-30", "sj"], "answer_keywords": null, "exact_token": false}
+{"question": "What is the minimum tread depth for the front tyre?", "chunk_id": "OMHness.pdf::247", "keywords": ["1.5 mm"], "answer_keywords": null, "exact_token": true}
+{"question": "What is the main fuse rating?", "chunk_id": "OMHness.pdf::250", "keywords": ["30 a"], "answer_keywords": null, "exact_token": true}
+{"question": "How many links does the standard drive chain have?", "chunk_id": "OMHness.pdf::70", "keywords": ["104"], "answer_keywords": null, "exact_token": true}
+{"question": "What is the recommended spark plug for this bike?", "chunk_id": "OMHness.pdf::247", "keywords": ["mr6k-9"], "answer_keywords": null, "exact_token": true}
+{"question": "Which brake fluid should I use?", "chunk_id": "OMHness.pdf::129", "keywords": ["dot 4"], "answer_keywords": null, "exact_token": false}
+{"question": "What is the torque for the rear axle nut?", "chunk_id": "OMHness.pdf::169", "keywords": ["88 n"], "answer_keywords": null, "exact_token": true}
+{"question": "What fuel octane should I use?", "chunk_id": "OMHness.pdf::92", "keywords": ["91 or higher"], "answer_keywords": null, "exact_token": true}
+{"question": "What is the idle speed?", "chunk_id": "OMHness.pdf::248", "keywords": ["1,000 \u00b1 100 rpm"], "answer_keywords": null, "exact_token": true}
+{"question": "What is the tyre pressure for the front when riding alone?", "chunk_id": "OMHness.pdf::247", "keywords": ["200 kpa"], "answer_keywords": null, "exact_token": true}
+{"question": "What battery does the CB350 use?", "chunk_id": "OMHness.pdf::246", "keywords": ["ytz7"], "answer_keywords": null, "exact_token": true}
+{"question": "What type is the headlight?", "chunk_id": "OMHness.pdf::250", "keywords": ["headlight led"], "answer_keywords": ["led type"], "exact_token": true}
