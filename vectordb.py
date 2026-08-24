@@ -1,12 +1,21 @@
+import hashlib
+import json
 import math
 import re
 from collections import Counter
+from pathlib import Path
 
 from qdrant_client import QdrantClient
 from qdrant_client.models import Distance, PointStruct, VectorParams
 
 COLLECTION_NAME = "bike_maintenance_docs"
 VECTOR_SIZE = 384
+
+# On-disk Qdrant collection + a small cache of the chunks/fingerprint that
+# produced it, so re-running the app doesn't re-embed unchanged PDFs.
+STORAGE_DIR = Path("qdrant_storage")
+MANIFEST_PATH = STORAGE_DIR / "manifest.json"
+CHUNKS_CACHE_PATH = STORAGE_DIR / "chunks.json"
 
 # BM25 parameters (Okapi). k1 controls term-frequency saturation, b controls
 # document-length normalisation.
@@ -31,15 +40,35 @@ def tokenize(text: str) -> list[str]:
     return _TOKEN_RE.findall(text.lower())
 
 
-def build_index() -> "VectorDB":
+def _hash_documents(documents_dir: str = "documents") -> str:
+    """
+    Fingerprint every PDF's name + content in the folder.
+
+    Used to detect whether the source documents changed since the last
+    run, so we know whether the cached embeddings are still valid.
+    """
+    digest = hashlib.sha256()
+    for pdf_path in sorted(Path(documents_dir).glob("*.pdf")):
+        digest.update(pdf_path.name.encode())
+        digest.update(pdf_path.read_bytes())
+    return digest.hexdigest()
+
+
+def build_index(documents_dir: str = "documents") -> "VectorDB":
     from loader import load_pdfs
     from chunker import chunk_documents
     from embedder import embed_texts
 
-    documents = load_pdfs()
-    chunks = chunk_documents(documents, chunk_size=500, overlap=100)
     db = VectorDB()
-    db.add_chunks(chunks, embed_texts([c["text"] for c in chunks]))
+    fingerprint = _hash_documents(documents_dir)
+
+    if db.load_cached(fingerprint):
+        print(f"-> reused cached index ({len(db._doc_texts)} vectors, documents unchanged)")
+        return db
+
+    documents = load_pdfs(documents_dir)
+    chunks = chunk_documents(documents, chunk_size=500, overlap=100)
+    db.rebuild(chunks, embed_texts([c["text"] for c in chunks]), fingerprint)
     print(f"-> {len(chunks)} vectors stored")
     return db
 
@@ -48,12 +77,16 @@ class VectorDB:
     """A tiny wrapper around an in-memory Qdrant collection + BM25 index."""
 
     def __init__(self):
-        self.client = QdrantClient(":memory:")
-        self.client.create_collection(
-            collection_name=COLLECTION_NAME,
-            vectors_config=VectorParams(size=VECTOR_SIZE, distance=Distance.COSINE),
-        )
-        # BM25 stats, computed once when chunks are added.
+        STORAGE_DIR.mkdir(parents=True, exist_ok=True)
+        # A local on-disk collection (instead of ":memory:") so the index
+        # survives across runs of the app.
+        self.client = QdrantClient(path=str(STORAGE_DIR))
+        if not self.client.collection_exists(COLLECTION_NAME):
+            self.client.create_collection(
+                collection_name=COLLECTION_NAME,
+                vectors_config=VectorParams(size=VECTOR_SIZE, distance=Distance.COSINE),
+            )
+        # BM25 stats, computed once when chunks are added/loaded.
         self._doc_texts: list[str] = []
         self._doc_sources: list[str] = []
         self._doc_chunk_ids: list[str] = []
@@ -63,6 +96,38 @@ class VectorDB:
     # ------------------------------------------------------------------
     # Indexing
     # ------------------------------------------------------------------
+
+    def load_cached(self, fingerprint: str) -> bool:
+        """
+        Reuse the on-disk collection if the source PDFs haven't changed.
+
+        Returns True (and hydrates BM25 stats from the chunk cache) when
+        the stored fingerprint matches and the collection is non-empty,
+        so the caller can skip re-embedding entirely.
+        """
+        if not MANIFEST_PATH.exists() or not CHUNKS_CACHE_PATH.exists():
+            return False
+        manifest = json.loads(MANIFEST_PATH.read_text())
+        if manifest.get("fingerprint") != fingerprint:
+            return False
+        if self.client.count(collection_name=COLLECTION_NAME).count == 0:
+            return False
+
+        chunks = json.loads(CHUNKS_CACHE_PATH.read_text())
+        self._hydrate_bm25(chunks)
+        return True
+
+    def rebuild(self, chunks: list[dict], vectors: list[list[float]], fingerprint: str) -> int:
+        """Recompute the index from scratch and persist it + a fingerprint."""
+        self.client.delete_collection(COLLECTION_NAME)
+        self.client.create_collection(
+            collection_name=COLLECTION_NAME,
+            vectors_config=VectorParams(size=VECTOR_SIZE, distance=Distance.COSINE),
+        )
+        count = self.add_chunks(chunks, vectors)
+        CHUNKS_CACHE_PATH.write_text(json.dumps(chunks))
+        MANIFEST_PATH.write_text(json.dumps({"fingerprint": fingerprint}))
+        return count
 
     def add_chunks(self, chunks: list[dict], vectors: list[list[float]]) -> int:
         points = [
@@ -80,12 +145,15 @@ class VectorDB:
             for i in range(len(chunks))
         ]
         self.client.upsert(collection_name=COLLECTION_NAME, points=points)
+        self._hydrate_bm25(chunks)
+        return len(points)
 
-        # One pass over the corpus to collect BM25 statistics.
+    def _hydrate_bm25(self, chunks: list[dict]) -> None:
+        """One pass over the corpus to (re)collect BM25 statistics."""
         self._doc_texts = [c["text"] for c in chunks]
         self._doc_sources = [c["source"] for c in chunks]
         self._doc_chunk_ids = [
-            f"{chunks[i]['source']}::{chunks[i].get('chunk_id', i)}" for i in range(len(chunks))
+            f"{c['source']}::{c.get('chunk_id', i)}" for i, c in enumerate(chunks)
         ]
         self._doc_lengths = [len(tokenize(t)) for t in self._doc_texts]
         self._doc_freq = Counter(
@@ -93,7 +161,6 @@ class VectorDB:
             for doc_tokens in map(tokenize, self._doc_texts)
             for term in set(doc_tokens)
         )
-        return len(points)
 
     # ------------------------------------------------------------------
     # Retrieval

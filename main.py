@@ -5,7 +5,7 @@ from debugger import print_inspection, visualize_retrieval
 from embedder import embed_texts
 from loader import load_pdfs
 from rag import RAG
-from vectordb import VectorDB
+from vectordb import VectorDB, _hash_documents
 
 EXIT_COMMANDS = {"exit", "quit", "q", ":q"}
 
@@ -15,7 +15,21 @@ MODES = ("semantic", "hybrid", "rerank", "hybrid_rerank", "mmr", "hybrid_mmr", "
 
 
 def build_index() -> VectorDB:
-    """Ingest the PDFs once and return a ready-to-query vector store."""
+    """
+    Return a ready-to-query vector store.
+
+    The index is persisted to qdrant_storage/ across runs. If the PDFs in
+    documents/ haven't changed since last time, the cached embeddings are
+    reused instead of re-embedding everything from scratch.
+    """
+    db = VectorDB()
+    fingerprint = _hash_documents("documents")
+
+    if db.load_cached(fingerprint):
+        print(f"Documents unchanged -> reused cached index "
+              f"({len(db._doc_texts)} vectors, persisted in qdrant_storage/)\n")
+        return db
+
     print("1/3 Loading documents...")
     documents = load_pdfs()
     print(f"   -> {len(documents)} document(s)")
@@ -28,9 +42,8 @@ def build_index() -> VectorDB:
 
     print("3/3 Embedding & storing vectors...")
     vectors = embed_texts([c["text"] for c in chunks])
-    db = VectorDB()
-    db.add_chunks(chunks, vectors)
-    print(f"   -> {len(chunks)} vectors stored in Qdrant (in-memory)\n")
+    db.rebuild(chunks, vectors, fingerprint)
+    print(f"   -> {len(chunks)} vectors stored in Qdrant (persisted to qdrant_storage/)\n")
     return db
 
 
