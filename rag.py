@@ -24,6 +24,10 @@ CANDIDATES = 50
 # unrelated questions score <0.3.
 MIN_SCORE = 0.35
 
+# Bump this string any time _build_prompt()'s template changes, so old
+# traces can be told apart from traces produced by a different prompt.
+PROMPT_VERSION = "v1-2026-08-26"
+
 DONT_KNOW_MESSAGE = (
     "I don't know — none of the retrieved passages are relevant enough "
     "to answer that from these documents."
