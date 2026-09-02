@@ -1,4 +1,5 @@
 import os
+import time
 
 from dotenv import load_dotenv
 
@@ -219,7 +220,9 @@ Answer:""".strip()
         callers can show retrieval debugging info.
         """
         # 1) Find relevant evidence in the vector store.
+        t0 = time.perf_counter()
         hits, meta = self.retrieve(question, top_k=top_k, mode=mode, mmr_lambda=mmr_lambda)
+        retrieval_ms = (time.perf_counter() - t0) * 1000
 
         # 2) Groundedness check: if even the best candidate is a weak
         # match, don't hand it to the LLM at all. Uses the RAW cosine of
@@ -236,17 +239,36 @@ Answer:""".strip()
                 "evidence": hits,
                 "meta": meta,
                 "grounded": False,
+                "best_score": best_cosine,
+                "min_score": min_score,
+                "timing_ms": {"retrieval": round(retrieval_ms, 1), "generation": 0.0},
+                "generation_method": "refused",
+                "prompt": None,
             }
 
         # 3) Turn evidence + question into a prompt.
         prompt = self._build_prompt(question, hits)
 
         # 4) Try to generate with an LLM; degrade gracefully to raw context.
+        t1 = time.perf_counter()
         generated = self._generate_with_llm(prompt)
+        generation_method = "llm"
         if generated is None:
             generated = self._synthesize_answer(question, hits)
+            generation_method = "fallback_synthesis"
+        generation_ms = (time.perf_counter() - t1) * 1000
 
-        return {"answer": generated, "evidence": hits, "meta": meta, "grounded": True}
+        return {
+            "answer": generated,
+            "evidence": hits,
+            "meta": meta,
+            "grounded": True,
+            "best_score": best_cosine,
+            "min_score": min_score,
+            "timing_ms": {"retrieval": round(retrieval_ms, 1), "generation": round(generation_ms, 1)},
+            "generation_method": generation_method,
+            "prompt": prompt,
+        }
 
 
 if __name__ == "__main__":
