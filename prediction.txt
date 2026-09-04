@@ -1,0 +1,23 @@
+Written: 2026-09-03, before judge_v2.txt exists.
+
+agreement_before = 20/25 = 80% (5 disagreements: w6-06, w6-13, w6-14, w6-19, w6-21).
+
+I'm picking 2 of these 5 as few-shot examples for judge_v2 — one false PASS
+(w6-21: the judge said PASS for an answer that claims "no relevant tool list is
+present in the other documents," when one of its own 5 evidence chunks,
+OMHornet20.pdf::166, literally contains a tool list — the judge didn't cross-check
+its verdict against every chunk it was given) and one false FAIL (w6-19: the judge
+said FAIL for "repeat the above steps again," calling it unsupported, when the
+context's own step d — "wait 10 seconds before trying steps a & b again" — already
+says exactly that).
+
+Prediction: adding these 2 as worked examples will fix that specific pattern —
+"read every evidence chunk before declaring something absent/unsupported, don't
+flag a plain paraphrase of an explicit step as invented" — and will flip both
+w6-19 and w6-21 to match my labels. It will NOT fix w6-06, w6-13, or w6-14, since
+those 3 disagreements aren't about missed chunks or paraphrase-flagging; they're
+the judge catching real added claims I was too lenient about on my first read
+(w6-06, w6-13) or a genuinely arguable case about how much inference a "same
+rating" statement licenses (w6-14). So I expect agreement_after to land around
+22/25 = 88%, not higher — this iteration targets 2 specific cases, not a general
+recalibration.

@@ -1,0 +1,50 @@
+You are grading one answer from a motorcycle owner's-manual RAG assistant.
+
+You are checking exactly ONE thing, binary:
+
+Does the answer stay strictly within what the retrieved context actually supports —
+with no invented facts, no causal claims (symptom -> cause) the context doesn't
+state, and no confident diagnosis built from a vague one-line complaint?
+
+Do NOT grade on: whether a Sources section is present, whether the cited manual
+matches the evidence, whether a specific number/keyword is correct, or whether the
+assistant refused when it should have. Those are all checked separately by rules,
+not by you. Grade ONLY whether the answer's claims are actually backed by the
+context below it.
+
+Two things v1 of this judge got wrong — read both before you grade:
+
+Example A (a real miss — v1 said PASS, should have been FAIL):
+  Context included, among other chunks, one that read: "...provided tools.
+  z 14 x 17 mm Open end wrench z Spark plug wrench z Standard/Philips
+  screwdriver z Fuse puller z 5 mm Hex wrench (Allen Key)..."
+  Answer: "I don't know... No relevant tool list is present in the other
+  documents."
+  This is FAIL: the answer claims no tool list exists anywhere in the context,
+  but one of the context chunks it was given literally is a tool list. Before
+  you grade "absent" or "not supported," check EVERY chunk in the context, not
+  just the ones that seem most relevant to the question - a claim about what
+  the WHOLE context does or doesn't contain must be true of all of it.
+
+Example B (a false alarm — v1 said FAIL, should have been PASS):
+  Context included: "d If the engine does not start, wait 10 seconds before
+  trying steps a & b again."
+  Answer: "...If it still does not start, repeat the above steps again."
+  This is PASS: "repeat the above steps again" is a plain paraphrase of "trying
+  steps a & b again" - it is not a new instruction. Don't flag a paraphrase of
+  an explicit step as an invented claim. Only flag genuinely NEW information -
+  a fact, mechanism, or instruction that doesn't appear, even reworded, anywhere
+  in the context.
+
+Context (retrieved manual excerpts):
+{context}
+
+Question: {question}
+
+Answer to grade:
+{answer}
+
+Respond with exactly one line: PASS or FAIL, followed by a one-sentence reason.
+Format:
+VERDICT: PASS|FAIL
+REASON: <one sentence>

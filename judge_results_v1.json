@@ -1,0 +1,177 @@
+[
+  {
+    "verdict": "PASS",
+    "reason": "The answer’s tyre pressure values exactly match the figures provided in the OMCB300R.pdf excerpt.",
+    "raw": "VERDICT: PASS\nREASON: The answer’s tyre pressure values exactly match the figures provided in the OMCB300R.pdf excerpt.",
+    "id": "w6-01",
+    "question": "what is the tyre pressure for the cb300r"
+  },
+  {
+    "verdict": "PASS",
+    "reason": "The answer directly cites the manual’s statement that the vehicle requires unleaded petrol with a RON of 91 or higher, which is fully supported by the provided context.",
+    "raw": "VERDICT: PASS\nREASON: The answer directly cites the manual’s statement that the vehicle requires unleaded petrol with a RON of 91 or higher, which is fully supported by the provided context.",
+    "id": "w6-02",
+    "question": "What fuel octane should I use?"
+  },
+  {
+    "verdict": "PASS",
+    "reason": "The answer correctly states the front tyre minimum tread depth as 1.5 mm, which is directly given in both retrieved manual excerpts.",
+    "raw": "VERDICT: PASS\nREASON: The answer correctly states the front tyre minimum tread depth as 1.5 mm, which is directly given in both retrieved manual excerpts.",
+    "id": "w6-03",
+    "question": "What is the minimum tread depth for the front tyre?"
+  },
+  {
+    "verdict": "PASS",
+    "reason": "The answer correctly states no information is available in the provided excerpts and does not add unsupported details.",
+    "raw": "VERDICT: PASS\nREASON: The answer correctly states no information is available in the provided excerpts and does not add unsupported details.",
+    "id": "w6-04",
+    "question": "What battery does the CB350 use?"
+  },
+  {
+    "verdict": "PASS",
+    "reason": "The answer correctly states that the retrieved motorcycle manual excerpts do not contain information about the capital of France and does not add any unsupported claims.",
+    "raw": "VERDICT: PASS\nREASON: The answer correctly states that the retrieved motorcycle manual excerpts do not contain information about the capital of France and does not add any unsupported claims.",
+    "id": "w6-05",
+    "question": "What is the capital of France?"
+  },
+  {
+    "verdict": "FAIL",
+    "reason": "The answer adds a method for measuring freeplay (“pull the clutch lever and measure how far it moves before the clutch begins to engage”) that is not stated in the provided manual excerpts.",
+    "raw": "VERDICT: FAIL\nREASON: The answer adds a method for measuring freeplay (“pull the clutch lever and measure how far it moves before the clutch begins to engage”) that is not stated in the provided manual excerpts.",
+    "id": "w6-06",
+    "question": "How do I check the clutch lever freeplay?"
+  },
+  {
+    "verdict": "PASS",
+    "reason": "The answer correctly states that the provided excerpts contain no oil specification and does not add any unsupported information.",
+    "raw": "VERDICT: PASS\nREASON: The answer correctly states that the provided excerpts contain no oil specification and does not add any unsupported information.",
+    "id": "w6-07",
+    "question": "what oil does the cb300r use"
+  },
+  {
+    "verdict": "PASS",
+    "reason": "The answer correctly states that the retrieved manual excerpts contain no brake‑bleeding instructions and does not add any unsupported information.",
+    "raw": "VERDICT: PASS\nREASON: The answer correctly states that the retrieved manual excerpts contain no brake‑bleeding instructions and does not add any unsupported information.",
+    "id": "w6-08",
+    "question": "How do I bleed the front brakes?"
+  },
+  {
+    "verdict": "FAIL",
+    "reason": "The answer asserts that using non‑MA oil causes a heavy clutch lever, a causal claim not explicitly stated in the provided manual excerpts.",
+    "raw": "VERDICT: FAIL\nREASON: The answer asserts that using non‑MA oil causes a heavy clutch lever, a causal claim not explicitly stated in the provided manual excerpts.",
+    "id": "w6-09",
+    "question": "clutch feels heavy lately"
+  },
+  {
+    "verdict": "PASS",
+    "reason": "All steps described (inspection, normal start, throttle adjustment if idle unstable, waiting 10 seconds and retrying) are directly stated in the retrieved manual excerpts.",
+    "raw": "VERDICT: PASS\nREASON: All steps described (inspection, normal start, throttle adjustment if idle unstable, waiting 10 seconds and retrying) are directly stated in the retrieved manual excerpts.",
+    "id": "w6-10",
+    "question": "What is the procedure to start the bike after a long storage period?"
+  },
+  {
+    "verdict": "PASS",
+    "reason": "The answer correctly states that the retrieved context lacks any information about the CB350's top speed and does not add unsupported claims.",
+    "raw": "VERDICT: PASS\nREASON: The answer correctly states that the retrieved context lacks any information about the CB350's top speed and does not add unsupported claims.",
+    "id": "w6-11",
+    "question": "what is the top speed of the CB350"
+  },
+  {
+    "verdict": "PASS",
+    "reason": "The answer correctly reports the freeplay range (10–20 mm / 0.4–0.8 in) that is explicitly stated in the retrieved manual excerpts.",
+    "raw": "VERDICT: PASS\nREASON: The answer correctly reports the freeplay range (10–20 mm / 0.4–0.8 in) that is explicitly stated in the retrieved manual excerpts.",
+    "id": "w6-12",
+    "question": "What is the clutch lever freeplay?"
+  },
+  {
+    "verdict": "FAIL",
+    "reason": "The answer asserts that moisture or ice inside the lens reduces light output, a causal claim not stated in the manual (which says fog does not impact function).",
+    "raw": "VERDICT: FAIL\nREASON: The answer asserts that moisture or ice inside the lens reduces light output, a causal claim not stated in the manual (which says fog does not impact function).",
+    "id": "w6-13",
+    "question": "headlight seems dim what could be wrong"
+  },
+  {
+    "verdict": "FAIL",
+    "reason": "The answer asserts the main fuse rating is 20 A, but the context only specifies the spare main fuse rating, not the rating of the main fuse itself.",
+    "raw": "VERDICT: FAIL\nREASON: The answer asserts the main fuse rating is 20 A, but the context only specifies the spare main fuse rating, not the rating of the main fuse itself.",
+    "id": "w6-14",
+    "question": "What is the main fuse rating?"
+  },
+  {
+    "verdict": "PASS",
+    "reason": "The answer correctly states that the provided excerpts lack a step‑by‑step air filter replacement procedure and does not add unsupported information.",
+    "raw": "VERDICT: PASS\nREASON: The answer correctly states that the provided excerpts lack a step‑by‑step air filter replacement procedure and does not add unsupported information.",
+    "id": "w6-16",
+    "question": "What is the procedure for replacing the air filter?"
+  },
+  {
+    "verdict": "PASS",
+    "reason": "The answer directly cites the manual’s statement that the vehicle requires unleaded petrol with a Research Octane Number of 91 or higher, without adding unsupported information.",
+    "raw": "VERDICT: PASS\nREASON: The answer directly cites the manual’s statement that the vehicle requires unleaded petrol with a Research Octane Number of 91 or higher, without adding unsupported information.",
+    "id": "w6-17",
+    "question": "What fuel octane should I use?"
+  },
+  {
+    "verdict": "PASS",
+    "reason": "The answer only restates the retrieved manual steps about fully opening the throttle, pressing the start button for 5 seconds, releasing both, and then repeating the normal start procedure, which are directly supported by the provided excerpts.",
+    "raw": "VERDICT: PASS\nREASON: The answer only restates the retrieved manual steps about fully opening the throttle, pressing the start button for 5 seconds, releasing both, and then repeating the normal start procedure, which are directly supported by the provided excerpts.",
+    "id": "w6-18",
+    "question": "bike won't start in the morning"
+  },
+  {
+    "verdict": "FAIL",
+    "reason": "The answer adds the instruction to “repeat the above steps again” which is not stated in the retrieved manual excerpts.",
+    "raw": "VERDICT: FAIL\nREASON: The answer adds the instruction to “repeat the above steps again” which is not stated in the retrieved manual excerpts.",
+    "id": "w6-19",
+    "question": "bike won't start in the morning"
+  },
+  {
+    "verdict": "PASS",
+    "reason": "All steps and cautions described are directly supported by the provided manual excerpts without adding unsupported information.",
+    "raw": "VERDICT: PASS\nREASON: All steps and cautions described are directly supported by the provided manual excerpts without adding unsupported information.",
+    "id": "w6-20",
+    "question": "How do I check the engine oil level?"
+  },
+  {
+    "verdict": "PASS",
+    "reason": "The answer correctly states that the retrieved excerpts do not contain a list of tools for the CB350 H‑ness and does not add any unsupported information.",
+    "raw": "VERDICT: PASS\nREASON: The answer correctly states that the retrieved excerpts do not contain a list of tools for the CB350 H‑ness and does not add any unsupported information.",
+    "id": "w6-21",
+    "question": "what are the tools provided with the cb350 hness"
+  },
+  {
+    "verdict": "PASS",
+    "reason": "The answer correctly states that the provided CB350 H’ness documents contain no tool list and does not add unsupported information.",
+    "raw": "VERDICT: PASS\nREASON: The answer correctly states that the provided CB350 H’ness documents contain no tool list and does not add unsupported information.",
+    "id": "w6-22",
+    "question": "what are the tools provided with the cb350 hness"
+  },
+  {
+    "verdict": "PASS",
+    "reason": "The answer correctly states lack of information in the provided excerpts without adding unsupported details.",
+    "raw": "VERDICT: PASS\nREASON: The answer correctly states lack of information in the provided excerpts without adding unsupported details.",
+    "id": "w6-23",
+    "question": "what are the tools provided with the cb350 hness"
+  },
+  {
+    "verdict": "PASS",
+    "reason": "The answer lists only the tools explicitly mentioned in the retrieved manual excerpts and does not add any unsupported information.",
+    "raw": "VERDICT: PASS\nREASON: The answer lists only the tools explicitly mentioned in the retrieved manual excerpts and does not add any unsupported information.",
+    "id": "w6-24",
+    "question": "what are the tools provided with the cb350 hness"
+  },
+  {
+    "verdict": "PASS",
+    "reason": "The answer only restates the manual’s guidance to change oil promptly when it is dirty or old, which is directly supported by the retrieved excerpts.",
+    "raw": "VERDICT: PASS\nREASON: The answer only restates the manual’s guidance to change oil promptly when it is dirty or old, which is directly supported by the retrieved excerpts.",
+    "id": "w6-25",
+    "question": "How often should I change the engine oil?"
+  },
+  {
+    "verdict": "PASS",
+    "reason": "The answer correctly reports the wheelbase exactly as stated in the retrieved manual excerpt.",
+    "raw": "VERDICT: PASS\nREASON: The answer correctly reports the wheelbase exactly as stated in the retrieved manual excerpt.",
+    "id": "w6-26",
+    "question": "What is the wheelbase of the CB300R?"
+  }
+]

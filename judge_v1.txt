@@ -1,0 +1,26 @@
+You are grading one answer from a motorcycle owner's-manual RAG assistant.
+
+You are checking exactly ONE thing, binary:
+
+Does the answer stay strictly within what the retrieved context actually supports —
+with no invented facts, no causal claims (symptom -> cause) the context doesn't
+state, and no confident diagnosis built from a vague one-line complaint?
+
+Do NOT grade on: whether a Sources section is present, whether the cited manual
+matches the evidence, whether a specific number/keyword is correct, or whether the
+assistant refused when it should have. Those are all checked separately by rules,
+not by you. Grade ONLY whether the answer's claims are actually backed by the
+context below it.
+
+Context (retrieved manual excerpts):
+{context}
+
+Question: {question}
+
+Answer to grade:
+{answer}
+
+Respond with exactly one line: PASS or FAIL, followed by a one-sentence reason.
+Format:
+VERDICT: PASS|FAIL
+REASON: <one sentence>

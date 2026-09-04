@@ -33,6 +33,7 @@ from loader import load_pdfs
 from rag import RAG
 from tracing import make_trace, write_trace
 from vectordb import VectorDB, _hash_documents
+from week6_api import build_week6_summary
 
 load_dotenv()
 
@@ -236,6 +237,72 @@ class DeleteResponse(BaseModel):
 
 
 # ----------------------------------------------------------------------
+# Week 6 eval — assertions + judge results (see build_eval_set.py, assertions.py,
+# judge.py; this endpoint only reads what those already produced on disk)
+# ----------------------------------------------------------------------
+
+class ModeBreakdownRow(BaseModel):
+    mode: str
+    pass_count: int
+    total: int
+    rate: float
+
+
+class EvalCaseDetail(BaseModel):
+    id: str
+    question: str
+    failure_mode_tag: str
+    retrieval_mode: str
+    regression_case: bool
+    judge_eligible: bool
+    expected_grounded: bool
+    assertions: dict[str, Optional[bool]]
+    assertions_passed: bool
+    answer: str
+    hand_label: Optional[str] = None
+    judge_v1_verdict: Optional[str] = None
+    judge_v2_verdict: Optional[str] = None
+
+
+class AgreementStat(BaseModel):
+    rate: float
+    matched: int
+    total: int
+
+
+class Disagreement(BaseModel):
+    id: str
+    question: str
+    hand_label: str
+    hand_label_reason: str
+    judge_v1_verdict: str
+    judge_v1_reason: str
+    judge_v2_verdict: Optional[str] = None
+    judge_v2_reason: Optional[str] = None
+    resolved_in_v2: bool
+
+
+class Week6EvalResponse(BaseModel):
+    mode_breakdown: list[ModeBreakdownRow]
+    overall_pass_rate: float
+    overall_pass_count: int
+    overall_total: int
+    regression_cases: list[EvalCaseDetail]
+    cases: list[EvalCaseDetail]
+    assertion_names: list[str]
+    replaced_judge_criteria: list[str]
+    remaining_judge_criteria: list[str]
+    labels_recorded_at: Optional[str] = None
+    agreement_before: Optional[AgreementStat] = None
+    agreement_after: Optional[AgreementStat] = None
+    disagreements: list[Disagreement]
+    prediction: Optional[str] = None
+    prediction_outcome: Optional[str] = None
+    judge_v1_prompt: Optional[str] = None
+    judge_v2_prompt: Optional[str] = None
+
+
+# ----------------------------------------------------------------------
 # App
 # ----------------------------------------------------------------------
 
@@ -310,6 +377,15 @@ def config():
         "rrf_k": vectordb.RRF_K,
         "prompt_version": rag_module.PROMPT_VERSION,
     }
+
+
+# ----------------------------------------------------------------------
+# Week 6 — evals
+# ----------------------------------------------------------------------
+
+@app.get("/api/eval/week6", response_model=Week6EvalResponse)
+def eval_week6():
+    return build_week6_summary()
 
 
 # ----------------------------------------------------------------------

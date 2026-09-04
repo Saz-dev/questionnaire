@@ -157,3 +157,6 @@ that only shows up by scanning the underlying corpus, which a benchmark's answer
 
 No fix has been applied yet — `taxonomy.md` and `notes.md` were written and are being committed
 before any change to `rag.py`.
+
+**Git commit:** `d7b194d18c2f88140f11aa6f1c2f3dd60351197c` ("taxonomy file added") — committed
+2026-09-03 12:41:50 +0530, before any Week 6 work (eval set, assertions, judge) began.
