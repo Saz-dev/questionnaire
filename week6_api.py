@@ -7,18 +7,29 @@ judge_v1/v2.txt, prediction.txt) - it does not call the LLM judge itself; run
 """
 import json
 from collections import defaultdict
+from datetime import datetime, timezone
 from pathlib import Path
 
 from assertions import run_all
+from judge import _build_context, _load_chunk_text_by_id
 
 EVAL_SET_PATH = Path("eval_set.jsonl")
 LABELS_PATH = Path("labels_25.json")
+DRAFT_LABELS_PATH = Path("labels_25_draft_ai.json")
 JUDGE_V1_RESULTS = Path("judge_results_v1.json")
 JUDGE_V2_RESULTS = Path("judge_results_v2.json")
 JUDGE_V1_PROMPT = Path("judge_v1.txt")
 JUDGE_V2_PROMPT = Path("judge_v2.txt")
 PREDICTION_PATH = Path("prediction.txt")
 PREDICTION_OUTCOME_PATH = Path("prediction_outcome.md")
+
+LABEL_CRITERION = (
+    "Same single binary criterion as judge_v1.txt: does the answer stay strictly "
+    "within what the retrieved context supports, with no invented facts and no "
+    "causal/diagnostic claims the context doesn't state? NOT graded here: source "
+    "citation presence, citation-vs-evidence match, exact keyword match, or "
+    "refusal-when-expected - those are all covered by assertions.py, not this label."
+)
 
 ASSERTION_NAMES = (
     "cites_a_source",
@@ -169,3 +180,73 @@ def build_week6_summary() -> dict:
         "judge_v1_prompt": JUDGE_V1_PROMPT.read_text() if JUDGE_V1_PROMPT.exists() else None,
         "judge_v2_prompt": JUDGE_V2_PROMPT.read_text() if JUDGE_V2_PROMPT.exists() else None,
     }
+
+
+# ----------------------------------------------------------------------
+# Human labeling — an actual person (not an LLM) grading each answer blind,
+# before the judge's verdict is ever shown. This is the real hand-label step
+# Week 6 requires; labels_25_draft_ai.json (Claude's own first-pass labels,
+# written while building this feature) is kept only as a reference point, not
+# as the graded artifact.
+# ----------------------------------------------------------------------
+
+def get_label_queue() -> list[dict]:
+    """Every judge-eligible case, with its full context text (same evidence the
+    judge itself sees) and any label already saved for it, so the UI can build
+    a review queue and support resuming. Judge verdicts are deliberately never
+    included here - the whole point is that labeling happens blind."""
+    cases = _load_jsonl(EVAL_SET_PATH)
+    chunk_text_by_id = _load_chunk_text_by_id()
+    labels_doc = _load_json(LABELS_PATH)
+    labels_by_id = {l["id"]: l for l in labels_doc["labels"]} if labels_doc else {}
+
+    queue = []
+    for case in cases:
+        if not case.get("judge_eligible"):
+            continue
+        existing = labels_by_id.get(case["id"])
+        queue.append({
+            "id": case["id"],
+            "question": case["question"],
+            "answer": case["answer"],
+            "context": _build_context(case.get("evidence_chunk_ids", []), chunk_text_by_id),
+            "existing_verdict": existing["verdict"] if existing else None,
+            "existing_reason": existing.get("reason") if existing else None,
+        })
+    return queue
+
+
+def submit_label(case_id: str, verdict: str, reason: str, labeler: str) -> dict:
+    """Upsert one human label into labels_25.json, creating it (with metadata
+    matching the schema Week 5/6 write-ups expect) on the first submission."""
+    now = datetime.now(timezone.utc).isoformat()
+    doc = _load_json(LABELS_PATH)
+    if doc is None:
+        doc = {
+            "labeler": labeler,
+            "labeled_at": now,
+            "criterion": LABEL_CRITERION,
+            "note": (
+                "Labeled through the /evals/label UI: each case's question, full "
+                "retrieved context, and answer were shown with no judge verdict "
+                "visible. Submitted before judge_v1.txt/judge_v2.txt were (re-)run "
+                "against this label set."
+            ),
+            "labels": [],
+        }
+
+    labels = {l["id"]: l for l in doc["labels"]}
+    labels[case_id] = {"id": case_id, "verdict": verdict, "reason": reason, "labeled_at": now}
+    doc["labels"] = list(labels.values())
+    doc["last_updated_at"] = now
+
+    total_eligible = sum(1 for c in _load_jsonl(EVAL_SET_PATH) if c.get("judge_eligible"))
+    doc["summary"] = {
+        "PASS": sum(1 for l in doc["labels"] if l["verdict"] == "PASS"),
+        "FAIL": sum(1 for l in doc["labels"] if l["verdict"] == "FAIL"),
+        "total": len(doc["labels"]),
+        "remaining": total_eligible - len(doc["labels"]),
+    }
+
+    LABELS_PATH.write_text(json.dumps(doc, indent=2, ensure_ascii=False))
+    return doc["summary"]

@@ -1,4 +1,5 @@
 import os
+import re
 import time
 
 from dotenv import load_dotenv
@@ -27,7 +28,7 @@ MIN_SCORE = 0.35
 
 # Bump this string any time _build_prompt()'s template changes, so old
 # traces can be told apart from traces produced by a different prompt.
-PROMPT_VERSION = "v1-2026-08-26"
+PROMPT_VERSION = "v2-2026-09-04"
 
 DONT_KNOW_MESSAGE = (
     "I don't know — none of the retrieved passages are relevant enough "
@@ -121,6 +122,10 @@ class RAG:
     # Generation
     # ------------------------------------------------------------------
 
+    # Named after Week 5's taxonomy (taxonomy.md): a question that doesn't name
+    # one of these is ambiguous across the 3 manuals in the corpus.
+    _MODEL_NAME_RE = re.compile(r"\b(cb350|h['’]?ness|hornet(?:\s?20)?|cb300r)\b", re.IGNORECASE)
+
     @staticmethod
     def _build_prompt(question: str, hits: list[dict]) -> str:
         """
@@ -128,15 +133,41 @@ class RAG:
         <context> tags; the instruction tells the model to rely ONLY on
         that context and to cite sources — this is what keeps RAG grounded
         and auditable.
+
+        Two extra instructions were added after Week 5/6's error analysis
+        found the model would otherwise (a) drop a source from its own
+        Sources list even when it was given that chunk as context (Mode 3,
+        "citation-evidence-mismatch" in taxonomy.md — confirmed live on
+        "How do I check the clutch lever freeplay?"), and (b) silently pick
+        one manual's number and present it as the universal answer when a
+        question doesn't say which of the 3 motorcycles it's about (Mode 2,
+        "model-conflation", the dominant failure mode in taxonomy.md and the
+        subject of notes.md's dated prediction).
         """
         evidence = "\n\n".join(
             f"[{h['source']}]\n{h['text']}" for h in hits
         )
-        return f"""Answer the question using ONLY the context below. 
+
+        sources = {h["source"] for h in hits}
+        ambiguous_model = len(sources) > 1 and not RAG._MODEL_NAME_RE.search(question)
+        disambiguation = ""
+        if ambiguous_model:
+            disambiguation = (
+                "\nThe context below is drawn from more than one motorcycle's manual, "
+                "and the question does not say which motorcycle it's about. Do NOT pick "
+                "one manual's value and present it as THE answer. If the manuals agree, "
+                "say so once. If they differ or only some manuals actually state the "
+                "value, answer separately per manual, labeled by filename — never merge "
+                "them into a single unqualified number.\n"
+            )
+
+        return f"""Answer the question using ONLY the context below.
 Format your answer as:
 1. The answer (be specific and accurate)
-2. A "Sources:" section listing which document(s) each part came from
-
+2. A "Sources:" section listing every document shown in the Context below that you
+   drew any part of the answer from — never omit one you were given, even if two
+   documents say the same thing.
+{disambiguation}
 If the context does not contain the answer, say "I don't know" instead of hallucinating.
 
 Context:

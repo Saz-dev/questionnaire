@@ -18,28 +18,57 @@ def _get_model() -> CrossEncoder:
     return CrossEncoder(MODEL_NAME)
 
 
-def rerank(query: str, candidates: list[dict], top_k: int = 3) -> list[dict]:
-    """
-    Re-order a candidate pool by cross-encoder relevance to the query.
+def _normalize(values: list[float]) -> list[float]:
+    """Min-max normalize to [0, 1] within this candidate pool. A raw
+    cross-encoder logit and a raw cosine similarity are on completely
+    different scales, so they can't be blended without this."""
+    lo, hi = min(values), max(values)
+    span = hi - lo
+    if span == 0:
+        return [0.5 for _ in values]
+    return [(v - lo) / span for v in values]
 
-    Each candidate gets a raw relevance score; the original retrieval
-    score is preserved as `retrieval_score` so an inspection view can show
-    both "what the cheap search thought" and "what the precise scorer
-    thinks".
+
+def rerank(query: str, candidates: list[dict], top_k: int = 3, ce_weight: float = 0.5) -> list[dict]:
+    """
+    Re-order a candidate pool by cross-encoder relevance to the query,
+    blended with the original retrieval cosine.
+
+    Trusting the cross-encoder alone is not safe on this corpus: verified on
+    two real queries ("what are the tools provided with the cb350 hness" and
+    "what is the main fuse rating?"), ms-marco-MiniLM-L-6-v2 ranked a
+    thematically-unrelated chunk (display/backlight settings) above the chunk
+    that actually contained the answer, even though the correct chunk was
+    the #2 candidate by raw cosine in both cases. The cross-encoder appears
+    to do poorly on this manual's terse, list-formatted spec/procedure text.
+    Blending keeps the cross-encoder as a real signal (`ce_weight`, default
+    an even 50/50) without letting one bad judgment bury a chunk the cheap
+    embedding search was confident about.
+
+    Each candidate keeps `retrieval_score` (the pre-rerank cosine/RRF score)
+    and gains `cross_encoder_score` (the raw, unblended cross-encoder logit)
+    alongside the blended `score` used for the final ordering, so an
+    inspection view can still show all three numbers separately.
     """
     if not candidates:
         return []
 
     pairs = [(query, c["text"]) for c in candidates]
-    scores = _get_model().predict(pairs)
+    ce_scores = [float(s) for s in _get_model().predict(pairs)]
+    cosines = [c.get("cosine") if c.get("cosine") is not None else c.get("score", 0.0) for c in candidates]
+
+    norm_ce = _normalize(ce_scores)
+    norm_cosine = _normalize(cosines)
 
     reranked = []
-    for c, s in zip(candidates, scores):
+    for c, ce, nce, ncos in zip(candidates, ce_scores, norm_ce, norm_cosine):
+        blended = ce_weight * nce + (1 - ce_weight) * ncos
         reranked.append(
             {
                 **c,
                 "retrieval_score": c.get("score"),
-                "score": float(s),
+                "cross_encoder_score": ce,
+                "score": blended,
             }
         )
     reranked.sort(key=lambda x: -x["score"])

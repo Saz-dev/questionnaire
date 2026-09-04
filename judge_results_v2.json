@@ -1,8 +1,8 @@
 [
   {
     "verdict": "PASS",
-    "reason": "The answer correctly reports the front and rear tyre pressures exactly as listed in the OMCB300R.pdf context.",
-    "raw": "VERDICT: PASS\nREASON: The answer correctly reports the front and rear tyre pressures exactly as listed in the OMCB300R.pdf context.",
+    "reason": "The answer accurately restates the front and rear tyre pressures that are explicitly provided in the OMCB300R.pdf context.",
+    "raw": "VERDICT: PASS\nREASON: The answer accurately restates the front and rear tyre pressures that are explicitly provided in the OMCB300R.pdf context.",
     "id": "w6-01",
     "question": "what is the tyre pressure for the cb300r"
   },
@@ -15,29 +15,29 @@
   },
   {
     "verdict": "PASS",
-    "reason": "The answer correctly states the front tyre minimum tread depth as 1.5 mm, which is explicitly given in both retrieved manual excerpts.",
-    "raw": "VERDICT: PASS\nREASON: The answer correctly states the front tyre minimum tread depth as 1.5 mm, which is explicitly given in both retrieved manual excerpts.",
+    "reason": "The answer correctly states the front tyre minimum tread depth as 1.5 mm, which is explicitly given in both context excerpts.",
+    "raw": "VERDICT: PASS\nREASON: The answer correctly states the front tyre minimum tread depth as 1.5 mm, which is explicitly given in both context excerpts.",
     "id": "w6-03",
     "question": "What is the minimum tread depth for the front tyre?"
   },
   {
     "verdict": "PASS",
-    "reason": "The answer only states lack of information, which is accurate because none of the provided excerpts mention the CB350’s battery type.",
-    "raw": "VERDICT: PASS\nREASON: The answer only states lack of information, which is accurate because none of the provided excerpts mention the CB350’s battery type.",
+    "reason": "The answer correctly states that the provided context contains no information about the CB350's battery, and it does not add any unsupported details.",
+    "raw": "VERDICT: PASS\nREASON: The answer correctly states that the provided context contains no information about the CB350's battery, and it does not add any unsupported details.",
     "id": "w6-04",
     "question": "What battery does the CB350 use?"
   },
   {
     "verdict": "PASS",
-    "reason": "The answer correctly states that the provided motorcycle manual excerpts contain no information about the capital of France.",
-    "raw": "VERDICT: PASS\nREASON: The answer correctly states that the provided motorcycle manual excerpts contain no information about the capital of France.",
+    "reason": "The answer correctly states that the provided motorcycle manual excerpts contain no information about the capital of France, without adding unsupported claims.",
+    "raw": "VERDICT: PASS\nREASON: The answer correctly states that the provided motorcycle manual excerpts contain no information about the capital of France, without adding unsupported claims.",
     "id": "w6-05",
     "question": "What is the capital of France?"
   },
   {
     "verdict": "FAIL",
-    "reason": "The answer adds a method (“pull the clutch lever and measure how far it moves before the clutch begins to engage”) that is not stated in any of the provided manual excerpts.",
-    "raw": "VERDICT: FAIL\nREASON: The answer adds a method (“pull the clutch lever and measure how far it moves before the clutch begins to engage”) that is not stated in any of the provided manual excerpts.",
+    "reason": "The answer adds a procedure (“pull the clutch lever and measure how far it moves before the clutch begins to engage”) that is not stated in any of the provided manual excerpts.",
+    "raw": "VERDICT: FAIL\nREASON: The answer adds a procedure (“pull the clutch lever and measure how far it moves before the clutch begins to engage”) that is not stated in any of the provided manual excerpts.",
     "id": "w6-06",
     "question": "How do I check the clutch lever freeplay?"
   },
@@ -50,22 +50,22 @@
   },
   {
     "verdict": "PASS",
-    "reason": "The answer correctly states that the provided excerpts contain no brake‑bleeding procedure and does not add any unsupported information.",
-    "raw": "VERDICT: PASS\nREASON: The answer correctly states that the provided excerpts contain no brake‑bleeding procedure and does not add any unsupported information.",
+    "reason": "The answer only states lack of bleeding instructions, which is accurate because the provided excerpts contain no brake‑bleeding procedure.",
+    "raw": "VERDICT: PASS\nREASON: The answer only states lack of bleeding instructions, which is accurate because the provided excerpts contain no brake‑bleeding procedure.",
     "id": "w6-08",
     "question": "How do I bleed the front brakes?"
   },
   {
     "verdict": "FAIL",
-    "reason": "The answer adds a causal claim that using non‑MA oil will make the clutch lever heavy, which is not explicitly stated in the provided context.",
-    "raw": "VERDICT: FAIL\nREASON: The answer adds a causal claim that using non‑MA oil will make the clutch lever heavy, which is not explicitly stated in the provided context.",
+    "reason": "The answer claims that using non‑MA oil will make the clutch lever heavy, a causal link not stated in the provided context.",
+    "raw": "VERDICT: FAIL\nREASON: The answer claims that using non‑MA oil will make the clutch lever heavy, a causal link not stated in the provided context.",
     "id": "w6-09",
     "question": "clutch feels heavy lately"
   },
   {
-    "verdict": "PASS",
-    "reason": "All steps described (inspection, normal start, throttle adjustment if it starts, waiting 10 seconds and retrying if it doesn’t) are directly supported by the provided manual excerpts.",
-    "raw": "VERDICT: PASS\nREASON: All steps described (inspection, normal start, throttle adjustment if it starts, waiting 10 seconds and retrying if it doesn’t) are directly supported by the provided manual excerpts.",
+    "verdict": "FAIL",
+    "reason": "The answer adds details about the “normal starting procedure” (turning the ignition/key) that are not stated in the provided context.",
+    "raw": "VERDICT: FAIL\nREASON: The answer adds details about the “normal starting procedure” (turning the ignition/key) that are not stated in the provided context.",
     "id": "w6-10",
     "question": "What is the procedure to start the bike after a long storage period?"
   },
@@ -78,22 +78,22 @@
   },
   {
     "verdict": "PASS",
-    "reason": "The answer states the clutch lever freeplay range exactly as specified in the provided manual excerpts.",
-    "raw": "VERDICT: PASS\nREASON: The answer states the clutch lever freeplay range exactly as specified in the provided manual excerpts.",
+    "reason": "The answer states the freeplay range exactly as given in the manual excerpts, without adding unsupported information.",
+    "raw": "VERDICT: PASS\nREASON: The answer states the freeplay range exactly as given in the manual excerpts, without adding unsupported information.",
     "id": "w6-12",
     "question": "What is the clutch lever freeplay?"
   },
   {
     "verdict": "FAIL",
-    "reason": "The answer adds a causal claim that moisture or ice inside the lens reduces light output, which is not stated in the provided context.",
-    "raw": "VERDICT: FAIL\nREASON: The answer adds a causal claim that moisture or ice inside the lens reduces light output, which is not stated in the provided context.",
+    "reason": "The answer asserts that moisture or ice inside the lens makes the headlight appear dim, a causal claim not stated in the provided context.",
+    "raw": "VERDICT: FAIL\nREASON: The answer asserts that moisture or ice inside the lens makes the headlight appear dim, a causal claim not stated in the provided context.",
     "id": "w6-13",
     "question": "headlight seems dim what could be wrong"
   },
   {
     "verdict": "PASS",
-    "reason": "The context explicitly states the spare main fuse is 20 A and that replacements must match the same rating, supporting the claim that the main fuse rating is 20 A.",
-    "raw": "VERDICT: PASS\nREASON: The context explicitly states the spare main fuse is 20 A and that replacements must match the same rating, supporting the claim that the main fuse rating is 20 A.",
+    "reason": "The context explicitly states the spare main fuse is 20 A and that it matches the main fuse rating, supporting the answer.",
+    "raw": "VERDICT: PASS\nREASON: The context explicitly states the spare main fuse is 20 A and that it matches the main fuse rating, supporting the answer.",
     "id": "w6-14",
     "question": "What is the main fuse rating?"
   },
@@ -106,57 +106,57 @@
   },
   {
     "verdict": "PASS",
-    "reason": "The answer directly restates the RON 91‑or‑higher requirement and unleaded fuel recommendation that are explicitly stated in the provided manual excerpts.",
-    "raw": "VERDICT: PASS\nREASON: The answer directly restates the RON 91‑or‑higher requirement and unleaded fuel recommendation that are explicitly stated in the provided manual excerpts.",
+    "reason": "The answer’s claim of using unleaded petrol with RON 91 or higher is directly stated in the provided manual excerpts.",
+    "raw": "VERDICT: PASS\nREASON: The answer’s claim of using unleaded petrol with RON 91 or higher is directly stated in the provided manual excerpts.",
     "id": "w6-17",
     "question": "What fuel octane should I use?"
   },
   {
     "verdict": "PASS",
-    "reason": "All steps and statements in the answer are directly drawn from the provided manual excerpts without adding unsupported information.",
-    "raw": "VERDICT: PASS\nREASON: All steps and statements in the answer are directly drawn from the provided manual excerpts without adding unsupported information.",
+    "reason": "All steps described are directly taken from the provided manual excerpts without adding unsupported information.",
+    "raw": "VERDICT: PASS\nREASON: All steps described are directly taken from the provided manual excerpts without adding unsupported information.",
     "id": "w6-18",
     "question": "bike won't start in the morning"
   },
   {
     "verdict": "FAIL",
-    "reason": "The answer adds “If it still does not start, repeat the above steps again,” which is not stated in any of the provided manual excerpts.",
-    "raw": "VERDICT: FAIL\nREASON: The answer adds “If it still does not start, repeat the above steps again,” which is not stated in any of the provided manual excerpts.",
+    "reason": "The answer adds “If it still does not start, repeat the above steps again,” which is not stated in the provided manual excerpts.",
+    "raw": "VERDICT: FAIL\nREASON: The answer adds “If it still does not start, repeat the above steps again,” which is not stated in the provided manual excerpts.",
     "id": "w6-19",
     "question": "bike won't start in the morning"
   },
   {
     "verdict": "PASS",
-    "reason": "All steps and cautions described are directly stated or paraphrased in the provided manual excerpts.",
-    "raw": "VERDICT: PASS\nREASON: All steps and cautions described are directly stated or paraphrased in the provided manual excerpts.",
+    "reason": "All steps and cautions in the answer are directly stated or paraphrased from the provided manual excerpts.",
+    "raw": "VERDICT: PASS\nREASON: All steps and cautions in the answer are directly stated or paraphrased from the provided manual excerpts.",
     "id": "w6-20",
     "question": "How do I check the engine oil level?"
   },
   {
     "verdict": "PASS",
-    "reason": "The answer correctly states that the given excerpts contain no tool list for the CB350 H‑ness and does not add any unsupported information.",
-    "raw": "VERDICT: PASS\nREASON: The answer correctly states that the given excerpts contain no tool list for the CB350 H‑ness and does not add any unsupported information.",
+    "reason": "The answer correctly states that none of the provided excerpts contain a tool list for the CB350 H‑ness and does not add any unsupported information.",
+    "raw": "VERDICT: PASS\nREASON: The answer correctly states that none of the provided excerpts contain a tool list for the CB350 H‑ness and does not add any unsupported information.",
     "id": "w6-21",
     "question": "what are the tools provided with the cb350 hness"
   },
   {
     "verdict": "PASS",
-    "reason": "The answer correctly states that the given context contains no tool list for the CB350 H’ness and does not add any unsupported information.",
-    "raw": "VERDICT: PASS\nREASON: The answer correctly states that the given context contains no tool list for the CB350 H’ness and does not add any unsupported information.",
+    "reason": "The answer only states that the context lacks a CB350 tool list and correctly notes the Hornet tool list, which aligns with the provided excerpts.",
+    "raw": "VERDICT: PASS\nREASON: The answer only states that the context lacks a CB350 tool list and correctly notes the Hornet tool list, which aligns with the provided excerpts.",
     "id": "w6-22",
     "question": "what are the tools provided with the cb350 hness"
   },
   {
     "verdict": "PASS",
-    "reason": "The context contains no information about supplied tools, so claiming lack of such information is accurate.",
-    "raw": "VERDICT: PASS\nREASON: The context contains no information about supplied tools, so claiming lack of such information is accurate.",
+    "reason": "The provided context contains no information about supplied tools, so claiming lack of such information is accurate.",
+    "raw": "VERDICT: PASS\nREASON: The provided context contains no information about supplied tools, so claiming lack of such information is accurate.",
     "id": "w6-23",
     "question": "what are the tools provided with the cb350 hness"
   },
   {
     "verdict": "PASS",
-    "reason": "All listed tools (spark plug wrench, Standard/Phillips screwdriver, fuse puller, and 5 mm Allen‑key) are explicitly mentioned in the provided OMHness.pdf context.",
-    "raw": "VERDICT: PASS\nREASON: All listed tools (spark plug wrench, Standard/Phillips screwdriver, fuse puller, and 5 mm Allen‑key) are explicitly mentioned in the provided OMHness.pdf context.",
+    "reason": "All listed tools are explicitly mentioned in the provided OMHness.pdf context.",
+    "raw": "VERDICT: PASS\nREASON: All listed tools are explicitly mentioned in the provided OMHness.pdf context.",
     "id": "w6-24",
     "question": "what are the tools provided with the cb350 hness"
   },
@@ -169,8 +169,8 @@
   },
   {
     "verdict": "PASS",
-    "reason": "The answer’s wheelbase value exactly matches the specification provided in the retrieved context.",
-    "raw": "VERDICT: PASS\nREASON: The answer’s wheelbase value exactly matches the specification provided in the retrieved context.",
+    "reason": "The answer correctly reports the wheelbase value that is explicitly listed in the provided specifications.",
+    "raw": "VERDICT: PASS\nREASON: The answer correctly reports the wheelbase value that is explicitly listed in the provided specifications.",
     "id": "w6-26",
     "question": "What is the wheelbase of the CB300R?"
   }

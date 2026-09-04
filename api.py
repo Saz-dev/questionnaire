@@ -33,7 +33,7 @@ from loader import load_pdfs
 from rag import RAG
 from tracing import make_trace, write_trace
 from vectordb import VectorDB, _hash_documents
-from week6_api import build_week6_summary
+from week6_api import build_week6_summary, get_label_queue, submit_label
 
 load_dotenv()
 
@@ -302,6 +302,29 @@ class Week6EvalResponse(BaseModel):
     judge_v2_prompt: Optional[str] = None
 
 
+class LabelQueueItem(BaseModel):
+    id: str
+    question: str
+    answer: str
+    context: str
+    existing_verdict: Optional[str] = None
+    existing_reason: Optional[str] = None
+
+
+class LabelSubmitRequest(BaseModel):
+    id: str
+    verdict: Literal["PASS", "FAIL"]
+    reason: str = Field(..., min_length=1)
+    labeler: str = Field("human reviewer", min_length=1)
+
+
+class LabelSubmitResponse(BaseModel):
+    PASS: int
+    FAIL: int
+    total: int
+    remaining: int
+
+
 # ----------------------------------------------------------------------
 # App
 # ----------------------------------------------------------------------
@@ -386,6 +409,21 @@ def config():
 @app.get("/api/eval/week6", response_model=Week6EvalResponse)
 def eval_week6():
     return build_week6_summary()
+
+
+@app.get("/api/eval/week6/label-queue", response_model=list[LabelQueueItem])
+def eval_week6_label_queue():
+    """Every judge-eligible case + its full context, for the blind human-labeling
+    UI (/evals/label). Deliberately carries no judge verdict."""
+    return get_label_queue()
+
+
+@app.post("/api/eval/week6/labels", response_model=LabelSubmitResponse)
+def eval_week6_submit_label(req: LabelSubmitRequest):
+    """Save one real hand label to labels_25.json. This is what actually
+    satisfies Week 6's blind-before-judge requirement — labels_25_draft_ai.json
+    (Claude's own first-pass labels) is not read or used here."""
+    return submit_label(req.id, req.verdict, req.reason, req.labeler)
 
 
 # ----------------------------------------------------------------------
