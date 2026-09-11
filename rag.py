@@ -37,10 +37,10 @@ DONT_KNOW_MESSAGE = (
 
 DEFAULT_MODE = "rerank"
 
-# LLM provider config (Groq's OpenAI-compatible API).
+# LLM provider config.
 AI_API_KEY = os.environ.get("AI_API_KEY")
-AI_MODEL = os.environ.get("AI_MODEL", "openai/gpt-oss-120b")
-AI_BASE_URL = "https://api.groq.com/openai/v1"
+AI_MODEL = os.environ.get("AI_MODEL", "gpt-4o-mini")
+AI_BASE_URL = os.environ.get("AI_BASE_URL", "https://api.openai.com/v1")
 AI_APP_NAME = os.environ.get("APP_NAME", "Smart CLI")
 
 

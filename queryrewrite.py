@@ -8,8 +8,8 @@ from dotenv import load_dotenv
 load_dotenv()
 
 AI_API_KEY = os.environ.get("AI_API_KEY")
-AI_MODEL = os.environ.get("AI_MODEL", "openai/gpt-oss-120b")
-AI_BASE_URL = "https://api.groq.com/openai/v1"
+AI_MODEL = os.environ.get("AI_MODEL", "gpt-4o-mini")
+AI_BASE_URL = os.environ.get("AI_BASE_URL", "https://api.openai.com/v1")
 
 # Conversational filler that adds no retrieval value.
 _FILLER_RE = re.compile(
