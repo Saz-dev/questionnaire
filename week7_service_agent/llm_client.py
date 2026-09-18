@@ -9,6 +9,7 @@ quota was exhausted by this task's own testing.
 """
 
 import os
+import re
 import time
 
 import openai
@@ -61,11 +62,31 @@ def chat(messages: list[dict], tools: list[dict] | None = None, tool_choice: str
         kwargs["tools"] = tools
         kwargs["tool_choice"] = tool_choice or "auto"
 
+    rate_limit_wait_s = 0.0
     for attempt in range(max_retries):
         try:
             response = get_client().chat.completions.create(**kwargs)
             break
-        except (openai.InternalServerError, openai.APIConnectionError, openai.RateLimitError):
+        except openai.RateLimitError as e:
+            if attempt == max_retries - 1:
+                raise
+            # Groq's daily-token-quota 429s name a wait ("Please try again
+            # in 13m35.184s") that dwarfs the transient-5xx backoff below —
+            # parse it so a long eval run (trajectory_eval.py: 11 tickets x
+            # 2 conditions) survives instead of burning its retry budget in
+            # a few seconds and crashing partway through. Capped well under
+            # agent.py's own max_wall_clock_s so one rate-limit wait can't
+            # look like the AGENT looping forever — see rate_limit_wait_s
+            # below, which agent.py adds back onto its own clock.
+            wait_s = 5.0
+            match = re.search(r"try again in (?:(\d+)m)?([\d.]+)s", str(e))
+            if match:
+                minutes, seconds = match.groups()
+                wait_s = (int(minutes) * 60 if minutes else 0) + float(seconds) + 2
+            wait_s = min(wait_s, 900)
+            rate_limit_wait_s += wait_s
+            time.sleep(wait_s)
+        except (openai.InternalServerError, openai.APIConnectionError):
             if attempt == max_retries - 1:
                 raise
             time.sleep(2 ** attempt)
@@ -75,5 +96,8 @@ def chat(messages: list[dict], tools: list[dict] | None = None, tool_choice: str
     usage_dict = {
         "prompt_tokens": usage.prompt_tokens if usage else 0,
         "completion_tokens": usage.completion_tokens if usage else 0,
+        # Provider-side dead time, not the agent's own thinking time — the
+        # caller's wall-clock budget should not count this against it.
+        "rate_limit_wait_s": rate_limit_wait_s,
     }
     return message, usage_dict

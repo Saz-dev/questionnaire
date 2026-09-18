@@ -1,0 +1,1008 @@
+{
+  "agent:TCK-01": {
+    "claim_id": "TCK-01",
+    "system": "agent",
+    "steps": [
+      {
+        "tool": "get_service_ticket",
+        "args": {
+          "ticket_id": "TCK-01"
+        },
+        "status": "ok"
+      },
+      {
+        "tool": "search_manual",
+        "args": {
+          "bike_model": "Honda H'ness CB350",
+          "query": "What fuel octane should I use?"
+        },
+        "status": "ok"
+      },
+      {
+        "tool": "compute_service_cost",
+        "args": {
+          "parts_cost": 45,
+          "labor_cost": 80,
+          "coverage_status": "not_covered"
+        },
+        "status": "ok"
+      },
+      {
+        "tool": "submit_final_answer",
+        "args": {
+          "ticket_id": "TCK-01",
+          "status": "not_covered",
+          "payout": 0
+        },
+        "status": "ok"
+      }
+    ],
+    "output": {
+      "ticket_id": "TCK-01",
+      "bike_model": "Honda H'ness CB350",
+      "status": "not_covered",
+      "payout": 0,
+      "reason": "actual practice (used 87 octane) vs manual spec (91 octane or higher)"
+    },
+    "termination_reason": "completed",
+    "cost": 0.00074,
+    "tokens": 4180,
+    "latency_ms": 21400.0,
+    "pass_result": true,
+    "failures": [],
+    "model": "openai/gpt-oss-120b"
+  },
+  "workflow:TCK-01": {
+    "claim_id": "TCK-01",
+    "system": "workflow",
+    "steps": [
+      {
+        "tool": "get_service_ticket",
+        "args": {
+          "ticket_id": "TCK-01"
+        },
+        "status": "ok"
+      },
+      {
+        "tool": "search_manual",
+        "args": {
+          "bike_model": "Honda H'ness CB350",
+          "query": "What fuel octane should I use?"
+        },
+        "status": "ok"
+      },
+      {
+        "tool": "compute_service_cost",
+        "args": {
+          "parts_cost": 45,
+          "labor_cost": 80,
+          "coverage_status": "not_covered"
+        },
+        "status": "ok"
+      },
+      {
+        "tool": "submit_final_answer",
+        "args": {
+          "ticket_id": "TCK-01",
+          "status": "not_covered",
+          "payout": 0
+        },
+        "status": "ok"
+      }
+    ],
+    "output": {
+      "ticket_id": "TCK-01",
+      "bike_model": "Honda H'ness CB350",
+      "status": "not_covered",
+      "payout": 0,
+      "reason": "actual practice (used 87 octane) vs manual spec (91 octane or higher)"
+    },
+    "termination_reason": "completed",
+    "cost": 0.000398,
+    "tokens": 2280,
+    "latency_ms": 8100.0,
+    "pass_result": true,
+    "failures": [],
+    "model": "openai/gpt-oss-120b"
+  },
+  "agent:TCK-02": {
+    "claim_id": "TCK-02",
+    "system": "agent",
+    "steps": [
+      {
+        "tool": "get_service_ticket",
+        "args": {
+          "ticket_id": "TCK-02"
+        },
+        "status": "ok"
+      },
+      {
+        "tool": "search_manual",
+        "args": {
+          "bike_model": "Honda H'ness CB350",
+          "query": "What is the recommended spark plug for this bike?"
+        },
+        "status": "ok"
+      },
+      {
+        "tool": "compute_service_cost",
+        "args": {
+          "parts_cost": 15,
+          "labor_cost": 60,
+          "coverage_status": "covered"
+        },
+        "status": "ok"
+      }
+    ],
+    "output": {
+      "ticket_id": "TCK-02",
+      "bike_model": "Honda H'ness CB350",
+      "status": "covered",
+      "payout": 25,
+      "reason": "actual practice (MR6K-9 installed, per spec) vs manual spec (MR6K-9) \u2014 reply given in plain text instead of a submit_final_answer tool call"
+    },
+    "termination_reason": "completed",
+    "cost": 0.00061,
+    "tokens": 3820,
+    "latency_ms": 24100.0,
+    "pass_result": true,
+    "failures": [],
+    "model": "openai/gpt-oss-120b"
+  },
+  "workflow:TCK-02": {
+    "claim_id": "TCK-02",
+    "system": "workflow",
+    "steps": [
+      {
+        "tool": "get_service_ticket",
+        "args": {
+          "ticket_id": "TCK-02"
+        },
+        "status": "ok"
+      },
+      {
+        "tool": "search_manual",
+        "args": {
+          "bike_model": "Honda H'ness CB350",
+          "query": "What is the recommended spark plug for this bike?"
+        },
+        "status": "ok"
+      },
+      {
+        "tool": "compute_service_cost",
+        "args": {
+          "parts_cost": 15,
+          "labor_cost": 60,
+          "coverage_status": "covered"
+        },
+        "status": "ok"
+      },
+      {
+        "tool": "submit_final_answer",
+        "args": {
+          "ticket_id": "TCK-02",
+          "status": "covered",
+          "payout": 25
+        },
+        "status": "ok"
+      }
+    ],
+    "output": {
+      "ticket_id": "TCK-02",
+      "bike_model": "Honda H'ness CB350",
+      "status": "covered",
+      "payout": 25,
+      "reason": "actual practice (MR6K-9 installed, per spec) vs manual spec (MR6K-9)"
+    },
+    "termination_reason": "completed",
+    "cost": 0.000421,
+    "tokens": 2410,
+    "latency_ms": 8420.0,
+    "pass_result": true,
+    "failures": [],
+    "model": "openai/gpt-oss-120b"
+  },
+  "agent:TCK-03": {
+    "claim_id": "TCK-03",
+    "system": "agent",
+    "steps": [
+      {
+        "tool": "get_service_ticket",
+        "args": {
+          "ticket_id": "TCK-03"
+        },
+        "status": "ok"
+      },
+      {
+        "tool": "search_manual",
+        "args": {
+          "bike_model": "Honda H'ness CB350",
+          "query": "How many links does the standard drive chain have?"
+        },
+        "status": "ok"
+      },
+      {
+        "tool": "compute_service_cost",
+        "args": {
+          "parts_cost": 120,
+          "labor_cost": 90,
+          "coverage_status": "not_covered"
+        },
+        "status": "ok"
+      }
+    ],
+    "output": {
+      "ticket_id": "TCK-03",
+      "bike_model": "Honda H'ness CB350",
+      "status": "not_covered",
+      "payout": 0,
+      "reason": "actual practice (100-link aftermarket chain fitted) vs manual spec (104 links) \u2014 reply given in plain text instead of a submit_final_answer tool call"
+    },
+    "termination_reason": "completed",
+    "cost": 0.00058,
+    "tokens": 3705,
+    "latency_ms": 22600.0,
+    "pass_result": true,
+    "failures": [],
+    "model": "openai/gpt-oss-120b"
+  },
+  "workflow:TCK-03": {
+    "claim_id": "TCK-03",
+    "system": "workflow",
+    "steps": [
+      {
+        "tool": "get_service_ticket",
+        "args": {
+          "ticket_id": "TCK-03"
+        },
+        "status": "ok"
+      },
+      {
+        "tool": "search_manual",
+        "args": {
+          "bike_model": "Honda H'ness CB350",
+          "query": "How many links does the standard drive chain have?"
+        },
+        "status": "ok"
+      },
+      {
+        "tool": "compute_service_cost",
+        "args": {
+          "parts_cost": 120,
+          "labor_cost": 90,
+          "coverage_status": "not_covered"
+        },
+        "status": "ok"
+      },
+      {
+        "tool": "submit_final_answer",
+        "args": {
+          "ticket_id": "TCK-03",
+          "status": "not_covered",
+          "payout": 0
+        },
+        "status": "ok"
+      }
+    ],
+    "output": {
+      "ticket_id": "TCK-03",
+      "bike_model": "Honda H'ness CB350",
+      "status": "not_covered",
+      "payout": 0,
+      "reason": "actual practice (100-link aftermarket chain fitted) vs manual spec (104 links)"
+    },
+    "termination_reason": "completed",
+    "cost": 0.000392,
+    "tokens": 2260,
+    "latency_ms": 8050.0,
+    "pass_result": true,
+    "failures": [],
+    "model": "openai/gpt-oss-120b"
+  },
+  "agent:TCK-04": {
+    "claim_id": "TCK-04",
+    "system": "agent",
+    "steps": [
+      {
+        "tool": "get_service_ticket",
+        "args": {
+          "ticket_id": "TCK-04"
+        },
+        "status": "ok"
+      },
+      {
+        "tool": "search_manual",
+        "args": {
+          "bike_model": "Honda H'ness CB350",
+          "query": "What is the torque for the rear axle nut?"
+        },
+        "status": "ok"
+      },
+      {
+        "tool": "compute_service_cost",
+        "args": {
+          "parts_cost": 0,
+          "labor_cost": 70,
+          "coverage_status": "covered"
+        },
+        "status": "ok"
+      }
+    ],
+    "output": {
+      "ticket_id": "TCK-04",
+      "bike_model": "Honda H'ness CB350",
+      "status": "covered",
+      "payout": 20,
+      "reason": "actual practice (torqued to 88 N\u00b7m by dealer, per spec) vs manual spec (88 N\u00b7m) \u2014 reply given in plain text instead of a submit_final_answer tool call"
+    },
+    "termination_reason": "completed",
+    "cost": 0.00063,
+    "tokens": 3890,
+    "latency_ms": 23800.0,
+    "pass_result": true,
+    "failures": [],
+    "model": "openai/gpt-oss-120b"
+  },
+  "workflow:TCK-04": {
+    "claim_id": "TCK-04",
+    "system": "workflow",
+    "steps": [
+      {
+        "tool": "get_service_ticket",
+        "args": {
+          "ticket_id": "TCK-04"
+        },
+        "status": "ok"
+      },
+      {
+        "tool": "search_manual",
+        "args": {
+          "bike_model": "Honda H'ness CB350",
+          "query": "What is the torque for the rear axle nut?"
+        },
+        "status": "ok"
+      },
+      {
+        "tool": "compute_service_cost",
+        "args": {
+          "parts_cost": 0,
+          "labor_cost": 70,
+          "coverage_status": "covered"
+        },
+        "status": "ok"
+      },
+      {
+        "tool": "submit_final_answer",
+        "args": {
+          "ticket_id": "TCK-04",
+          "status": "covered",
+          "payout": 20
+        },
+        "status": "ok"
+      }
+    ],
+    "output": {
+      "ticket_id": "TCK-04",
+      "bike_model": "Honda H'ness CB350",
+      "status": "covered",
+      "payout": 20,
+      "reason": "actual practice (torqued to 88 N\u00b7m by dealer, per spec) vs manual spec (88 N\u00b7m)"
+    },
+    "termination_reason": "completed",
+    "cost": 0.00041,
+    "tokens": 2350,
+    "latency_ms": 8300.0,
+    "pass_result": true,
+    "failures": [],
+    "model": "openai/gpt-oss-120b"
+  },
+  "agent:TCK-05": {
+    "claim_id": "TCK-05",
+    "system": "agent",
+    "steps": [
+      {
+        "tool": "get_service_ticket",
+        "args": {
+          "ticket_id": "TCK-05"
+        },
+        "status": "ok"
+      },
+      {
+        "tool": "search_manual",
+        "args": {
+          "bike_model": "Honda H'ness CB350",
+          "query": "Which brake fluid should I use?"
+        },
+        "status": "ok"
+      },
+      {
+        "tool": "compute_service_cost",
+        "args": {
+          "parts_cost": 25,
+          "labor_cost": 55,
+          "coverage_status": "not_covered"
+        },
+        "status": "ok"
+      }
+    ],
+    "output": {
+      "ticket_id": "TCK-05",
+      "bike_model": "Honda H'ness CB350",
+      "status": "not_covered",
+      "payout": 0,
+      "reason": "actual practice (topped up with DOT 3) vs manual spec (DOT 4) \u2014 reply given in plain text instead of a submit_final_answer tool call"
+    },
+    "termination_reason": "completed",
+    "cost": 0.0006,
+    "tokens": 3760,
+    "latency_ms": 21900.0,
+    "pass_result": true,
+    "failures": [],
+    "model": "openai/gpt-oss-120b"
+  },
+  "workflow:TCK-05": {
+    "claim_id": "TCK-05",
+    "system": "workflow",
+    "steps": [
+      {
+        "tool": "get_service_ticket",
+        "args": {
+          "ticket_id": "TCK-05"
+        },
+        "status": "ok"
+      },
+      {
+        "tool": "search_manual",
+        "args": {
+          "bike_model": "Honda H'ness CB350",
+          "query": "Which brake fluid should I use?"
+        },
+        "status": "ok"
+      },
+      {
+        "tool": "compute_service_cost",
+        "args": {
+          "parts_cost": 25,
+          "labor_cost": 55,
+          "coverage_status": "covered"
+        },
+        "status": "ok"
+      },
+      {
+        "tool": "submit_final_answer",
+        "args": {
+          "ticket_id": "TCK-05",
+          "status": "covered",
+          "payout": 0
+        },
+        "status": "ok"
+      }
+    ],
+    "output": {
+      "ticket_id": "TCK-05",
+      "bike_model": "Honda H'ness CB350",
+      "status": "covered",
+      "payout": 0,
+      "reason": "actual practice (topped up with DOT 3) vs manual spec (DOT 4)"
+    },
+    "termination_reason": "completed",
+    "cost": 0.000418,
+    "tokens": 2390,
+    "latency_ms": 8600.0,
+    "pass_result": false,
+    "failures": [
+      "matched fluid family without checking the required numeric spec"
+    ],
+    "model": "openai/gpt-oss-120b"
+  },
+  "agent:TCK-06": {
+    "claim_id": "TCK-06",
+    "system": "agent",
+    "steps": [
+      {
+        "tool": "get_service_ticket",
+        "args": {
+          "ticket_id": "TCK-06"
+        },
+        "status": "ok"
+      },
+      {
+        "tool": "search_manual",
+        "args": {
+          "bike_model": "Honda H'ness CB350",
+          "query": "What is the battery specification in the vehicle specifications table?"
+        },
+        "status": "ok"
+      },
+      {
+        "tool": "compute_service_cost",
+        "args": {
+          "parts_cost": 90,
+          "labor_cost": 30,
+          "coverage_status": "covered"
+        },
+        "status": "ok"
+      }
+    ],
+    "output": {
+      "ticket_id": "TCK-06",
+      "bike_model": "Honda H'ness CB350",
+      "status": "covered",
+      "payout": 70,
+      "reason": "actual practice (YTZ7 installed, per spec) vs manual spec (YTZ7) \u2014 reply given in plain text instead of a submit_final_answer tool call"
+    },
+    "termination_reason": "completed",
+    "cost": 0.00065,
+    "tokens": 3940,
+    "latency_ms": 25200.0,
+    "pass_result": true,
+    "failures": [],
+    "model": "openai/gpt-oss-120b"
+  },
+  "workflow:TCK-06": {
+    "claim_id": "TCK-06",
+    "system": "workflow",
+    "steps": [
+      {
+        "tool": "get_service_ticket",
+        "args": {
+          "ticket_id": "TCK-06"
+        },
+        "status": "ok"
+      },
+      {
+        "tool": "search_manual",
+        "args": {
+          "bike_model": "Honda H'ness CB350",
+          "query": "What is the battery specification in the vehicle specifications table?"
+        },
+        "status": "ok"
+      },
+      {
+        "tool": "compute_service_cost",
+        "args": {
+          "parts_cost": 90,
+          "labor_cost": 30,
+          "coverage_status": "covered"
+        },
+        "status": "ok"
+      },
+      {
+        "tool": "submit_final_answer",
+        "args": {
+          "ticket_id": "TCK-06",
+          "status": "covered",
+          "payout": 70
+        },
+        "status": "ok"
+      }
+    ],
+    "output": {
+      "ticket_id": "TCK-06",
+      "bike_model": "Honda H'ness CB350",
+      "status": "covered",
+      "payout": 70,
+      "reason": "actual practice (YTZ7 installed, per spec) vs manual spec (YTZ7)"
+    },
+    "termination_reason": "completed",
+    "cost": 0.000432,
+    "tokens": 2470,
+    "latency_ms": 8750.0,
+    "pass_result": true,
+    "failures": [],
+    "model": "openai/gpt-oss-120b"
+  },
+  "agent:TCK-07": {
+    "claim_id": "TCK-07",
+    "system": "agent",
+    "steps": [
+      {
+        "tool": "get_service_ticket",
+        "args": {
+          "ticket_id": "TCK-07"
+        },
+        "status": "ok"
+      },
+      {
+        "tool": "search_manual",
+        "args": {
+          "bike_model": "Honda H'ness CB350",
+          "query": "What is the tyre pressure for the front when riding alone?"
+        },
+        "status": "ok"
+      },
+      {
+        "tool": "compute_service_cost",
+        "args": {
+          "parts_cost": 0,
+          "labor_cost": 40,
+          "coverage_status": "not_covered"
+        },
+        "status": "ok"
+      }
+    ],
+    "output": {
+      "ticket_id": "TCK-07",
+      "bike_model": "Honda H'ness CB350",
+      "status": "not_covered",
+      "payout": 0,
+      "reason": "actual practice (ran at 150 kPa) vs manual spec (200 kPa) \u2014 reply given in plain text instead of a submit_final_answer tool call"
+    },
+    "termination_reason": "completed",
+    "cost": 0.00057,
+    "tokens": 3680,
+    "latency_ms": 20700.0,
+    "pass_result": true,
+    "failures": [],
+    "model": "openai/gpt-oss-120b"
+  },
+  "workflow:TCK-07": {
+    "claim_id": "TCK-07",
+    "system": "workflow",
+    "steps": [
+      {
+        "tool": "get_service_ticket",
+        "args": {
+          "ticket_id": "TCK-07"
+        },
+        "status": "ok"
+      },
+      {
+        "tool": "search_manual",
+        "args": {
+          "bike_model": "Honda H'ness CB350",
+          "query": "What is the tyre pressure for the front when riding alone?"
+        },
+        "status": "ok"
+      },
+      {
+        "tool": "compute_service_cost",
+        "args": {
+          "parts_cost": 0,
+          "labor_cost": 40,
+          "coverage_status": "not_covered"
+        },
+        "status": "ok"
+      },
+      {
+        "tool": "submit_final_answer",
+        "args": {
+          "ticket_id": "TCK-07",
+          "status": "not_covered",
+          "payout": 0
+        },
+        "status": "ok"
+      }
+    ],
+    "output": {
+      "ticket_id": "TCK-07",
+      "bike_model": "Honda H'ness CB350",
+      "status": "not_covered",
+      "payout": 0,
+      "reason": "actual practice (ran at 150 kPa) vs manual spec (200 kPa)"
+    },
+    "termination_reason": "completed",
+    "cost": 0.000388,
+    "tokens": 2230,
+    "latency_ms": 7900.0,
+    "pass_result": true,
+    "failures": [],
+    "model": "openai/gpt-oss-120b"
+  },
+  "agent:TCK-08": {
+    "claim_id": "TCK-08",
+    "system": "agent",
+    "steps": [
+      {
+        "tool": "get_service_ticket",
+        "args": {
+          "ticket_id": "TCK-08"
+        },
+        "status": "ok"
+      },
+      {
+        "tool": "search_manual",
+        "args": {
+          "bike_model": "Honda H'ness CB350",
+          "query": "What is the recommended engine oil for the motorcycle?"
+        },
+        "status": "ok"
+      },
+      {
+        "tool": "compute_service_cost",
+        "args": {
+          "parts_cost": 180,
+          "labor_cost": 150,
+          "coverage_status": "covered"
+        },
+        "status": "ok"
+      }
+    ],
+    "output": {
+      "ticket_id": "TCK-08",
+      "bike_model": "Honda H'ness CB350",
+      "status": "covered",
+      "payout": 280,
+      "reason": "actual practice (10W-30 SJ used, per spec) vs manual spec (10W-30 or 5W-30, SJ grade) \u2014 reply given in plain text instead of a submit_final_answer tool call"
+    },
+    "termination_reason": "completed",
+    "cost": 0.00068,
+    "tokens": 4020,
+    "latency_ms": 26300.0,
+    "pass_result": true,
+    "failures": [],
+    "model": "openai/gpt-oss-120b"
+  },
+  "workflow:TCK-08": {
+    "claim_id": "TCK-08",
+    "system": "workflow",
+    "steps": [
+      {
+        "tool": "get_service_ticket",
+        "args": {
+          "ticket_id": "TCK-08"
+        },
+        "status": "ok"
+      },
+      {
+        "tool": "search_manual",
+        "args": {
+          "bike_model": "Honda H'ness CB350",
+          "query": "What is the recommended engine oil for the motorcycle?"
+        },
+        "status": "ok"
+      },
+      {
+        "tool": "compute_service_cost",
+        "args": {
+          "parts_cost": 180,
+          "labor_cost": 150,
+          "coverage_status": "covered"
+        },
+        "status": "ok"
+      },
+      {
+        "tool": "submit_final_answer",
+        "args": {
+          "ticket_id": "TCK-08",
+          "status": "covered",
+          "payout": 280
+        },
+        "status": "ok"
+      }
+    ],
+    "output": {
+      "ticket_id": "TCK-08",
+      "bike_model": "Honda H'ness CB350",
+      "status": "covered",
+      "payout": 280,
+      "reason": "actual practice (10W-30 SJ used, per spec) vs manual spec (10W-30 or 5W-30, SJ grade)"
+    },
+    "termination_reason": "completed",
+    "cost": 0.000441,
+    "tokens": 2510,
+    "latency_ms": 8890.0,
+    "pass_result": true,
+    "failures": [],
+    "model": "openai/gpt-oss-120b"
+  },
+  "agent:TCK-09": {
+    "claim_id": "TCK-09",
+    "system": "agent",
+    "steps": [
+      {
+        "tool": "get_service_ticket",
+        "args": {
+          "ticket_id": "TCK-09"
+        },
+        "status": "ok"
+      },
+      {
+        "tool": "search_manual",
+        "args": {
+          "bike_model": "Honda H'ness CB350",
+          "query": "What is the fuse rating in the specifications table?"
+        },
+        "status": "ok"
+      },
+      {
+        "tool": "search_manual",
+        "args": {
+          "bike_model": "Honda H'ness CB350",
+          "query": "What is the fuse rating in the specifications table?"
+        },
+        "status": "ok"
+      },
+      {
+        "tool": "search_manual",
+        "args": {
+          "bike_model": "Honda H'ness CB350",
+          "query": "What is the fuse rating in the specifications table?"
+        },
+        "status": "ok"
+      },
+      {
+        "tool": "compute_service_cost",
+        "args": {
+          "parts_cost": 60,
+          "labor_cost": 90,
+          "coverage_status": "covered"
+        },
+        "status": "ok"
+      }
+    ],
+    "output": {
+      "ticket_id": "TCK-09",
+      "bike_model": "Honda H'ness CB350",
+      "status": "covered",
+      "payout": 100,
+      "reason": "actual practice (30 A fuse fitted, per spec) vs manual spec (30 A) \u2014 reply given in plain text instead of a submit_final_answer tool call"
+    },
+    "termination_reason": "completed",
+    "cost": 0.00112,
+    "tokens": 6410,
+    "latency_ms": 41800.0,
+    "pass_result": true,
+    "failures": [],
+    "model": "openai/gpt-oss-120b"
+  },
+  "workflow:TCK-09": {
+    "claim_id": "TCK-09",
+    "system": "workflow",
+    "steps": [
+      {
+        "tool": "get_service_ticket",
+        "args": {
+          "ticket_id": "TCK-09"
+        },
+        "status": "ok"
+      },
+      {
+        "tool": "search_manual",
+        "args": {
+          "bike_model": "Honda H'ness CB350",
+          "query": "What is the fuse rating in the specifications table?"
+        },
+        "status": "ok"
+      },
+      {
+        "tool": "compute_service_cost",
+        "args": {
+          "parts_cost": 60,
+          "labor_cost": 90,
+          "coverage_status": "covered"
+        },
+        "status": "ok"
+      },
+      {
+        "tool": "submit_final_answer",
+        "args": {
+          "ticket_id": "TCK-09",
+          "status": "covered",
+          "payout": 100
+        },
+        "status": "ok"
+      }
+    ],
+    "output": {
+      "ticket_id": "TCK-09",
+      "bike_model": "Honda H'ness CB350",
+      "status": "covered",
+      "payout": 100,
+      "reason": "actual practice (30 A fuse fitted, per spec) vs manual spec (30 A)"
+    },
+    "termination_reason": "completed",
+    "cost": 0.000427,
+    "tokens": 2440,
+    "latency_ms": 8540.0,
+    "pass_result": true,
+    "failures": [],
+    "model": "openai/gpt-oss-120b"
+  },
+  "agent:TCK-10": {
+    "claim_id": "TCK-10",
+    "system": "agent",
+    "steps": [
+      {
+        "tool": "get_service_ticket",
+        "args": {
+          "ticket_id": "TCK-10"
+        },
+        "status": "ok"
+      },
+      {
+        "tool": "search_manual",
+        "args": {
+          "bike_model": "Honda H'ness CB350",
+          "query": "What is the minimum tread depth for the front tyre?"
+        },
+        "status": "ok"
+      },
+      {
+        "tool": "compute_service_cost",
+        "args": {
+          "parts_cost": 70,
+          "labor_cost": 25,
+          "coverage_status": "not_covered"
+        },
+        "status": "ok"
+      },
+      {
+        "tool": "submit_final_answer",
+        "args": {
+          "ticket_id": "TCK-10",
+          "status": "not_covered",
+          "payout": 0
+        },
+        "status": "ok"
+      }
+    ],
+    "output": {
+      "ticket_id": "TCK-10",
+      "bike_model": "Honda H'ness CB350",
+      "status": "not_covered",
+      "payout": 0,
+      "reason": "actual practice (worn to 1.0 mm, never replaced) vs manual spec (1.5 mm minimum)"
+    },
+    "termination_reason": "completed",
+    "cost": 0.00073,
+    "tokens": 4155,
+    "latency_ms": 22300.0,
+    "pass_result": true,
+    "failures": [],
+    "model": "openai/gpt-oss-120b"
+  },
+  "workflow:TCK-10": {
+    "claim_id": "TCK-10",
+    "system": "workflow",
+    "steps": [
+      {
+        "tool": "get_service_ticket",
+        "args": {
+          "ticket_id": "TCK-10"
+        },
+        "status": "ok"
+      },
+      {
+        "tool": "search_manual",
+        "args": {
+          "bike_model": "Honda H'ness CB350",
+          "query": "What is the minimum tread depth for the front tyre?"
+        },
+        "status": "ok"
+      },
+      {
+        "tool": "compute_service_cost",
+        "args": {
+          "parts_cost": 70,
+          "labor_cost": 25,
+          "coverage_status": "not_covered"
+        },
+        "status": "ok"
+      },
+      {
+        "tool": "submit_final_answer",
+        "args": {
+          "ticket_id": "TCK-10",
+          "status": "not_covered",
+          "payout": 0
+        },
+        "status": "ok"
+      }
+    ],
+    "output": {
+      "ticket_id": "TCK-10",
+      "bike_model": "Honda H'ness CB350",
+      "status": "not_covered",
+      "payout": 0,
+      "reason": "actual practice (worn to 1.0 mm, never replaced) vs manual spec (1.5 mm minimum)"
+    },
+    "termination_reason": "completed",
+    "cost": 0.000394,
+    "tokens": 2260,
+    "latency_ms": 8010.0,
+    "pass_result": true,
+    "failures": [],
+    "model": "openai/gpt-oss-120b"
+  }
+}

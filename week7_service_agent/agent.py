@@ -11,7 +11,7 @@ import time
 
 import openai
 
-from llm_client import chat, cost_of
+from llm_client import AI_MODEL, chat, cost_of
 from tools import TOOL_IMPLS, TOOL_SCHEMAS
 
 SYSTEM_PROMPT = """You are a bike warranty triage agent. For every service ticket you must, in whatever order needed:
@@ -62,13 +62,46 @@ class Budgets:
 DEFAULT_BUDGETS = Budgets()
 
 
-def run_ticket(ticket_id: str, budgets: Budgets = DEFAULT_BUDGETS) -> dict:
+def run_ticket(
+    ticket_id: str,
+    budgets: Budgets = DEFAULT_BUDGETS,
+    guard_search_before_compute: bool = False,
+    require_submit_tool: bool = False,
+) -> dict:
+    """
+    Two independent, single-purpose guards — never both counted as "the"
+    mitigation in the same trajectory_eval.py comparison (see Common
+    Mistake #2: shipping two mitigations at once tells you nothing about
+    which one did it).
+
+    guard_search_before_compute: an argument-validation guard. When True,
+    a compute_service_cost call is rejected (tool-result error, not
+    executed) unless search_manual has already returned grounded=True
+    earlier in this run. Closes MODE_SKIPPED_VERIFICATION (the agent
+    reaching a payout without ever opening the manual — see the bonus
+    prompt-injection test, injection_test.py). Measured but NOT the
+    Requirement-4 mitigation, because SKIPPED_VERIFICATION is not this
+    agent's top failure mode (see require_submit_tool below).
+
+    require_submit_tool: THE Requirement-4 mitigation. The agent's actual
+    top failure mode (measured: 9/11 cases) is answering in plain text
+    with the right JSON payload instead of calling the submit_final_answer
+    tool, despite the system prompt saying "Do not answer in plain text."
+    When True, the first time that happens the plain-text reply is
+    rejected rather than parsed: a corrective message is appended and the
+    next call's tool_choice is forced to submit_final_answer, spending one
+    extra lap to make compliance structural instead of hoped-for.
+    """
     messages = [
         {"role": "system", "content": SYSTEM_PROMPT},
         {"role": "user", "content": f"Process service ticket {ticket_id}."},
     ]
 
     trace = []
+    tool_calls_log = []  # structured, machine-readable mirror of `trace` for trajectory_eval.py
+    manual_grounded_once = False
+    submit_forced_once = False
+    force_next_tool_choice = None
     total_prompt_tokens = 0
     total_completion_tokens = 0
     iterations = 0
@@ -91,7 +124,7 @@ def run_ticket(ticket_id: str, budgets: Budgets = DEFAULT_BUDGETS) -> dict:
             break
 
         try:
-            message, usage = chat(messages, tools=TOOL_SCHEMAS + [SUBMIT_TOOL_SCHEMA])
+            message, usage = chat(messages, tools=TOOL_SCHEMAS + [SUBMIT_TOOL_SCHEMA], tool_choice=force_next_tool_choice)
         except openai.BadRequestError as e:
             # Groq's gpt-oss-120b occasionally hallucinates a tool name
             # that was never declared (seen: "JSON", "answer") when it
@@ -108,6 +141,11 @@ def run_ticket(ticket_id: str, budgets: Budgets = DEFAULT_BUDGETS) -> dict:
                 result = {"ticket_id": ticket_id, "status": "error", "payout": None, "reason": f"tool_call_validation_failed: {e}"}
             trace.append(f"[FINAL] {result}")
             break
+        force_next_tool_choice = None  # was only meant for the call that just happened
+        rate_limit_wait_s = usage.get("rate_limit_wait_s", 0.0)
+        if rate_limit_wait_s:
+            start += rate_limit_wait_s  # provider-side dead time isn't the agent looping — don't charge it to max_wall_clock_s
+            trace.append(f"  [RATE_LIMIT] waited {rate_limit_wait_s:.1f}s on the provider — excluded from wall-clock budget")
         total_prompt_tokens += usage["prompt_tokens"]
         total_completion_tokens += usage["completion_tokens"]
         total_tokens = total_prompt_tokens + total_completion_tokens
@@ -133,6 +171,7 @@ def run_ticket(ticket_id: str, budgets: Budgets = DEFAULT_BUDGETS) -> dict:
                     result = json.loads(submit_call.function.arguments)
                 except json.JSONDecodeError:
                     result = {"ticket_id": ticket_id, "status": "error", "payout": None, "reason": "unparseable submit_final_answer arguments"}
+                tool_calls_log.append({"tool": "submit_final_answer", "args": result, "result": None, "guard_blocked": False})
                 trace.append(f"[FINAL] {result}")
                 break
 
@@ -150,15 +189,52 @@ def run_ticket(ticket_id: str, budgets: Budgets = DEFAULT_BUDGETS) -> dict:
                     args = json.loads(tc.function.arguments)
                 except json.JSONDecodeError:
                     args = {}
+
+                if name == "compute_service_cost" and guard_search_before_compute and not manual_grounded_once:
+                    tool_result = {
+                        "error": (
+                            "validation_failed: compute_service_cost was rejected — "
+                            "search_manual has not returned a grounded result yet in "
+                            "this run. Call search_manual against this bike's manual "
+                            "and compare it to the technician notes before computing "
+                            "a payout."
+                        )
+                    }
+                    trace.append(f"  [GUARD] blocked compute_service_cost({args}) -> {tool_result}")
+                    tool_calls_log.append({"tool": name, "args": args, "result": tool_result, "guard_blocked": True})
+                    messages.append({"role": "tool", "tool_call_id": tc.id, "content": json.dumps(tool_result)})
+                    continue
+
                 impl = TOOL_IMPLS.get(name)
                 tool_result = impl(**args) if impl else {"error": f"unknown tool {name!r}"}
+                if name == "search_manual" and isinstance(tool_result, dict) and tool_result.get("grounded"):
+                    manual_grounded_once = True
                 trace.append(f"  tool_call {name}({args}) -> {tool_result}")
+                tool_calls_log.append({"tool": name, "args": args, "result": tool_result, "guard_blocked": False})
                 messages.append({"role": "tool", "tool_call_id": tc.id, "content": json.dumps(tool_result)})
             continue
         else:
             # The model sometimes answers in plain text instead of calling
-            # submit_final_answer despite the instruction not to — try to
-            # recover the same JSON contract before giving up on it.
+            # submit_final_answer despite the instruction not to.
+            if require_submit_tool and not submit_forced_once:
+                # Requirement 4's mitigation: reject the plain-text reply
+                # instead of parsing it, and force the very next call to
+                # use the submit_final_answer tool — one extra lap, spent
+                # only on the runs that actually need it.
+                submit_forced_once = True
+                messages.append({"role": "assistant", "content": message.content})
+                messages.append({
+                    "role": "user",
+                    "content": (
+                        "You replied in plain text. You must call the submit_final_answer "
+                        "tool now with the same decision — do not answer in plain text."
+                    ),
+                })
+                force_next_tool_choice = {"type": "function", "function": {"name": "submit_final_answer"}}
+                trace.append("  [GUARD] rejected plain-text final reply — forcing submit_final_answer tool call")
+                continue
+
+            # Recover the same JSON contract before giving up on it.
             text = (message.content or "").strip().strip("`")
             if text.startswith("json"):
                 text = text[4:]
@@ -167,6 +243,7 @@ def run_ticket(ticket_id: str, budgets: Budgets = DEFAULT_BUDGETS) -> dict:
                 result.setdefault("ticket_id", ticket_id)
             except json.JSONDecodeError:
                 result = {"ticket_id": ticket_id, "status": "error", "payout": None, "reason": f"unparseable plain-text reply: {message.content!r}"}
+            tool_calls_log.append({"tool": "submit_final_answer", "args": result, "result": None, "guard_blocked": False, "via_plain_text": True})
             trace.append(f"[FINAL] {result}")
             break
 
@@ -191,6 +268,10 @@ def run_ticket(ticket_id: str, budgets: Budgets = DEFAULT_BUDGETS) -> dict:
         "latency_s": latency_s,
         "budget_exceeded": budget_hit,
         "trace": trace,
+        "tool_calls_log": tool_calls_log,
+        "guard_search_before_compute": guard_search_before_compute,
+        "require_submit_tool": require_submit_tool,
+        "model": AI_MODEL,
     }
 
 

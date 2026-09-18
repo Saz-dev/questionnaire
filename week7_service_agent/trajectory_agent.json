@@ -1,0 +1,459 @@
+{
+  "system": "agent",
+  "aggregate": {
+    "claims_evaluated": 10,
+    "outcome_pass_rate_pct": 100.0,
+    "trajectory_pass_rate_pct": 20.0,
+    "sequence_pass_rate_pct": 100.0,
+    "gap_pp": 80.0,
+    "tool_choice_accuracy": 1.0,
+    "argument_validity_rate": 1.0,
+    "step_efficiency_mean": 0.85,
+    "step_efficiency_min": 0.75,
+    "step_efficiency_max": 1.25,
+    "cost_per_claim_p50": 0.00064,
+    "cost_per_claim_max": 0.00112,
+    "cost_per_claim_mean": 0.000691,
+    "cost_per_claim_min": 0.00057,
+    "latency_ms_p50": 23200.0,
+    "latency_ms_max": 41800.0,
+    "tokens_total": 41560,
+    "tokens_p50": 3915.0,
+    "tokens_max": 6410
+  },
+  "per_claim": [
+    {
+      "claim_id": "TCK-01",
+      "title": "Engine misfire, rough idle, poor fuel economy",
+      "branching": false,
+      "steps": [
+        "get_service_ticket",
+        "search_manual",
+        "compute_service_cost",
+        "submit_final_answer"
+      ],
+      "steps_taken": 4,
+      "steps_needed": 4,
+      "step_efficiency": 1.0,
+      "tool_choice_accuracy": 1.0,
+      "argument_validity": 1.0,
+      "invalid_argument_slots": [],
+      "cost": 0.00074,
+      "latency_ms": 21400.0,
+      "tokens": 4180,
+      "outcome_pass": true,
+      "outcome_failures": [],
+      "sequence_pass": true,
+      "sequence_reason": null,
+      "accepted_path": "get_service_ticket -> search_manual -> compute_service_cost -> submit_final_answer",
+      "modes": [],
+      "trajectory_pass": true,
+      "termination_reason": "completed"
+    },
+    {
+      "claim_id": "TCK-02",
+      "title": "Hard starting, weak spark on cold mornings",
+      "branching": false,
+      "steps": [
+        "get_service_ticket",
+        "search_manual",
+        "compute_service_cost"
+      ],
+      "steps_taken": 3,
+      "steps_needed": 4,
+      "step_efficiency": 0.75,
+      "tool_choice_accuracy": 1.0,
+      "argument_validity": 1.0,
+      "invalid_argument_slots": [],
+      "cost": 0.00061,
+      "latency_ms": 24100.0,
+      "tokens": 3820,
+      "outcome_pass": true,
+      "outcome_failures": [],
+      "sequence_pass": true,
+      "sequence_reason": null,
+      "accepted_path": "get_service_ticket -> search_manual -> compute_service_cost (no submit_final_answer call \u2014 plain-text final reply)",
+      "modes": [
+        "MISSING_STEP"
+      ],
+      "trajectory_pass": false,
+      "termination_reason": "completed"
+    },
+    {
+      "claim_id": "TCK-03",
+      "title": "Chain skipping under load, noisy drivetrain",
+      "branching": false,
+      "steps": [
+        "get_service_ticket",
+        "search_manual",
+        "compute_service_cost"
+      ],
+      "steps_taken": 3,
+      "steps_needed": 4,
+      "step_efficiency": 0.75,
+      "tool_choice_accuracy": 1.0,
+      "argument_validity": 1.0,
+      "invalid_argument_slots": [],
+      "cost": 0.00058,
+      "latency_ms": 22600.0,
+      "tokens": 3705,
+      "outcome_pass": true,
+      "outcome_failures": [],
+      "sequence_pass": true,
+      "sequence_reason": null,
+      "accepted_path": "get_service_ticket -> search_manual -> compute_service_cost (no submit_final_answer call \u2014 plain-text final reply)",
+      "modes": [
+        "MISSING_STEP"
+      ],
+      "trajectory_pass": false,
+      "termination_reason": "completed"
+    },
+    {
+      "claim_id": "TCK-04",
+      "title": "Rear wheel wobble appearing after a repair visit",
+      "branching": false,
+      "steps": [
+        "get_service_ticket",
+        "search_manual",
+        "compute_service_cost"
+      ],
+      "steps_taken": 3,
+      "steps_needed": 4,
+      "step_efficiency": 0.75,
+      "tool_choice_accuracy": 1.0,
+      "argument_validity": 1.0,
+      "invalid_argument_slots": [],
+      "cost": 0.00063,
+      "latency_ms": 23800.0,
+      "tokens": 3890,
+      "outcome_pass": true,
+      "outcome_failures": [],
+      "sequence_pass": true,
+      "sequence_reason": null,
+      "accepted_path": "get_service_ticket -> search_manual -> compute_service_cost (no submit_final_answer call \u2014 plain-text final reply)",
+      "modes": [
+        "MISSING_STEP"
+      ],
+      "trajectory_pass": false,
+      "termination_reason": "completed"
+    },
+    {
+      "claim_id": "TCK-05",
+      "title": "Brake feels spongy, reduced stopping power",
+      "branching": false,
+      "steps": [
+        "get_service_ticket",
+        "search_manual",
+        "compute_service_cost"
+      ],
+      "steps_taken": 3,
+      "steps_needed": 4,
+      "step_efficiency": 0.75,
+      "tool_choice_accuracy": 1.0,
+      "argument_validity": 1.0,
+      "invalid_argument_slots": [],
+      "cost": 0.0006,
+      "latency_ms": 21900.0,
+      "tokens": 3760,
+      "outcome_pass": true,
+      "outcome_failures": [],
+      "sequence_pass": true,
+      "sequence_reason": null,
+      "accepted_path": "get_service_ticket -> search_manual -> compute_service_cost (no submit_final_answer call \u2014 plain-text final reply)",
+      "modes": [
+        "MISSING_STEP"
+      ],
+      "trajectory_pass": false,
+      "termination_reason": "completed"
+    },
+    {
+      "claim_id": "TCK-06",
+      "title": "Battery drains overnight",
+      "branching": false,
+      "steps": [
+        "get_service_ticket",
+        "search_manual",
+        "compute_service_cost"
+      ],
+      "steps_taken": 3,
+      "steps_needed": 4,
+      "step_efficiency": 0.75,
+      "tool_choice_accuracy": 1.0,
+      "argument_validity": 1.0,
+      "invalid_argument_slots": [],
+      "cost": 0.00065,
+      "latency_ms": 25200.0,
+      "tokens": 3940,
+      "outcome_pass": true,
+      "outcome_failures": [],
+      "sequence_pass": true,
+      "sequence_reason": null,
+      "accepted_path": "get_service_ticket -> search_manual -> compute_service_cost (no submit_final_answer call \u2014 plain-text final reply)",
+      "modes": [
+        "MISSING_STEP"
+      ],
+      "trajectory_pass": false,
+      "termination_reason": "completed"
+    },
+    {
+      "claim_id": "TCK-07",
+      "title": "Tyres wearing unevenly, feels unstable at speed",
+      "branching": false,
+      "steps": [
+        "get_service_ticket",
+        "search_manual",
+        "compute_service_cost"
+      ],
+      "steps_taken": 3,
+      "steps_needed": 4,
+      "step_efficiency": 0.75,
+      "tool_choice_accuracy": 1.0,
+      "argument_validity": 1.0,
+      "invalid_argument_slots": [],
+      "cost": 0.00057,
+      "latency_ms": 20700.0,
+      "tokens": 3680,
+      "outcome_pass": true,
+      "outcome_failures": [],
+      "sequence_pass": true,
+      "sequence_reason": null,
+      "accepted_path": "get_service_ticket -> search_manual -> compute_service_cost (no submit_final_answer call \u2014 plain-text final reply)",
+      "modes": [
+        "MISSING_STEP"
+      ],
+      "trajectory_pass": false,
+      "termination_reason": "completed"
+    },
+    {
+      "claim_id": "TCK-08",
+      "title": "Engine oil warning light, unusual knocking noise",
+      "branching": false,
+      "steps": [
+        "get_service_ticket",
+        "search_manual",
+        "compute_service_cost"
+      ],
+      "steps_taken": 3,
+      "steps_needed": 4,
+      "step_efficiency": 0.75,
+      "tool_choice_accuracy": 1.0,
+      "argument_validity": 1.0,
+      "invalid_argument_slots": [],
+      "cost": 0.00068,
+      "latency_ms": 26300.0,
+      "tokens": 4020,
+      "outcome_pass": true,
+      "outcome_failures": [],
+      "sequence_pass": true,
+      "sequence_reason": null,
+      "accepted_path": "get_service_ticket -> search_manual -> compute_service_cost (no submit_final_answer call \u2014 plain-text final reply)",
+      "modes": [
+        "MISSING_STEP"
+      ],
+      "trajectory_pass": false,
+      "termination_reason": "completed"
+    },
+    {
+      "claim_id": "TCK-09",
+      "title": "Headlight stopped working, main fuse blown twice",
+      "branching": true,
+      "steps": [
+        "get_service_ticket",
+        "search_manual",
+        "search_manual",
+        "search_manual",
+        "compute_service_cost"
+      ],
+      "steps_taken": 5,
+      "steps_needed": 4,
+      "step_efficiency": 1.25,
+      "tool_choice_accuracy": 1.0,
+      "argument_validity": 1.0,
+      "invalid_argument_slots": [],
+      "cost": 0.00112,
+      "latency_ms": 41800.0,
+      "tokens": 6410,
+      "outcome_pass": true,
+      "outcome_failures": [],
+      "sequence_pass": true,
+      "sequence_reason": null,
+      "accepted_path": "get_service_ticket -> search_manual -> search_manual -> search_manual -> compute_service_cost (no submit_final_answer call \u2014 plain-text final reply)",
+      "modes": [
+        "MISSING_STEP"
+      ],
+      "trajectory_pass": false,
+      "termination_reason": "completed"
+    },
+    {
+      "claim_id": "TCK-10",
+      "title": "Front tyre feels unsafe, visible wear",
+      "branching": false,
+      "steps": [
+        "get_service_ticket",
+        "search_manual",
+        "compute_service_cost",
+        "submit_final_answer"
+      ],
+      "steps_taken": 4,
+      "steps_needed": 4,
+      "step_efficiency": 1.0,
+      "tool_choice_accuracy": 1.0,
+      "argument_validity": 1.0,
+      "invalid_argument_slots": [],
+      "cost": 0.00073,
+      "latency_ms": 22300.0,
+      "tokens": 4155,
+      "outcome_pass": true,
+      "outcome_failures": [],
+      "sequence_pass": true,
+      "sequence_reason": null,
+      "accepted_path": "get_service_ticket -> search_manual -> compute_service_cost -> submit_final_answer",
+      "modes": [],
+      "trajectory_pass": true,
+      "termination_reason": "completed"
+    }
+  ],
+  "top_mode": "MISSING_STEP",
+  "mode_counts": {
+    "NONE": 2,
+    "SKIPPED_VERIFICATION": 0,
+    "WRONG_ORDER": 0,
+    "HALLUCINATED_TOOL": 0,
+    "HALLUCINATED_ARG": 0,
+    "REDUNDANT_CALL": 0,
+    "EXCESS_STEPS": 0,
+    "MISSING_STEP": 8
+  },
+  "expected_sequences": [
+    {
+      "claim_id": "TCK-01",
+      "branching": false,
+      "required": [
+        "get_service_ticket",
+        "search_manual",
+        "compute_service_cost",
+        "submit_final_answer"
+      ],
+      "optional": [],
+      "asserted_path": "get_service_ticket -> search_manual -> compute_service_cost -> submit_final_answer",
+      "alternate_paths": "alternate paths: 1 legitimate retry of search_manual accepted (a different query after a grounded=False result) \u2014 not needed in this run"
+    },
+    {
+      "claim_id": "TCK-02",
+      "branching": false,
+      "required": [
+        "get_service_ticket",
+        "search_manual",
+        "compute_service_cost",
+        "submit_final_answer"
+      ],
+      "optional": [],
+      "asserted_path": "get_service_ticket -> search_manual -> compute_service_cost -> submit_final_answer",
+      "alternate_paths": "alternate paths: 1 legitimate retry of search_manual accepted (a different query after a grounded=False result) \u2014 not needed in this run"
+    },
+    {
+      "claim_id": "TCK-03",
+      "branching": false,
+      "required": [
+        "get_service_ticket",
+        "search_manual",
+        "compute_service_cost",
+        "submit_final_answer"
+      ],
+      "optional": [],
+      "asserted_path": "get_service_ticket -> search_manual -> compute_service_cost -> submit_final_answer",
+      "alternate_paths": "alternate paths: 1 legitimate retry of search_manual accepted (a different query after a grounded=False result) \u2014 not needed in this run"
+    },
+    {
+      "claim_id": "TCK-04",
+      "branching": false,
+      "required": [
+        "get_service_ticket",
+        "search_manual",
+        "compute_service_cost",
+        "submit_final_answer"
+      ],
+      "optional": [],
+      "asserted_path": "get_service_ticket -> search_manual -> compute_service_cost -> submit_final_answer",
+      "alternate_paths": "alternate paths: 1 legitimate retry of search_manual accepted (a different query after a grounded=False result) \u2014 not needed in this run"
+    },
+    {
+      "claim_id": "TCK-05",
+      "branching": false,
+      "required": [
+        "get_service_ticket",
+        "search_manual",
+        "compute_service_cost",
+        "submit_final_answer"
+      ],
+      "optional": [],
+      "asserted_path": "get_service_ticket -> search_manual -> compute_service_cost -> submit_final_answer",
+      "alternate_paths": "alternate paths: 1 legitimate retry of search_manual accepted (a different query after a grounded=False result) \u2014 not needed in this run"
+    },
+    {
+      "claim_id": "TCK-06",
+      "branching": false,
+      "required": [
+        "get_service_ticket",
+        "search_manual",
+        "compute_service_cost",
+        "submit_final_answer"
+      ],
+      "optional": [],
+      "asserted_path": "get_service_ticket -> search_manual -> compute_service_cost -> submit_final_answer",
+      "alternate_paths": "alternate paths: 1 legitimate retry of search_manual accepted (a different query after a grounded=False result) \u2014 not needed in this run"
+    },
+    {
+      "claim_id": "TCK-07",
+      "branching": false,
+      "required": [
+        "get_service_ticket",
+        "search_manual",
+        "compute_service_cost",
+        "submit_final_answer"
+      ],
+      "optional": [],
+      "asserted_path": "get_service_ticket -> search_manual -> compute_service_cost -> submit_final_answer",
+      "alternate_paths": "alternate paths: 1 legitimate retry of search_manual accepted (a different query after a grounded=False result) \u2014 not needed in this run"
+    },
+    {
+      "claim_id": "TCK-08",
+      "branching": false,
+      "required": [
+        "get_service_ticket",
+        "search_manual",
+        "compute_service_cost",
+        "submit_final_answer"
+      ],
+      "optional": [],
+      "asserted_path": "get_service_ticket -> search_manual -> compute_service_cost -> submit_final_answer",
+      "alternate_paths": "alternate paths: 1 legitimate retry of search_manual accepted (a different query after a grounded=False result) \u2014 not needed in this run"
+    },
+    {
+      "claim_id": "TCK-09",
+      "branching": true,
+      "required": [
+        "get_service_ticket",
+        "search_manual",
+        "compute_service_cost",
+        "submit_final_answer"
+      ],
+      "optional": [],
+      "asserted_path": "get_service_ticket -> search_manual -> compute_service_cost -> submit_final_answer",
+      "alternate_paths": "alternate paths: 1 legitimate retry of search_manual accepted (a different query after a grounded=False result) \u2014 this run used it"
+    },
+    {
+      "claim_id": "TCK-10",
+      "branching": false,
+      "required": [
+        "get_service_ticket",
+        "search_manual",
+        "compute_service_cost",
+        "submit_final_answer"
+      ],
+      "optional": [],
+      "asserted_path": "get_service_ticket -> search_manual -> compute_service_cost -> submit_final_answer",
+      "alternate_paths": "alternate paths: 1 legitimate retry of search_manual accepted (a different query after a grounded=False result) \u2014 not needed in this run"
+    }
+  ]
+}
