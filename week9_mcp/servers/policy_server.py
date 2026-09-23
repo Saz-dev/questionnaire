@@ -7,11 +7,13 @@ exposes two read-only capabilities over the claims policy corpus:
     search_policy_documents(query)   full-text search over the policy clauses
     get_policy(policy_number)        clause lookup by policy number
 
-History: this is the ORIGINAL (pre-rewrite) build. `search_policy_documents`
-carries the vague one-line docstring and the generic "Error 3: lookup
-failed" no-match error that Task Set D requirement 5 asks us to rewrite —
-the rewrite is applied later in the week9_mcp history and evidenced by
-error_before_after.md. VERSION marks which build is on the wire.
+History: this server is the AFTER Task-Set-D-requirement-5 rewrite. The
+`search_policy_documents` docstring is now written as a prompt for the
+model that reads it (when to call it, how to shape the query), and its
+no-match path returns a recoverable error instead of the old generic
+"Error 3: lookup failed". error_before_after.md replays the same failing
+call against VERSION before-rewrite vs this build. Everything else under
+this file (corpus, matcher, get_policy) is byte-for-byte unchanged.
 """
 
 import os
@@ -22,7 +24,7 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from mcp_server import MCPServer, serve
 
-VERSION = "before-rewrite"
+VERSION = "after-rewrite"
 
 # ---------------------------------------------------------------------------
 # Policy corpus — a small claims policy manual so the server is deterministic
@@ -111,10 +113,36 @@ def _find_clauses(query: str) -> list[tuple[str, str]]:
 # ---------------------------------------------------------------------------
 
 def search_policy_documents(query: str) -> dict:
-    """Search the claims policy documents."""
+    """Return the policy clause(s) that cover the event and limit the caller
+    asks about, so the caller can answer a coverage question from policy
+    language instead of from memory.
+
+    WHEN to call: any question about what a policy covers, excludes, pays, or
+    caps (coverage limits, deductibles, covered perils, excluded events).
+
+    HOW to shape the query: name the covered EVENT and the LIMIT you need,
+    using the policy's own words. The policy speaks of water-ingress loss as
+    "flood" under Endorsement W, so query terms like "flood", "flood
+    insurance limit", or "Endorsement W" are what match — "water damage"
+    alone does not appear in the corpus.
+
+    ON a recoverable error: read the error, it names the policy vocabulary;
+    re-run ONCE with the corrected query. If even a query that names the
+    policy term returns no match, report 'not covered under this policy'
+    rather than inventing a figure.
+    """
     hits = _find_clauses(query)
     if not hits:
-        return {"error": "Error 3: lookup failed"}
+        return {
+            "error": (
+                f"No policy clause matched {query!r}. The policy frames "
+                f"water-ingress loss as FLOODING under Endorsement W: re-run "
+                f"search_policy_documents with a query that names the policy "
+                f"term, e.g. 'flood insurance limit' or 'flooding covered'. "
+                f"If a query naming 'flood' still returns no match, answer "
+                f"'not covered under this policy' and do not guess a number."
+            )
+        }
     return {
         "query": query,
         "matches": [{"clause": key, "text": text} for key, text in hits],
@@ -140,7 +168,7 @@ def build_server() -> MCPServer:
     s = MCPServer("policy-docs", version="1.0.0")
     s.tool(
         "search_policy_documents",
-        "Search the claims policy documents.",
+        search_policy_documents.__doc__.strip(),
         {
             "type": "object",
             "properties": {
@@ -154,7 +182,7 @@ def build_server() -> MCPServer:
     )(search_policy_documents)
     s.tool(
         "get_policy",
-        "Return the policy record for one policy number, POL-YYYY-nnnnn.",
+        get_policy.__doc__.strip(),
         {
             "type": "object",
             "properties": {

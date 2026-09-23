@@ -1,0 +1,4 @@
+# config_diff.txt — the ONLY change to the agent's setup that bolted on server two (server-one-only commit b04bd18 -> HEAD)
+
+
+No other config or agent wiring changed: the agent reads every server from mcpServers and discovers tools at run time.

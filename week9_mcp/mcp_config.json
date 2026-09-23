@@ -3,6 +3,10 @@
     "policy-docs": {
       "command": "python",
       "args": ["servers/policy_server.py"]
+    },
+    "claims-system": {
+      "command": "python",
+      "args": ["claims_thirdparty/claims_server.py"]
     }
   }
 }

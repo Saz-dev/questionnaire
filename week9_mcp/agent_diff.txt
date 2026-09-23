@@ -1,0 +1,14 @@
+# agent_diff.txt — proof that the agent module changed ZERO lines when server two was bolted on
+
+Compare commit b04bd18 (policy-doc server only) vs HEAD (policy-doc + claims-system).
+Agent module = agent.py, mcp_client.py, llm_client.py, run.py — the MCP host. Servers/config are excluded by design.
+
+$ git diff b04bd18..HEAD -- week9_mcp/agent.py week9_mcp/mcp_client.py week9_mcp/llm_client.py week9_mcp/run.py
+----- begin diff (empty = zero changed lines) -----
+----- end diff -----
+
+$ git diff --shortstat b04bd18..HEAD -- <agent module>
+-> 
+-> explicit: files_changed=0 lines_added=0 lines_removed=0
+
+(What DID change in that range is only: week9_mcp/mcp_config.json + the third-party claims server + reports — see config_diff.txt.)

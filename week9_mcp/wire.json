@@ -1,0 +1,128 @@
+{
+  "_title": "Raw JSON-RPC wire exchange:  initialize -> tools/list -> tools/call",
+  "_capture": "Captured verbatim from the agent's stdio transport while running the demo query against server two (claims-system). Each 'raw' object below is byte-for-byte the JSON that crossed the wire; the untouched source is wire/demo_claims__claims-system.jsonl.",
+  "_target_server": "claims-system (third-party) — claim number CLM-2024-88120",
+  "_transport": "MCP stdio transport: JSON-RPC 2.0, newline-delimited JSON on stdin/stdout",
+  "_where_the_model_call_happens": "The model call happens ONLY in the host (agent.py issues chat.completions.create against Groq with the discovered tool schemas) and does NOT happen anywhere in this wire: initialize, tools/list and tools/call are plain JSON-RPC between host and server, and the server's tools/call handler executes the lookup with no LLM in the path.",
+
+  "frames": [
+    {
+      "frame": 1,
+      "direction": "host --> server (request)",
+      "raw": {"jsonrpc": "2.0", "id": 1, "method": "initialize", "params": {"protocolVersion": "2025-03-26", "capabilities": {}, "clientInfo": {"name": "week9-mcp-agent", "version": "1.0.0"}}},
+      "_annotation": [
+        "'jsonrpc' — protocol-version marker; '2.0' means MCP rides JSON-RPC 2.0.",
+        "'id' — the host's request id (1): the server mirrors it so replies correlate to requests.",
+        "'method' — 'initialize' opens the MCP session: first message a client MUST send.",
+        "'params' — session-opening payload.",
+        "  'protocolVersion' — the MCP protocol version the host offers ('2025-03-26').",
+        "  'capabilities' — host capabilities (empty: the host exposes none of the optional client features).",
+        "  'clientInfo' — who is connecting; here the week-9 agent host. The server may show this in its logs."
+      ]
+    },
+    {
+      "frame": 2,
+      "direction": "host <-- server (reply)",
+      "raw": {"jsonrpc": "2.0", "id": 1, "result": {"protocolVersion": "2025-03-26", "capabilities": {"tools": {"listChanged": false}, "logging": {}}, "serverInfo": {"name": "claims-system", "version": "3.2.1"}}},
+      "_annotation": [
+        "'jsonrpc' — again '2.0'.",
+        "'id' — mirrored 1, pairing this reply to frame 1's initialize request.",
+        "'result' — the success payload of initialize.",
+        "  'protocolVersion' — the server agrees on the same MCP protocol version.",
+        "  'capabilities' — server capabilities.",
+        "    'tools' — the server advertises tool discovery; 'listChanged': false means it will not push tool-list-change notifications.",
+        "    'logging' — the server supports the logging capability.",
+        "  'serverInfo' — the server identifies itself; this is the third-party claims vendor's artifact (name 'claims-system', version 3.2.1)."
+      ]
+    },
+    {
+      "frame": 3,
+      "direction": "host --> server (notification)",
+      "raw": {"jsonrpc": "2.0", "method": "notifications/initialized", "params": {}},
+      "_annotation": [
+        "'jsonrpc' — '2.0'.",
+        "'method' — 'notifications/initialized': a one-way notification telling the server the host has finished initializing.",
+        "'params' — {} (empty); both present and correct.",
+        "No 'id' is present: the JSON-RPC rule every notification obeys — notifications are fire-and-forget and MUST NOT get a reply."
+      ]
+    },
+    {
+      "frame": 4,
+      "direction": "host --> server (request)",
+      "raw": {"jsonrpc": "2.0", "id": 2, "method": "tools/list", "params": {"cursor": null}},
+      "_annotation": [
+        "'jsonrpc' — '2.0'.",
+        "'id' — 2, the next id after initialize (1).",
+        "'method' — 'tools/list': the TOOL DISCOVERY call — this is how the agent learns the server's tools instead of hard-coding them.",
+        "'params' — 'cursor': null means 'start from the first page' (listChanged is false, so one page is expected)."
+      ]
+    },
+    {
+      "frame": 5,
+      "direction": "host <-- server (reply)",
+      "raw": {"jsonrpc": "2.0", "id": 2, "result": {"tools": [{"name": "claim_status", "description": "Look up the current status of an insurance claim by claim number (CLM-YYYY-nnnnn): claimant, linked policy, status, reported date and claimed amount. Read-only.", "inputSchema": {"type": "object", "properties": {"claim_number": {"type": "string", "description": "The claim number, e.g. 'CLM-2024-88120'."}}, "required": ["claim_number"]}}, {"name": "claim_adjuster_notes", "description": "Read the adjuster's note history for one insurance claim by claim number (CLM-YYYY-nnnnn). Sensitive: notes may name claimants and their address/damage details. Read-only.", "inputSchema": {"type": "object", "properties": {"claim_number": {"type": "string", "description": "The claim number, e.g. 'CLM-2024-88120'."}}, "required": ["claim_number"]}}]}},
+      "_annotation": [
+        "'jsonrpc' — '2.0'.",
+        "'id' — mirrored 2, pairing to frame 4's tools/list request.",
+        "'result' — the discovered tool catalog.",
+        "  'tools' — a LIST of every tool this server makes available; the agent turns each into a function schema for the model.",
+        "    tool 1 'claim_status' — the third-party server's claim-status lookup.",
+        "      'description' — the tool description (docstring) that becomes the model's function description.",
+        "      'inputSchema' — JSON Schema for the arguments the tool accepts.",
+        "    tool 2 'claim_adjuster_notes' — the adjuster-note history lookup (the sensitive one; see risk_note.md).",
+        "Count from THIS reply: 2 tools exposed by the claims server (the count report adds them to the policy server's 2)."
+      ]
+    },
+    {
+      "frame": 6,
+      "direction": "host --> server (request)",
+      "raw": {"jsonrpc": "2.0", "id": 3, "method": "tools/call", "params": {"name": "claim_status", "arguments": {"claim_number": "CLM-2024-88120"}}},
+      "_annotation": [
+        "'jsonrpc' — '2.0'.",
+        "'id' — 3.",
+        "'method' — 'tools/call': the host executes a discovered tool by name.",
+        "'params' — the invocation.",
+        "  'name' — 'claim_status', one of the names tools/list returned (never hard-coded in the agent).",
+        "  'arguments' — the model-produced arguments, passed straight through from its function call."
+      ]
+    },
+    {
+      "frame": 7,
+      "direction": "host <-- server (reply)",
+      "raw": {"jsonrpc": "2.0", "id": 3, "result": {"content": [{"type": "text", "text": "{\"claim_number\": \"CLM-2024-88120\", \"claimant\": \"A. Marchetti\", \"policy_number\": \"POL-2024-88120\", \"status\": \"in_review\", \"reported\": \"2024-11-02\", \"claimed_amount\": 25000}"}], "isError": false}},
+      "_annotation": [
+        "'jsonrpc' — '2.0'.",
+        "'id' — mirrored 3, pairing to frame 6's tools/call request.",
+        "'result' — the tool's return value.",
+        "  'content' — array of content blocks; one 'text' block whose 'text' is the JSON the lookup produced (claim CLM-2024-88120 is in_review, $25,000 claimed).",
+        "  'isError' — false: this was a successful lookup, not an error. (Recoverable failures return isError=true — see error_before_after.md.)"
+      ]
+    },
+    {
+      "frame": 8,
+      "direction": "host --> server (request)",
+      "raw": {"jsonrpc": "2.0", "id": 4, "method": "tools/call", "params": {"name": "claim_adjuster_notes", "arguments": {"claim_number": "CLM-2024-88120"}}},
+      "_annotation": [
+        "'jsonrpc' — '2.0'.",
+        "'id' — 4.",
+        "'method' — 'tools/call' (second call of the same query).",
+        "'params' — 'name' 'claim_adjuster_notes': the second discovered tool, called because the query asked for the adjuster's note history too.",
+        "  'arguments' — the same claim number the model was asked about.",
+        "No model runs here either — the host just forwards the model's chosen call."
+      ]
+    },
+    {
+      "frame": 9,
+      "direction": "host <-- server (reply)",
+      "raw": {"jsonrpc": "2.0", "id": 4, "result": {"content": [{"type": "text", "text": "{\"claim_number\": \"CLM-2024-88120\", \"notes\": [\"2024-11-03: Initial report - burst pipe in laundry room caused flooding.\", \"2024-11-05: On-site inspection. Water damage to flooring and drywall, mostly the ground floor.\", \"2024-11-08: Estimate received. Total repair $25,000, all water-related.\", \"2024-11-10: Flagged for policy limit check - is this covered under Endorsement W cap?\"]}"}], "isError": false}},
+      "_annotation": [
+        "'jsonrpc' — '2.0'.",
+        "'id' — mirrored 4, pairing to frame 8.",
+        "'result' — the tool's return value.",
+        "  'content' — the adjuster note history as one text block.",
+        "  'isError' — false.",
+        "This reply leaves the server's trust boundary carrying claimant-level detail the adjuster wrote — one reason risk_note.md questions the token that reads it."
+      ]
+    }
+  ]
+}

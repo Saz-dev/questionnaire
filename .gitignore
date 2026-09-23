@@ -3,3 +3,4 @@ __pycache__/
 venv/
 qdrant_storage/
 .DS_Store
+__pycache__/

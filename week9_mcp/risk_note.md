@@ -1,0 +1,7 @@
+# Risk note — claims-system MCP server (third-party)
+
+1. WHO WROTE IT: the claims-platform team's artifact, vendored unmodified into `week9_mcp/claims_thirdparty/` — not our code, reviewed by us only for protocol compatibility, not for security.
+2. WHAT IT CAN REACH: every claim in the claims database it ships with, by any `CLM-YYYY-nnnnn` (status, claimant, policy, adjuster-note history) — and because it runs on the same stdio pipe inside our agent's process, it shares that process's permissions and sees the same wire traffic as our own server.
+3. WHAT IT LOGS: nothing itself (its stdout is reserved for JSON-RPC), but our host logs every `tools/call` it serves — claim numbers and full note text — into `wire/` and `traces/`, so PII exits through our logs regardless.
+4. A STOLEN TOKEN COULD: call `claim_adjuster_notes` for an unbounded, un-authorized list of claim numbers — the artifact has no rate limit, no per-claim access check, and no expiry on the scope it trusts, exposing claimant names + damage details for every open claim.
+5. VERDICT: don't ship as-is — keep it only behind the gateway's scoped token that denies `claim_adjuster_notes` (see bonus) and make the vendor sign their artifact + audit logs; approved for the read-only staging lookup we ran.
