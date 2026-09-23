@@ -1,4 +1,20 @@
-# config_diff.txt — the ONLY change to the agent's setup that bolted on server two (server-one-only commit b04bd18 -> HEAD)
+# config_diff.txt — the ONLY change to the agent's setup that bolted on server two (b04bd18 -> 9e1f254)
 
+diff --git a/week9_mcp/mcp_config.json b/week9_mcp/mcp_config.json
+index 6e9785e..53123ef 100644
+--- a/week9_mcp/mcp_config.json
++++ b/week9_mcp/mcp_config.json
+@@ -3,6 +3,10 @@
+     "policy-docs": {
+       "command": "python",
+       "args": ["servers/policy_server.py"]
++    },
++    "claims-system": {
++      "command": "python",
++      "args": ["claims_thirdparty/claims_server.py"]
+     }
+   }
+ }
+\ No newline at end of file
 
-No other config or agent wiring changed: the agent reads every server from mcpServers and discovers tools at run time.
+That one block is the whole diff to the agent's wiring: the agent reads every server from mcpServers and discovers tools at run time, so nothing else about the host changed.
