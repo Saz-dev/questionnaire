@@ -1,0 +1,2 @@
+ts=2026-09-23T16:59:34 caller=week9-mcp-agent scope=ro tool=claim_status claim=CLM-2024-88120 denied=0
+ts=2026-09-23T16:59:34 caller=week9-mcp-agent scope=ro tool=claim_adjuster_notes claim=CLM-2024-88120 denied=1

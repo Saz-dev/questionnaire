@@ -1,0 +1,94 @@
+{
+  "run_id": "demo_claims_final",
+  "query": "What is the current status of claim CLM-2024-88120 and what does the adjuster's note history say about it?",
+  "servers_connected": [
+    "policy-docs",
+    "claims-system"
+  ],
+  "tools_discovered": {
+    "policy-docs": [
+      "search_policy_documents",
+      "get_policy"
+    ],
+    "claims-system": [
+      "claim_status",
+      "claim_adjuster_notes"
+    ]
+  },
+  "model": "openai/gpt-oss-120b",
+  "model_call_location": "The model call happens ONLY in the host \u2014 agent.py's LLM loop issues chat.completions.create against the provider and never appears on the MCP wire: initialize, tools/list and tools/call are plain JSON-RPC between host and server, and each server's tools/call handler runs with no LLM in the path.",
+  "laps": [
+    {
+      "lap": 1,
+      "assistant": {
+        "content": null,
+        "tool_calls": [
+          {
+            "name": "claim_status",
+            "server": "claims-system",
+            "arguments_raw": "{\"claim_number\":\"CLM-2024-88120\"}"
+          }
+        ]
+      },
+      "model": "openai/gpt-oss-120b",
+      "usage": {
+        "prompt_tokens": 712,
+        "completion_tokens": 56
+      },
+      "tool_results": [
+        {
+          "tool": "claim_status",
+          "server": "claims-system",
+          "arguments": {
+            "claim_number": "CLM-2024-88120"
+          },
+          "isError": false,
+          "result": "{\"claim_number\": \"CLM-2024-88120\", \"claimant\": \"A. Marchetti\", \"policy_number\": \"POL-2024-88120\", \"status\": \"in_review\", \"reported\": \"2024-11-02\", \"claimed_amount\": 25000}"
+        }
+      ]
+    },
+    {
+      "lap": 2,
+      "assistant": {
+        "content": null,
+        "tool_calls": [
+          {
+            "name": "claim_adjuster_notes",
+            "server": "claims-system",
+            "arguments_raw": "{\"claim_number\":\"CLM-2024-88120\"}"
+          }
+        ]
+      },
+      "model": "openai/gpt-oss-120b",
+      "usage": {
+        "prompt_tokens": 808,
+        "completion_tokens": 43
+      },
+      "tool_results": [
+        {
+          "tool": "claim_adjuster_notes",
+          "server": "claims-system",
+          "arguments": {
+            "claim_number": "CLM-2024-88120"
+          },
+          "isError": false,
+          "result": "{\"claim_number\": \"CLM-2024-88120\", \"notes\": [\"2024-11-03: Initial report - burst pipe in laundry room caused flooding.\", \"2024-11-05: On-site inspection. Water damage to flooring and drywall, mostly the ground floor.\", \"2024-11-08: Estimate received. Total repair $25,000, all water-related.\", \"2024-11-10: Flagged for policy limit check - is this covered under Endorsement W cap?\"]}"
+        }
+      ]
+    },
+    {
+      "lap": 3,
+      "assistant": {
+        "content": "**Claim Status**  \n- **Claim Number:** CLM-2024-88120  \n- **Claimant:** A. Marchetti  \n- **Linked Policy:** POL-2024-88120  \n- **Current Status:** *in_review*  \n- **Date Reported:** 2024\u201111\u201102  \n- **Claimed Amount:** $25,000  \n\n**Adjuster\u2019s Note History**  \n1. **2024\u201111\u201103:** Initial report \u2013 burst pipe in laundry room caused flooding.  \n2. **2024\u201111\u201105:** On\u2011site inspection \u2013 water damage to flooring and drywall, primarily on the ground floor.  \n3. **2024\u201111\u201108:** Estimate received \u2013 total repair cost $25,000, all water\u2011related.  \n4. **2024\u201111\u201110:** Flagged for policy limit check \u2013 \u201cis this covered under Endorsement\u202fW cap?\u201d  \n\nThe claim is currently under review, and the adjuster has noted that the loss is being evaluated against the coverage limits of Endorsement\u202fW.",
+        "tool_calls": []
+      },
+      "model": "openai/gpt-oss-120b",
+      "usage": {
+        "prompt_tokens": 954,
+        "completion_tokens": 227
+      }
+    }
+  ],
+  "final_answer": "**Claim Status**  \n- **Claim Number:** CLM-2024-88120  \n- **Claimant:** A. Marchetti  \n- **Linked Policy:** POL-2024-88120  \n- **Current Status:** *in_review*  \n- **Date Reported:** 2024\u201111\u201102  \n- **Claimed Amount:** $25,000  \n\n**Adjuster\u2019s Note History**  \n1. **2024\u201111\u201103:** Initial report \u2013 burst pipe in laundry room caused flooding.  \n2. **2024\u201111\u201105:** On\u2011site inspection \u2013 water damage to flooring and drywall, primarily on the ground floor.  \n3. **2024\u201111\u201108:** Estimate received \u2013 total repair cost $25,000, all water\u2011related.  \n4. **2024\u201111\u201110:** Flagged for policy limit check \u2013 \u201cis this covered under Endorsement\u202fW cap?\u201d  \n\nThe claim is currently under review, and the adjuster has noted that the loss is being evaluated against the coverage limits of Endorsement\u202fW.",
+  "laps_used": 3
+}

@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "mcp-gateway": {
+      "command": "python",
+      "args": ["gateway.py", "--token", "ro"]
+    }
+  }
+}

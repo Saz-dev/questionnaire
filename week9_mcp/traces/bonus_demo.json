@@ -1,0 +1,91 @@
+{
+  "run_id": "bonus_demo",
+  "query": "What is the status of claim CLM-2024-88120, and what did the adjuster note most recently?",
+  "servers_connected": [
+    "mcp-gateway"
+  ],
+  "tools_discovered": {
+    "mcp-gateway": [
+      "search_policy_documents",
+      "get_policy",
+      "claim_status",
+      "claim_adjuster_notes"
+    ]
+  },
+  "model": "openai/gpt-oss-120b",
+  "model_call_location": "The model call happens ONLY in the host \u2014 agent.py's LLM loop issues chat.completions.create against the provider and never appears on the MCP wire: initialize, tools/list and tools/call are plain JSON-RPC between host and server, and each server's tools/call handler runs with no LLM in the path.",
+  "laps": [
+    {
+      "lap": 1,
+      "assistant": {
+        "content": null,
+        "tool_calls": [
+          {
+            "name": "claim_status",
+            "server": "mcp-gateway",
+            "arguments_raw": "{\"claim_number\":\"CLM-2024-88120\"}"
+          }
+        ]
+      },
+      "model": "openai/gpt-oss-120b",
+      "usage": {
+        "prompt_tokens": 710,
+        "completion_tokens": 56
+      },
+      "tool_results": [
+        {
+          "tool": "claim_status",
+          "server": "mcp-gateway",
+          "arguments": {
+            "claim_number": "CLM-2024-88120"
+          },
+          "isError": false,
+          "result": "{\"claim_number\": \"CLM-2024-88120\", \"claimant\": \"A. Marchetti\", \"policy_number\": \"POL-2024-88120\", \"status\": \"in_review\", \"reported\": \"2024-11-02\", \"claimed_amount\": 25000}"
+        }
+      ]
+    },
+    {
+      "lap": 2,
+      "assistant": {
+        "content": null,
+        "tool_calls": [
+          {
+            "name": "claim_adjuster_notes",
+            "server": "mcp-gateway",
+            "arguments_raw": "{\"claim_number\":\"CLM-2024-88120\"}"
+          }
+        ]
+      },
+      "model": "openai/gpt-oss-120b",
+      "usage": {
+        "prompt_tokens": 806,
+        "completion_tokens": 52
+      },
+      "tool_results": [
+        {
+          "tool": "claim_adjuster_notes",
+          "server": "mcp-gateway",
+          "arguments": {
+            "claim_number": "CLM-2024-88120"
+          },
+          "isError": true,
+          "result": "{\"error\": \"denied: the scoped token you presented (scope 'ro') does not include claim_adjuster_notes. The gateway allows only: claim_status, get_policy, search_policy_documents. Answer from those tools; if they cannot give the detail, say the caller needs a token with broader scope.\"}"
+        }
+      ]
+    },
+    {
+      "lap": 3,
+      "assistant": {
+        "content": "The claim\u202fCLM\u20112024\u201188120 is currently **in review**.  \n\nTo see the most recent adjuster note, a token with access to the **claim_adjuster_notes** scope is required; the current read\u2011only token does not include that permission. Please provide a token that includes the `claim_adjuster_notes` scope, and I\u2019ll retrieve the latest note for you.",
+        "tool_calls": []
+      },
+      "model": "openai/gpt-oss-120b",
+      "usage": {
+        "prompt_tokens": 906,
+        "completion_tokens": 128
+      }
+    }
+  ],
+  "final_answer": "The claim\u202fCLM\u20112024\u201188120 is currently **in review**.  \n\nTo see the most recent adjuster note, a token with access to the **claim_adjuster_notes** scope is required; the current read\u2011only token does not include that permission. Please provide a token that includes the `claim_adjuster_notes` scope, and I\u2019ll retrieve the latest note for you.",
+  "laps_used": 3
+}

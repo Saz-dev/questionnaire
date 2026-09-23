@@ -693,6 +693,79 @@ def query_stream(req: QueryRequest):
 
 
 # ----------------------------------------------------------------------
+# Week 9 — MCP agent status (read-only view over the week9_mcp runtime)
+# ----------------------------------------------------------------------
+
+WEEK9_MCP_DIR = Path(__file__).parent / "week9_mcp"
+
+
+def _read_json(path: Path) -> dict:
+    try:
+        return json.loads(path.read_text())
+    except Exception:
+        return {}
+
+
+def _latest_agent_trace() -> dict:
+    traces_dir = WEEK9_MCP_DIR / "traces"
+    if not traces_dir.exists():
+        return {}
+    trace_files = [p for p in traces_dir.iterdir() if p.suffix == ".json"]
+    if not trace_files:
+        return {}
+    latest = max(trace_files, key=lambda p: p.stat().st_mtime)
+    trace = _read_json(latest)
+    laps = [
+        {
+            "lap": lap.get("lap"),
+            "tool_calls": [
+                {"name": tc.get("name"), "server": tc.get("server")}
+                for tc in (lap.get("assistant") or {}).get("tool_calls", [])
+            ],
+            "tool_results": [
+                {
+                    "tool": r.get("tool"),
+                    "server": r.get("server"),
+                    "isError": r.get("isError"),
+                    "result_preview": (r.get("result") or "")[:220],
+                }
+                for r in lap.get("tool_results", [])
+            ],
+        }
+        for lap in trace.get("laps", [])
+    ]
+    return {
+        "run_id": trace.get("run_id"),
+        "query": trace.get("query"),
+        "model": trace.get("model"),
+        "tools_discovered": trace.get("tools_discovered", {}),
+        "final_answer": trace.get("final_answer"),
+        "laps": laps,
+    }
+
+
+@app.get("/api/agent/mcp")
+def agent_mcp():
+    """Week-9 MCP agent at a glance: registered servers, tools discovered
+    via tools/list, and the most recent agent run (tool names per lap)."""
+    config = _read_json(WEEK9_MCP_DIR / "mcp_config.json")
+    discovery = _read_json(WEEK9_MCP_DIR / "runtime" / "discovery_latest.json")
+    return {
+        "servers": list((config.get("mcpServers") or {}).keys()),
+        "server_config": config.get("mcpServers", {}),
+        "discovery": {
+            name: [t.get("name") for t in data.get("raw_tools_list", [])]
+            for name, data in discovery.items()
+        },
+        "model_call_location": (
+            "The model call happens only in the host agent (agent.py's LLM loop); "
+            "MCP servers are pure JSON-RPC capability execution."
+        ),
+        "latest_trace": _latest_agent_trace(),
+    }
+
+
+# ----------------------------------------------------------------------
 # Week 7 — Race
 # ----------------------------------------------------------------------
 
