@@ -1,0 +1,24 @@
+{
+    "name": "claims-orchestrator",
+    "description": "Manager agent that decomposes insurance claim questions into coverage/exclusions and adjuster notes sub-tasks.",
+    "version": "1.0.0",
+    "skills": [
+        {
+            "name": "coverage_check",
+            "description": "Determine coverage and exclusions from policy documents"
+        },
+        {
+            "name": "adjuster_summary",
+            "description": "Summarize adjuster notes from claims system"
+        }
+    ],
+    "inputModes": [
+        "text"
+    ],
+    "outputModes": [
+        "text"
+    ],
+    "auth": {
+        "type": "none"
+    }
+}
