@@ -1,0 +1,27 @@
+### GREEN — AFTER the fix (AGENT_PROMPT_VERSION=agent-v2-2026-10-10)
+Sat Oct 10 09:18:36 UTC 2026
+$ python week6_eval.py --live
+(live agent cases re-run with prompt agent-v2-2026-10-10)
+
+=== Deterministic assertion pass rate by mode (29 cases) ===
+mode                             pass  total    rate
+appropriate-abstention              4      4 100.0%
+citation-evidence-mismatch          0      2   0.0%
+clean                               3      3 100.0%
+exclusion-ignored                   1      1 100.0%
+fails-to-use-info                   0      6   0.0%
+guard-covered                       1      1 100.0%
+guard-deductible                    0      1   0.0%
+model-conflation                    6     10  60.0%
+unsupported-diagnosis               0      1   0.0%
+OVERALL                            15     29  51.7%
+
+=== Regression cases (verbatim from real failed traces) ===
+  w6-04 [FAIL] trace_id=e8c6a0d4-fc95-4870-88dd-08dd4c0996e9 - What battery does the CB350 use?
+  w6-14 [FAIL] trace_id=b3b17def-fdc5-4313-95f1-5e1d8de6953d - What is the main fuse rating?
+  w11-01 [PASS] trace_id=565fda46-6e45-4731-8c25-24f77d3e6aa5 - Claim CLM-2024-88123: is the flood loss covered? One line for the claimant.
+      answer: 'D.\u202fRose – not covered (flood excluded).'
+
+=== Judge agreement with hand labels ===
+  agreement_before (judge_v1): 64.0%  (16/25)
+  agreement_after  (judge_v2): 60.0%  (15/25)

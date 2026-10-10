@@ -24,6 +24,27 @@ def load_cases() -> list[dict]:
         return [json.loads(line) for line in f if line.strip()]
 
 
+def refresh_live_cases(cases: list[dict]) -> list[dict]:
+    """Week 11: cases flagged `live_agent` are re-run through the real Week-9 agent
+    NOW (current AGENT_PROMPT_VERSION), so a prompt fix changes the result. The stored
+    `answer` is only the captured failure. Live runs are traced like any other request."""
+    import os, sys
+    sys.path.insert(0, str(Path(__file__).parent / "week9_mcp"))
+    from agent import discover_and_run, get_prompt_version
+    print(f"(live agent cases re-run with prompt {get_prompt_version()})")
+    out = []
+    for c in cases:
+        if c.get("live_agent"):
+            os.chdir(Path(__file__).parent / "week9_mcp")
+            try:
+                t = discover_and_run(c["question"], run_id=f"eval-{c['id']}", user_id="eval-suite")
+            finally:
+                os.chdir(Path(__file__).parent)
+            c = {**c, "answer": t["final_answer"] or "", "trace_id_live": t.get("obs_trace_id")}
+        out.append(c)
+    return out
+
+
 def print_assertion_table(cases: list[dict]) -> None:
     by_mode = defaultdict(lambda: {"pass": 0, "total": 0})
     per_case = []
@@ -49,6 +70,8 @@ def print_assertion_table(cases: list[dict]) -> None:
         if case["regression_case"]:
             status = "PASS" if result["passed"] else "FAIL"
             print(f"  {case['id']} [{status}] trace_id={case['trace_id']} - {case['question']}")
+            if case.get("suite") == "claims-agent":
+                print(f"      answer: {case['answer'][:140]!r}")
 
 
 def print_judge_agreement_if_available() -> None:
@@ -83,7 +106,10 @@ def print_judge_agreement_if_available() -> None:
 
 
 def main() -> None:
+    import sys
     cases = load_cases()
+    if "--live" in sys.argv:
+        cases = refresh_live_cases(cases)
     print_assertion_table(cases)
     print_judge_agreement_if_available()
 

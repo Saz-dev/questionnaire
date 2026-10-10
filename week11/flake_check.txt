@@ -1,0 +1,6 @@
+agent-v1-2026-10-09  w11-01  exclusion-ignored  0/5
+agent-v1-2026-10-09  w11-02  guard-covered      5/5
+agent-v1-2026-10-09  w11-03  guard-deductible   5/5
+agent-v2-2026-10-10  w11-01  exclusion-ignored  5/5
+agent-v2-2026-10-10  w11-02  guard-covered      5/5
+agent-v2-2026-10-10  w11-03  guard-deductible   5/5

@@ -37,6 +37,7 @@ from rag import RAG
 from tracing import make_trace, write_trace
 from vectordb import VectorDB, _hash_documents
 from week6_api import build_week6_summary, get_label_queue, submit_label
+from week11_api import router as week11_router
 
 load_dotenv()
 
@@ -363,6 +364,9 @@ app.add_middleware(
 )
 
 
+app.include_router(week11_router)
+
+
 @app.on_event("startup")
 def _startup():
     # Load the cached index (if present) so the first real request isn't
@@ -649,7 +653,8 @@ def query_stream(req: QueryRequest):
         if best_score < rag_module.MIN_SCORE:
             write_trace(make_trace(
                 req.question,
-                {"answer": rag_module.DONT_KNOW_MESSAGE, "evidence": hits, "meta": meta, "grounded": False},
+                {"answer": rag_module.DONT_KNOW_MESSAGE, "evidence": hits, "meta": meta, "grounded": False,
+                 "generation_method": "refused", "timing_ms": {"retrieval": retrieval_ms, "generation": 0.0}},
                 mode=req.mode,
             ))
             yield sse({
@@ -664,7 +669,7 @@ def query_stream(req: QueryRequest):
 
         prompt = RAG._build_prompt(req.question, hits)
         t1 = time.perf_counter()
-        generated = RAG._generate_with_llm(prompt)
+        generated, usage = RAG._generate_with_llm_usage(prompt)
         method = "llm"
         if generated is None:
             generated = RAG._synthesize_answer(req.question, hits)
@@ -673,7 +678,9 @@ def query_stream(req: QueryRequest):
 
         write_trace(make_trace(
             req.question,
-            {"answer": generated, "evidence": hits, "meta": meta, "grounded": True},
+            {"answer": generated, "evidence": hits, "meta": meta, "grounded": True,
+             "generation_method": method, "usage": usage,
+             "timing_ms": {"retrieval": retrieval_ms, "generation": generation_ms}},
             mode=req.mode,
         ))
         yield sse({

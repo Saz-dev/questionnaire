@@ -1,0 +1,10 @@
+# Prompt version bump — `agent-v1-2026-10-09` → `agent-v2-2026-10-10`
+
+**Layer:** prompt (`week9_mcp/agent.py`, `PROMPTS` registry; selected at runtime by env `AGENT_PROMPT_VERSION`, default = v2).
+**Why:** claim CLM-2024-88123 sits on a renter-contents policy that *excludes flooding*, but the agent called `claim_status` then `search_policy_documents`, got the generic Endorsement W flood clause (`clause:flood`, "covered up to $10,000"), never called `get_policy`, and told the claimant "flood loss is covered". Retrieval did return the right generic clause; the model never read the policy-specific `cover` field — a **prompt/tool-use** miss, not a retrieval miss (the context ids in the trace show `claim:…`, `clause:flood`, and no `policy:…`).
+**Change:** v2 appends a coverage rule — for a *specific claim/policy* coverage question, resolve the policy, call `get_policy`, and let a policy-specific exclusion override generic clause text. First attempt scoped it to *any* coverage-ish question and broke the generic deductible question (model started demanding a claim number: suite 15/29 → 15/29, `guard-deductible` 1/1 → 0/1); narrowed to "specific claim or policy only" → 16/29. See `suite_red.txt`, `suite_green_attempt1_guard_regressed.txt`, `suite_green.txt`.
+**Cost of the fix:** measured v2 vs v1: -10% $/query, -8% tokens (`cost_by_stage.md`); stability over 5 repeat runs: w11-01 0/5 on v1 → 5/5 on v2, both guards 5/5 on both (`flake_check.txt`).
+
+## Canary + rollback (two lines)
+1. **Canary:** set `AGENT_PROMPT_VERSION=agent-v2-2026-10-10` for ~5% of adjusters (hash `user_id` mod 20 == 0) for 24h; watch in the Observability page / `drill_tools.py find --prompt-version agent-v2-2026-10-10 --says-covered --no-exclusion` that the "says covered, no exclusion cited" rate does not rise vs v1, and that p95 latency stays within +1 lap (~+1s) and no 429s increase.
+2. **Rollback:** set `AGENT_PROMPT_VERSION=agent-v1-2026-10-09` and restart the agent (config flip, no code deploy); traces stay comparable because every trace carries `prompt_version`.

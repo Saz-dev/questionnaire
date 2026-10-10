@@ -11,6 +11,8 @@ worth paying an LLM for.
 """
 import re
 
+import obs
+
 KNOWN_SOURCES = ("OMHness.pdf", "OMHornet20.pdf", "OMCB300R.pdf")
 REFUSAL_RE = re.compile(r"\bi don'?t know\b", re.IGNORECASE)
 NAMES_A_MODEL_RE = re.compile(r"\b(cb350|h.?ness|hornet|cb300r)\b", re.IGNORECASE)
@@ -66,11 +68,32 @@ def citations_match_evidence(question: str, answer: str, evidence_chunk_ids: lis
     return all(src in answer for src in used_sources)
 
 
+def exclusion_respected(answer: str, coverage_truth: str) -> bool:
+    """Week 11 — claims-agent cases. `coverage_truth` is what the policy actually says:
+    "excluded"  -> the answer must say NOT covered (and must not assert coverage);
+    "covered"   -> the answer must assert coverage (guards against over-correcting
+                   so the exclusion fix does not break the legitimate flood/deductible cases)."""
+    flags = obs.output_flags(answer)
+    if coverage_truth == "excluded":
+        return flags["says_not_covered"] and not flags["says_covered"]
+    return flags["says_covered"] and not flags["says_not_covered"]
+
+
 def run_all(case: dict) -> dict:
     """Run every assertion on one eval_set.jsonl case. Returns per-check results
     plus an overall `passed` bool (None-valued / not-applicable checks don't
     count against the case)."""
     answer = case["answer"]
+    if case.get("suite") == "claims-agent":
+        # Claims-domain cases (Week 11): the bike-manual assertions (named manual,
+        # Sources section, evidence citations) do not apply; coverage truth does.
+        checks = {
+            "exclusion_respected": exclusion_respected(answer, case["coverage_truth"])
+            if case.get("coverage_truth") else None,
+            "expected_fact_present": expected_fact_present(answer, case.get("expected_keywords")),
+        }
+        applicable = [v for v in checks.values() if v is not None]
+        return {"checks": checks, "passed": all(applicable) if applicable else True}
     checks = {
         "cites_a_source": cites_a_source(answer),
         "refusal_matches_expected_grounded": refusal_matches_expected_grounded(

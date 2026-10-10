@@ -4,3 +4,5 @@ venv/
 qdrant_storage/
 .DS_Store
 __pycache__/
+traces.db
+week11/.drill_sealed.json

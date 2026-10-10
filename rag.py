@@ -195,8 +195,14 @@ Answer:""".strip()
     @staticmethod
     def _generate_with_llm(prompt: str) -> str | None:
         """Call the AI provider's chat completions API via Groq. None if no key."""
+        return RAG._generate_with_llm_usage(prompt)[0]
+
+    @staticmethod
+    def _generate_with_llm_usage(prompt: str) -> tuple[str | None, dict]:
+        """Same call, but also returns token usage (for Week 11 cost tracing)."""
+        no_usage = {"prompt_tokens": 0, "completion_tokens": 0}
         if not AI_API_KEY:
-            return None  # no key -> caller falls back to context-only answer
+            return None, no_usage  # no key -> caller falls back to context-only answer
 
         # Groq exposes an OpenAI-compatible endpoint, so the `openai` client
         # works by just swapping the base_url. Imported lazily so local
@@ -219,7 +225,12 @@ Answer:""".strip()
                     ],
                     temperature=0.2,  # low temp -> factual, reproducible answers
                 )
-                return response.choices[0].message.content
+                u = response.usage
+                usage = {
+                    "prompt_tokens": getattr(u, "prompt_tokens", 0) or 0,
+                    "completion_tokens": getattr(u, "completion_tokens", 0) or 0,
+                }
+                return response.choices[0].message.content, usage
             except Exception as exc:
                 if getattr(exc, "status_code", None) in (429, 503):
                     import time
@@ -227,8 +238,8 @@ Answer:""".strip()
                     time.sleep(min(30 * (2 ** attempt), 240))  # rate limit: back off
                 else:
                     print(f"  ! LLM generation failed: {exc}")
-                    return None
-        return None
+                    return None, no_usage
+        return None, no_usage
 
     # ------------------------------------------------------------------
     # End-to-end answer
@@ -282,7 +293,7 @@ Answer:""".strip()
 
         # 4) Try to generate with an LLM; degrade gracefully to raw context.
         t1 = time.perf_counter()
-        generated = self._generate_with_llm(prompt)
+        generated, usage = self._generate_with_llm_usage(prompt)
         generation_method = "llm"
         if generated is None:
             generated = self._synthesize_answer(question, hits)
@@ -299,6 +310,7 @@ Answer:""".strip()
             "timing_ms": {"retrieval": round(retrieval_ms, 1), "generation": round(generation_ms, 1)},
             "generation_method": generation_method,
             "prompt": prompt,
+            "usage": usage,
         }
 
 

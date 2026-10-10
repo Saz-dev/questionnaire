@@ -4,27 +4,17 @@ import uuid
 from datetime import datetime, timezone
 from pathlib import Path
 
+import obs
 import rag as rag_module
 
 TRACE_PATH = Path("traces.jsonl")
 
-# Defensive PII scrub. This app's real questions are motorcycle-manual
-# lookups with no claimant data in them, but the redaction step must
-# still run BEFORE a trace is written (not filtered out afterward), so
-# the requirement is satisfied as actual pipeline behavior, not a
-# retroactive claim. See notes.md for confirmation this fires 0 times
-# on the real corpus and why.
-_CLAIM_NUMBER_RE = re.compile(r"\b(claim|policy)[\s#:-]*[A-Z0-9-]{4,}\b", re.IGNORECASE)
-_NAME_LABEL_RE = re.compile(r"\b(claimant|policyholder)[\s:]+[A-Z][a-z]+(?:\s+[A-Z][a-z]+)?\b")
+# PII redaction lives in obs.py (single implementation; runs BEFORE any write).
+redact_pii = obs.redact_pii
 
 
-def redact_pii(text: str) -> str:
-    text = _CLAIM_NUMBER_RE.sub("[REDACTED-CLAIM-NUMBER]", text)
-    text = _NAME_LABEL_RE.sub("[REDACTED-NAME]", text)
-    return text
-
-
-def make_trace(question: str, result: dict, mode: str, temperature: float = 0.2) -> dict:
+def make_trace(question: str, result: dict, mode: str, temperature: float = 0.2,
+               user_id: str | None = None, session_id: str | None = None) -> dict:
     """
     Build one trace record from a RAG.answer() result.
 
@@ -43,26 +33,36 @@ def make_trace(question: str, result: dict, mode: str, temperature: float = 0.2)
         for h in pool
     ]
 
-    trace = {
-        "trace_id": str(uuid.uuid4()),
-        "timestamp": datetime.now(timezone.utc).isoformat(),
-        "question": redact_pii(question),
-        "prompt_version": rag_module.PROMPT_VERSION,
-        "mode": mode,
-        "model": rag_module.AI_MODEL,
-        "temperature": temperature,
-        "retrieved": retrieved,
-        "evidence_chunk_ids": [h.get("chunk_id") for h in result["evidence"]],
-        "grounded": result["grounded"],
-        "raw_output": result["answer"],
-        "answer": redact_pii(result["answer"]),
-    }
+    # Per-span latency / tokens / cost (retrieval, generation). `timing_ms`
+    # and `usage` are present on RAG.answer() results; the streaming endpoint
+    # passes them through the same keys.
+    timing = result.get("timing_ms") or {}
+    usage = result.get("usage") or {}
+    tin, tout = usage.get("prompt_tokens", 0), usage.get("completion_tokens", 0)
+    rec = obs.TraceRecorder()
+    rec.add_span("retrieval", "retrieval", timing.get("retrieval", 0.0), cost_usd=obs.RETRIEVAL_COST_USD,
+                 mode=mode, candidates=len(pool))
+    if result.get("generation_method") != "refused" and result["grounded"]:
+        rec.add_span("generation", "generation", timing.get("generation", 0.0), tokens_in=tin,
+                     tokens_out=tout, cost_usd=obs.llm_cost(rag_module.AI_MODEL, tin, tout))
+
+    trace = obs.build_trace(
+        question=question, answer=result["answer"], prompt_version=rag_module.PROMPT_VERSION,
+        model=rag_module.AI_MODEL, spans=rec.spans,
+        retrieved_context_ids=[h.get("chunk_id") for h in pool], source="rag",
+        user_id=user_id, session_id=session_id, mode=mode,
+        extra={
+            "temperature": temperature,
+            "retrieved": retrieved,
+            "evidence_chunk_ids": [h.get("chunk_id") for h in result["evidence"]],
+            "grounded": result["grounded"],
+        },
+    )
     return trace
 
 
 def write_trace(trace: dict, path: Path = TRACE_PATH) -> None:
-    with path.open("a") as f:
-        f.write(json.dumps(trace) + "\n")
+    obs.write_trace_v2(trace, path)
 
 
 def load_traces(path: Path = TRACE_PATH) -> list[dict]:
