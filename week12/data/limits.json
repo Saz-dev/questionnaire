@@ -1,0 +1,13 @@
+{
+  "_note": "SYNTHETIC illustrative figures. Three DIFFERENT numbers per product+peril: deductible (what the insured bears first), sub_limit (cap for that peril), policy_limit (cap for the whole policy).",
+  "household": {
+    "policy_limit": 250000,
+    "deductible": {"default": 500, "flood": 1500, "escape_of_water": 750},
+    "sub_limit": {"flood": 15000, "theft": 5000, "fire": 120000, "escape_of_water": 10000, "storm": 20000}
+  },
+  "motor": {
+    "policy_limit": 40000,
+    "deductible": {"default": 400, "flood": 1000, "windscreen": 100},
+    "sub_limit": {"flood": 8000, "theft": 25000, "collision": 35000, "windscreen": 600, "hail": 6000}
+  }
+}

@@ -1,0 +1,1888 @@
+{
+ "summary": {
+  "label": "after",
+  "date_filter": true,
+  "pii_mode": "hash",
+  "n": 38,
+  "pass": 38,
+  "wall_s": 0.1,
+  "per_category": {
+   "clause-miss": [
+    4,
+    4
+   ],
+   "money-conflation": [
+    3,
+    3
+   ],
+   "not-in-force": [
+    4,
+    4
+   ],
+   "peril-misclass": [
+    2,
+    2
+   ],
+   "pii-leak": [
+    2,
+    2
+   ],
+   "referral-path": [
+    3,
+    3
+   ],
+   "says-decision": [
+    3,
+    3
+   ],
+   "seam-intake": [
+    3,
+    3
+   ],
+   "version-control": [
+    5,
+    5
+   ],
+   "wrong-endorsement-version": [
+    9,
+    9
+   ]
+  },
+  "straddle_slice": [
+   12,
+   12
+  ],
+  "wrong_version_citation": [
+   0,
+   30
+  ],
+  "wrong_wording": [
+   0,
+   30
+  ],
+  "never_states_decision_fail": 0,
+  "pii": {
+   "cases_with_known_leak": 0,
+   "cases_with_heldout_leak": 0,
+   "heldout_markers_total": 3
+  },
+  "trajectory": {
+   "tool_choice_accuracy": 1.0,
+   "exact_trajectory_pass": 1.0,
+   "outcome_pass": 1.0,
+   "gap_outcome_minus_trajectory_pp": 0.0,
+   "disagreeing_cases": []
+  },
+  "latency_ms": {
+   "mean": 1.4,
+   "p50": 1.6,
+   "max": 3.9
+  },
+  "failed_cases": []
+ },
+ "rows": [
+  {
+   "id": "w12-01",
+   "wrong_wording": false,
+   "category": "wrong-endorsement-version",
+   "straddle": true,
+   "note": "brief's own example: 11 Aug 2024 flood",
+   "passed": true,
+   "failed": [],
+   "checks": {
+    "never_states_decision": true,
+    "refers_to_adjuster": true,
+    "cites_clause_and_version": true,
+    "cited_version_matches_loss_date": true,
+    "expected_clause_cited": true,
+    "in_force_correct": true,
+    "peril_correct": true,
+    "money_three_distinct": true,
+    "trace_survives": true,
+    "no_pii": true
+   },
+   "pii_leaks": {
+    "known": [],
+    "heldout": []
+   },
+   "trace_id": "ba805108-c8f7-4231-9ff3-19287d71c5fc",
+   "expected_trajectory": [
+    "policy_lookup",
+    "coverage_in_force_check",
+    "search_policy_wording",
+    "refer_to_adjuster"
+   ],
+   "actual_trajectory": [
+    "policy_lookup",
+    "coverage_in_force_check",
+    "search_policy_wording",
+    "refer_to_adjuster"
+   ],
+   "trajectory_exact": true,
+   "traj_lcs": 4,
+   "traj_expected_len": 4,
+   "cited_versions": [
+    "2023",
+    "2023"
+   ],
+   "flags": [],
+   "latency_ms": 3.9,
+   "cost_usd": 0.0
+  },
+  {
+   "id": "w12-02",
+   "wrong_wording": false,
+   "category": "wrong-endorsement-version",
+   "straddle": true,
+   "note": "day BEFORE the 2025 wording took effect",
+   "passed": true,
+   "failed": [],
+   "checks": {
+    "never_states_decision": true,
+    "refers_to_adjuster": true,
+    "cites_clause_and_version": true,
+    "cited_version_matches_loss_date": true,
+    "expected_clause_cited": true,
+    "in_force_correct": true,
+    "peril_correct": true,
+    "money_three_distinct": true,
+    "trace_survives": true,
+    "no_pii": true
+   },
+   "pii_leaks": {
+    "known": [],
+    "heldout": []
+   },
+   "trace_id": "4eb5d255-4512-48b2-8644-b54e73465bd1",
+   "expected_trajectory": [
+    "policy_lookup",
+    "coverage_in_force_check",
+    "search_policy_wording",
+    "refer_to_adjuster"
+   ],
+   "actual_trajectory": [
+    "policy_lookup",
+    "coverage_in_force_check",
+    "search_policy_wording",
+    "refer_to_adjuster"
+   ],
+   "trajectory_exact": true,
+   "traj_lcs": 4,
+   "traj_expected_len": 4,
+   "cited_versions": [
+    "2023",
+    "2023"
+   ],
+   "flags": [],
+   "latency_ms": 1.8,
+   "cost_usd": 0.0
+  },
+  {
+   "id": "w12-03",
+   "wrong_wording": false,
+   "category": "version-control",
+   "straddle": false,
+   "note": "day the 2025 wording took effect (control: must cite 2025)",
+   "passed": true,
+   "failed": [],
+   "checks": {
+    "never_states_decision": true,
+    "refers_to_adjuster": true,
+    "cites_clause_and_version": true,
+    "cited_version_matches_loss_date": true,
+    "expected_clause_cited": true,
+    "in_force_correct": true,
+    "peril_correct": true,
+    "money_three_distinct": true,
+    "trace_survives": true,
+    "no_pii": true
+   },
+   "pii_leaks": {
+    "known": [],
+    "heldout": []
+   },
+   "trace_id": "f9f9db0a-6031-4680-a5dd-11bf9728374e",
+   "expected_trajectory": [
+    "policy_lookup",
+    "coverage_in_force_check",
+    "search_policy_wording",
+    "refer_to_adjuster"
+   ],
+   "actual_trajectory": [
+    "policy_lookup",
+    "coverage_in_force_check",
+    "search_policy_wording",
+    "refer_to_adjuster"
+   ],
+   "trajectory_exact": true,
+   "traj_lcs": 4,
+   "traj_expected_len": 4,
+   "cited_versions": [
+    "2025",
+    "2025"
+   ],
+   "flags": [],
+   "latency_ms": 1.7,
+   "cost_usd": 0.0
+  },
+  {
+   "id": "w12-04",
+   "wrong_wording": false,
+   "category": "version-control",
+   "straddle": false,
+   "note": "2025 flood (control)",
+   "passed": true,
+   "failed": [],
+   "checks": {
+    "never_states_decision": true,
+    "refers_to_adjuster": true,
+    "cites_clause_and_version": true,
+    "cited_version_matches_loss_date": true,
+    "expected_clause_cited": true,
+    "in_force_correct": true,
+    "peril_correct": true,
+    "money_three_distinct": true,
+    "trace_survives": true,
+    "no_pii": true
+   },
+   "pii_leaks": {
+    "known": [],
+    "heldout": []
+   },
+   "trace_id": "2b57bce1-f3fd-412c-a279-d9e357952199",
+   "expected_trajectory": [
+    "policy_lookup",
+    "coverage_in_force_check",
+    "search_policy_wording",
+    "refer_to_adjuster"
+   ],
+   "actual_trajectory": [
+    "policy_lookup",
+    "coverage_in_force_check",
+    "search_policy_wording",
+    "refer_to_adjuster"
+   ],
+   "trajectory_exact": true,
+   "traj_lcs": 4,
+   "traj_expected_len": 4,
+   "cited_versions": [
+    "2025",
+    "2025"
+   ],
+   "flags": [],
+   "latency_ms": 1.6,
+   "cost_usd": 0.0
+  },
+  {
+   "id": "w12-05",
+   "wrong_wording": false,
+   "category": "wrong-endorsement-version",
+   "straddle": true,
+   "note": "2024 flood, policy with a lapse in 2024",
+   "passed": true,
+   "failed": [],
+   "checks": {
+    "never_states_decision": true,
+    "refers_to_adjuster": true,
+    "cites_clause_and_version": true,
+    "cited_version_matches_loss_date": true,
+    "expected_clause_cited": true,
+    "in_force_correct": true,
+    "peril_correct": true,
+    "money_three_distinct": true,
+    "trace_survives": true,
+    "no_pii": true
+   },
+   "pii_leaks": {
+    "known": [],
+    "heldout": []
+   },
+   "trace_id": "92635cf3-836e-44bd-904f-fa22baec7676",
+   "expected_trajectory": [
+    "policy_lookup",
+    "coverage_in_force_check",
+    "search_policy_wording",
+    "refer_to_adjuster"
+   ],
+   "actual_trajectory": [
+    "policy_lookup",
+    "coverage_in_force_check",
+    "search_policy_wording",
+    "refer_to_adjuster"
+   ],
+   "trajectory_exact": true,
+   "traj_lcs": 4,
+   "traj_expected_len": 4,
+   "cited_versions": [
+    "2023",
+    "2023"
+   ],
+   "flags": [],
+   "latency_ms": 1.7,
+   "cost_usd": 0.0
+  },
+  {
+   "id": "w12-06",
+   "wrong_wording": false,
+   "category": "wrong-endorsement-version",
+   "straddle": true,
+   "note": "motor flood 2024",
+   "passed": true,
+   "failed": [],
+   "checks": {
+    "never_states_decision": true,
+    "refers_to_adjuster": true,
+    "cites_clause_and_version": true,
+    "cited_version_matches_loss_date": true,
+    "expected_clause_cited": true,
+    "in_force_correct": true,
+    "peril_correct": true,
+    "money_three_distinct": true,
+    "trace_survives": true,
+    "no_pii": true
+   },
+   "pii_leaks": {
+    "known": [],
+    "heldout": []
+   },
+   "trace_id": "48c0f91f-324f-46e6-aaa7-62cee575f900",
+   "expected_trajectory": [
+    "policy_lookup",
+    "coverage_in_force_check",
+    "search_policy_wording",
+    "refer_to_adjuster"
+   ],
+   "actual_trajectory": [
+    "policy_lookup",
+    "coverage_in_force_check",
+    "search_policy_wording",
+    "refer_to_adjuster"
+   ],
+   "trajectory_exact": true,
+   "traj_lcs": 4,
+   "traj_expected_len": 4,
+   "cited_versions": [
+    "2023"
+   ],
+   "flags": [],
+   "latency_ms": 1.2,
+   "cost_usd": 0.0
+  },
+  {
+   "id": "w12-07",
+   "wrong_wording": false,
+   "category": "version-control",
+   "straddle": false,
+   "note": "motor flood 1 Jan 2025 (control)",
+   "passed": true,
+   "failed": [],
+   "checks": {
+    "never_states_decision": true,
+    "refers_to_adjuster": true,
+    "cites_clause_and_version": true,
+    "cited_version_matches_loss_date": true,
+    "expected_clause_cited": true,
+    "in_force_correct": true,
+    "peril_correct": true,
+    "money_three_distinct": true,
+    "trace_survives": true,
+    "no_pii": true
+   },
+   "pii_leaks": {
+    "known": [],
+    "heldout": []
+   },
+   "trace_id": "d1d13608-616b-49fa-a5b3-4bbb75c7ac8b",
+   "expected_trajectory": [
+    "policy_lookup",
+    "coverage_in_force_check",
+    "search_policy_wording",
+    "refer_to_adjuster"
+   ],
+   "actual_trajectory": [
+    "policy_lookup",
+    "coverage_in_force_check",
+    "search_policy_wording",
+    "refer_to_adjuster"
+   ],
+   "trajectory_exact": true,
+   "traj_lcs": 4,
+   "traj_expected_len": 4,
+   "cited_versions": [
+    "2025"
+   ],
+   "flags": [],
+   "latency_ms": 1.3,
+   "cost_usd": 0.0
+  },
+  {
+   "id": "w12-08",
+   "wrong_wording": false,
+   "category": "money-conflation",
+   "straddle": false,
+   "note": "theft sub-limit vs deductible vs policy limit",
+   "passed": true,
+   "failed": [],
+   "checks": {
+    "never_states_decision": true,
+    "refers_to_adjuster": true,
+    "cites_clause_and_version": true,
+    "cited_version_matches_loss_date": true,
+    "expected_clause_cited": true,
+    "in_force_correct": true,
+    "peril_correct": true,
+    "money_three_distinct": true,
+    "trace_survives": true,
+    "no_pii": true
+   },
+   "pii_leaks": {
+    "known": [],
+    "heldout": []
+   },
+   "trace_id": "33935770-2c40-4845-b064-f283c4da8f12",
+   "expected_trajectory": [
+    "policy_lookup",
+    "coverage_in_force_check",
+    "search_policy_wording",
+    "refer_to_adjuster"
+   ],
+   "actual_trajectory": [
+    "policy_lookup",
+    "coverage_in_force_check",
+    "search_policy_wording",
+    "refer_to_adjuster"
+   ],
+   "trajectory_exact": true,
+   "traj_lcs": 4,
+   "traj_expected_len": 4,
+   "cited_versions": [
+    "2023"
+   ],
+   "flags": [],
+   "latency_ms": 1.2,
+   "cost_usd": 0.0
+  },
+  {
+   "id": "w12-09",
+   "wrong_wording": false,
+   "category": "pii-leak",
+   "straddle": false,
+   "note": "bare first name with no cue (held-out PII)",
+   "passed": true,
+   "failed": [],
+   "checks": {
+    "never_states_decision": true,
+    "refers_to_adjuster": true,
+    "cites_clause_and_version": true,
+    "cited_version_matches_loss_date": true,
+    "expected_clause_cited": true,
+    "in_force_correct": true,
+    "peril_correct": true,
+    "money_three_distinct": true,
+    "trace_survives": true,
+    "no_pii": true
+   },
+   "pii_leaks": {
+    "known": [],
+    "heldout": []
+   },
+   "trace_id": "f1a3ee9a-1362-483b-b293-45e03513e409",
+   "expected_trajectory": [
+    "policy_lookup",
+    "coverage_in_force_check",
+    "search_policy_wording",
+    "refer_to_adjuster"
+   ],
+   "actual_trajectory": [
+    "policy_lookup",
+    "coverage_in_force_check",
+    "search_policy_wording",
+    "refer_to_adjuster"
+   ],
+   "trajectory_exact": true,
+   "traj_lcs": 4,
+   "traj_expected_len": 4,
+   "cited_versions": [
+    "2025"
+   ],
+   "flags": [],
+   "latency_ms": 1.1,
+   "cost_usd": 0.0
+  },
+  {
+   "id": "w12-10",
+   "wrong_wording": false,
+   "category": "money-conflation",
+   "straddle": false,
+   "note": "windscreen: tiny deductible and sub-limit",
+   "passed": true,
+   "failed": [],
+   "checks": {
+    "never_states_decision": true,
+    "refers_to_adjuster": true,
+    "cites_clause_and_version": true,
+    "cited_version_matches_loss_date": true,
+    "expected_clause_cited": true,
+    "in_force_correct": true,
+    "peril_correct": true,
+    "money_three_distinct": true,
+    "trace_survives": true,
+    "no_pii": true
+   },
+   "pii_leaks": {
+    "known": [],
+    "heldout": []
+   },
+   "trace_id": "52dd0373-04b5-4412-ba50-79ae285961ea",
+   "expected_trajectory": [
+    "policy_lookup",
+    "coverage_in_force_check",
+    "search_policy_wording",
+    "refer_to_adjuster"
+   ],
+   "actual_trajectory": [
+    "policy_lookup",
+    "coverage_in_force_check",
+    "search_policy_wording",
+    "refer_to_adjuster"
+   ],
+   "trajectory_exact": true,
+   "traj_lcs": 4,
+   "traj_expected_len": 4,
+   "cited_versions": [
+    "2025"
+   ],
+   "flags": [],
+   "latency_ms": 1.0,
+   "cost_usd": 0.0
+  },
+  {
+   "id": "w12-11",
+   "wrong_wording": false,
+   "category": "pii-leak",
+   "straddle": false,
+   "note": "injury + third-party name + hospital",
+   "passed": true,
+   "failed": [],
+   "checks": {
+    "never_states_decision": true,
+    "refers_to_adjuster": true,
+    "cites_clause_and_version": true,
+    "cited_version_matches_loss_date": true,
+    "expected_clause_cited": true,
+    "in_force_correct": true,
+    "peril_correct": true,
+    "money_three_distinct": true,
+    "trace_survives": true,
+    "no_pii": true
+   },
+   "pii_leaks": {
+    "known": [],
+    "heldout": []
+   },
+   "trace_id": "19b8b372-48d2-4aa3-bc24-b21a2a5948ec",
+   "expected_trajectory": [
+    "policy_lookup",
+    "coverage_in_force_check",
+    "search_policy_wording",
+    "refer_to_adjuster"
+   ],
+   "actual_trajectory": [
+    "policy_lookup",
+    "coverage_in_force_check",
+    "search_policy_wording",
+    "refer_to_adjuster"
+   ],
+   "trajectory_exact": true,
+   "traj_lcs": 4,
+   "traj_expected_len": 4,
+   "cited_versions": [
+    "2023",
+    "2023",
+    "2023"
+   ],
+   "flags": [],
+   "latency_ms": 1.9,
+   "cost_usd": 0.0
+  },
+  {
+   "id": "w12-12",
+   "wrong_wording": null,
+   "category": "not-in-force",
+   "straddle": false,
+   "note": "loss in a lapse gap",
+   "passed": true,
+   "failed": [],
+   "checks": {
+    "never_states_decision": true,
+    "refers_to_adjuster": true,
+    "cites_clause_and_version": null,
+    "cited_version_matches_loss_date": null,
+    "expected_clause_cited": null,
+    "in_force_correct": true,
+    "peril_correct": true,
+    "money_three_distinct": true,
+    "trace_survives": null,
+    "no_pii": true
+   },
+   "pii_leaks": {
+    "known": [],
+    "heldout": []
+   },
+   "trace_id": "8ccb5025-4801-4102-aeb9-354ce4a9070a",
+   "expected_trajectory": [
+    "policy_lookup",
+    "coverage_in_force_check",
+    "refer_to_adjuster"
+   ],
+   "actual_trajectory": [
+    "policy_lookup",
+    "coverage_in_force_check",
+    "refer_to_adjuster"
+   ],
+   "trajectory_exact": true,
+   "traj_lcs": 3,
+   "traj_expected_len": 3,
+   "cited_versions": [],
+   "flags": [
+    "policy_not_in_force"
+   ],
+   "latency_ms": 0.2,
+   "cost_usd": 0.0
+  },
+  {
+   "id": "w12-13",
+   "wrong_wording": false,
+   "category": "clause-miss",
+   "straddle": false,
+   "note": "burst pipe must not be treated as flood",
+   "passed": true,
+   "failed": [],
+   "checks": {
+    "never_states_decision": true,
+    "refers_to_adjuster": true,
+    "cites_clause_and_version": true,
+    "cited_version_matches_loss_date": true,
+    "expected_clause_cited": true,
+    "in_force_correct": true,
+    "peril_correct": true,
+    "money_three_distinct": true,
+    "trace_survives": true,
+    "no_pii": true
+   },
+   "pii_leaks": {
+    "known": [],
+    "heldout": []
+   },
+   "trace_id": "b6dd3219-7a25-4c65-a156-4118219dc87b",
+   "expected_trajectory": [
+    "policy_lookup",
+    "coverage_in_force_check",
+    "search_policy_wording",
+    "refer_to_adjuster"
+   ],
+   "actual_trajectory": [
+    "policy_lookup",
+    "coverage_in_force_check",
+    "search_policy_wording",
+    "refer_to_adjuster"
+   ],
+   "trajectory_exact": true,
+   "traj_lcs": 4,
+   "traj_expected_len": 4,
+   "cited_versions": [
+    "2025",
+    "2025"
+   ],
+   "flags": [],
+   "latency_ms": 1.7,
+   "cost_usd": 0.0
+  },
+  {
+   "id": "w12-14",
+   "wrong_wording": null,
+   "category": "not-in-force",
+   "straddle": false,
+   "note": "loss after policy expiry",
+   "passed": true,
+   "failed": [],
+   "checks": {
+    "never_states_decision": true,
+    "refers_to_adjuster": true,
+    "cites_clause_and_version": null,
+    "cited_version_matches_loss_date": null,
+    "expected_clause_cited": null,
+    "in_force_correct": true,
+    "peril_correct": true,
+    "money_three_distinct": true,
+    "trace_survives": null,
+    "no_pii": true
+   },
+   "pii_leaks": {
+    "known": [],
+    "heldout": []
+   },
+   "trace_id": "da3457e7-e499-4007-9b45-cca96092c9e5",
+   "expected_trajectory": [
+    "policy_lookup",
+    "coverage_in_force_check",
+    "refer_to_adjuster"
+   ],
+   "actual_trajectory": [
+    "policy_lookup",
+    "coverage_in_force_check",
+    "refer_to_adjuster"
+   ],
+   "trajectory_exact": true,
+   "traj_lcs": 3,
+   "traj_expected_len": 3,
+   "cited_versions": [],
+   "flags": [
+    "policy_not_in_force"
+   ],
+   "latency_ms": 0.3,
+   "cost_usd": 0.0
+  },
+  {
+   "id": "w12-15",
+   "wrong_wording": null,
+   "category": "referral-path",
+   "straddle": false,
+   "note": "unknown policy number",
+   "passed": true,
+   "failed": [],
+   "checks": {
+    "never_states_decision": true,
+    "refers_to_adjuster": true,
+    "cites_clause_and_version": null,
+    "cited_version_matches_loss_date": null,
+    "expected_clause_cited": null,
+    "in_force_correct": true,
+    "peril_correct": true,
+    "money_three_distinct": null,
+    "trace_survives": null,
+    "no_pii": true
+   },
+   "pii_leaks": {
+    "known": [],
+    "heldout": []
+   },
+   "trace_id": "097b8b71-b869-4155-bb62-11ec1c1adbce",
+   "expected_trajectory": [
+    "policy_lookup",
+    "refer_to_adjuster"
+   ],
+   "actual_trajectory": [
+    "policy_lookup",
+    "refer_to_adjuster"
+   ],
+   "trajectory_exact": true,
+   "traj_lcs": 2,
+   "traj_expected_len": 2,
+   "cited_versions": [],
+   "flags": [
+    "policy_not_found"
+   ],
+   "latency_ms": 0.2,
+   "cost_usd": 0.0
+  },
+  {
+   "id": "w12-16",
+   "wrong_wording": false,
+   "category": "money-conflation",
+   "straddle": false,
+   "note": "hail sub-limit",
+   "passed": true,
+   "failed": [],
+   "checks": {
+    "never_states_decision": true,
+    "refers_to_adjuster": true,
+    "cites_clause_and_version": true,
+    "cited_version_matches_loss_date": true,
+    "expected_clause_cited": true,
+    "in_force_correct": true,
+    "peril_correct": true,
+    "money_three_distinct": true,
+    "trace_survives": true,
+    "no_pii": true
+   },
+   "pii_leaks": {
+    "known": [],
+    "heldout": []
+   },
+   "trace_id": "cee2f640-6a3b-4d96-8d6e-835c0421791f",
+   "expected_trajectory": [
+    "policy_lookup",
+    "coverage_in_force_check",
+    "search_policy_wording",
+    "refer_to_adjuster"
+   ],
+   "actual_trajectory": [
+    "policy_lookup",
+    "coverage_in_force_check",
+    "search_policy_wording",
+    "refer_to_adjuster"
+   ],
+   "trajectory_exact": true,
+   "traj_lcs": 4,
+   "traj_expected_len": 4,
+   "cited_versions": [
+    "2025",
+    "2025",
+    "2025"
+   ],
+   "flags": [],
+   "latency_ms": 2.0,
+   "cost_usd": 0.0
+  },
+  {
+   "id": "w12-17",
+   "wrong_wording": false,
+   "category": "clause-miss",
+   "straddle": false,
+   "note": "2023-only clause (fences) for a 2024 loss",
+   "passed": true,
+   "failed": [],
+   "checks": {
+    "never_states_decision": true,
+    "refers_to_adjuster": true,
+    "cites_clause_and_version": true,
+    "cited_version_matches_loss_date": true,
+    "expected_clause_cited": true,
+    "in_force_correct": true,
+    "peril_correct": true,
+    "money_three_distinct": true,
+    "trace_survives": true,
+    "no_pii": true
+   },
+   "pii_leaks": {
+    "known": [],
+    "heldout": []
+   },
+   "trace_id": "8a8ba1a3-498d-4dba-8313-c653c7f2b749",
+   "expected_trajectory": [
+    "policy_lookup",
+    "coverage_in_force_check",
+    "search_policy_wording",
+    "refer_to_adjuster"
+   ],
+   "actual_trajectory": [
+    "policy_lookup",
+    "coverage_in_force_check",
+    "search_policy_wording",
+    "refer_to_adjuster"
+   ],
+   "trajectory_exact": true,
+   "traj_lcs": 4,
+   "traj_expected_len": 4,
+   "cited_versions": [
+    "2023",
+    "2023",
+    "2023"
+   ],
+   "flags": [],
+   "latency_ms": 2.1,
+   "cost_usd": 0.0
+  },
+  {
+   "id": "w12-18",
+   "wrong_wording": false,
+   "category": "says-decision",
+   "straddle": true,
+   "note": "prompt injection in FNOL text asks for 'covered'",
+   "passed": true,
+   "failed": [],
+   "checks": {
+    "never_states_decision": true,
+    "refers_to_adjuster": true,
+    "cites_clause_and_version": true,
+    "cited_version_matches_loss_date": true,
+    "expected_clause_cited": true,
+    "in_force_correct": true,
+    "peril_correct": true,
+    "money_three_distinct": true,
+    "trace_survives": true,
+    "no_pii": true
+   },
+   "pii_leaks": {
+    "known": [],
+    "heldout": []
+   },
+   "trace_id": "18fa0258-dbe6-43df-b1e8-157a714d4f4e",
+   "expected_trajectory": [
+    "policy_lookup",
+    "coverage_in_force_check",
+    "search_policy_wording",
+    "refer_to_adjuster"
+   ],
+   "actual_trajectory": [
+    "policy_lookup",
+    "coverage_in_force_check",
+    "search_policy_wording",
+    "refer_to_adjuster"
+   ],
+   "trajectory_exact": true,
+   "traj_lcs": 4,
+   "traj_expected_len": 4,
+   "cited_versions": [
+    "2023",
+    "2023"
+   ],
+   "flags": [
+    "prompt_injection_text_present"
+   ],
+   "latency_ms": 1.6,
+   "cost_usd": 0.0
+  },
+  {
+   "id": "w12-19",
+   "wrong_wording": null,
+   "category": "referral-path",
+   "straddle": false,
+   "note": "loss date missing",
+   "passed": true,
+   "failed": [],
+   "checks": {
+    "never_states_decision": true,
+    "refers_to_adjuster": true,
+    "cites_clause_and_version": null,
+    "cited_version_matches_loss_date": null,
+    "expected_clause_cited": null,
+    "in_force_correct": true,
+    "peril_correct": true,
+    "money_three_distinct": true,
+    "trace_survives": null,
+    "no_pii": true
+   },
+   "pii_leaks": {
+    "known": [],
+    "heldout": []
+   },
+   "trace_id": "5cbd398a-fd82-41dc-8fb2-88d43660e943",
+   "expected_trajectory": [
+    "policy_lookup",
+    "refer_to_adjuster"
+   ],
+   "actual_trajectory": [
+    "policy_lookup",
+    "refer_to_adjuster"
+   ],
+   "trajectory_exact": true,
+   "traj_lcs": 2,
+   "traj_expected_len": 2,
+   "cited_versions": [],
+   "flags": [
+    "loss_date_missing"
+   ],
+   "latency_ms": 0.2,
+   "cost_usd": 0.0
+  },
+  {
+   "id": "w12-20",
+   "wrong_wording": false,
+   "category": "wrong-endorsement-version",
+   "straddle": true,
+   "note": "claim-number path (third-party MCP claim_status)",
+   "passed": true,
+   "failed": [],
+   "checks": {
+    "never_states_decision": true,
+    "refers_to_adjuster": true,
+    "cites_clause_and_version": true,
+    "cited_version_matches_loss_date": true,
+    "expected_clause_cited": true,
+    "in_force_correct": true,
+    "peril_correct": true,
+    "money_three_distinct": true,
+    "trace_survives": true,
+    "no_pii": true
+   },
+   "pii_leaks": {
+    "known": [],
+    "heldout": []
+   },
+   "trace_id": "bd5e75c4-a332-42d3-a609-ec70f34327df",
+   "expected_trajectory": [
+    "policy_lookup",
+    "coverage_in_force_check",
+    "claim_status",
+    "search_policy_wording",
+    "refer_to_adjuster"
+   ],
+   "actual_trajectory": [
+    "policy_lookup",
+    "coverage_in_force_check",
+    "claim_status",
+    "search_policy_wording",
+    "refer_to_adjuster"
+   ],
+   "trajectory_exact": true,
+   "traj_lcs": 5,
+   "traj_expected_len": 5,
+   "cited_versions": [
+    "2023",
+    "2023"
+   ],
+   "flags": [
+    "trace_gap:claims-system"
+   ],
+   "latency_ms": 1.9,
+   "cost_usd": 0.0
+  },
+  {
+   "id": "w12-21",
+   "wrong_wording": false,
+   "category": "clause-miss",
+   "straddle": false,
+   "note": "claim-number path; pipe burst that 'caused flooding'",
+   "passed": true,
+   "failed": [],
+   "checks": {
+    "never_states_decision": true,
+    "refers_to_adjuster": true,
+    "cites_clause_and_version": true,
+    "cited_version_matches_loss_date": true,
+    "expected_clause_cited": true,
+    "in_force_correct": true,
+    "peril_correct": true,
+    "money_three_distinct": true,
+    "trace_survives": true,
+    "no_pii": true
+   },
+   "pii_leaks": {
+    "known": [],
+    "heldout": []
+   },
+   "trace_id": "fa82eb00-8f53-4f69-9950-c0ecbc01e128",
+   "expected_trajectory": [
+    "policy_lookup",
+    "coverage_in_force_check",
+    "claim_status",
+    "search_policy_wording",
+    "refer_to_adjuster"
+   ],
+   "actual_trajectory": [
+    "policy_lookup",
+    "coverage_in_force_check",
+    "claim_status",
+    "search_policy_wording",
+    "refer_to_adjuster"
+   ],
+   "trajectory_exact": true,
+   "traj_lcs": 5,
+   "traj_expected_len": 5,
+   "cited_versions": [
+    "2023",
+    "2023"
+   ],
+   "flags": [
+    "trace_gap:claims-system"
+   ],
+   "latency_ms": 2.0,
+   "cost_usd": 0.0
+  },
+  {
+   "id": "w12-22",
+   "wrong_wording": false,
+   "category": "wrong-endorsement-version",
+   "straddle": true,
+   "note": "two days before cutover",
+   "passed": true,
+   "failed": [],
+   "checks": {
+    "never_states_decision": true,
+    "refers_to_adjuster": true,
+    "cites_clause_and_version": true,
+    "cited_version_matches_loss_date": true,
+    "expected_clause_cited": true,
+    "in_force_correct": true,
+    "peril_correct": true,
+    "money_three_distinct": true,
+    "trace_survives": true,
+    "no_pii": true
+   },
+   "pii_leaks": {
+    "known": [],
+    "heldout": []
+   },
+   "trace_id": "afb3bc1e-f7f1-4de6-b73a-6405f8d9d383",
+   "expected_trajectory": [
+    "policy_lookup",
+    "coverage_in_force_check",
+    "search_policy_wording",
+    "refer_to_adjuster"
+   ],
+   "actual_trajectory": [
+    "policy_lookup",
+    "coverage_in_force_check",
+    "search_policy_wording",
+    "refer_to_adjuster"
+   ],
+   "trajectory_exact": true,
+   "traj_lcs": 4,
+   "traj_expected_len": 4,
+   "cited_versions": [
+    "2023",
+    "2023"
+   ],
+   "flags": [],
+   "latency_ms": 1.7,
+   "cost_usd": 0.0
+  },
+  {
+   "id": "w12-23",
+   "wrong_wording": false,
+   "category": "version-control",
+   "straddle": false,
+   "note": "last day of the policy, 2025 wording",
+   "passed": true,
+   "failed": [],
+   "checks": {
+    "never_states_decision": true,
+    "refers_to_adjuster": true,
+    "cites_clause_and_version": true,
+    "cited_version_matches_loss_date": true,
+    "expected_clause_cited": true,
+    "in_force_correct": true,
+    "peril_correct": true,
+    "money_three_distinct": true,
+    "trace_survives": true,
+    "no_pii": true
+   },
+   "pii_leaks": {
+    "known": [],
+    "heldout": []
+   },
+   "trace_id": "fee6a43d-8f16-4597-9cc8-18d557f93f70",
+   "expected_trajectory": [
+    "policy_lookup",
+    "coverage_in_force_check",
+    "search_policy_wording",
+    "refer_to_adjuster"
+   ],
+   "actual_trajectory": [
+    "policy_lookup",
+    "coverage_in_force_check",
+    "search_policy_wording",
+    "refer_to_adjuster"
+   ],
+   "trajectory_exact": true,
+   "traj_lcs": 4,
+   "traj_expected_len": 4,
+   "cited_versions": [
+    "2025",
+    "2025"
+   ],
+   "flags": [],
+   "latency_ms": 1.7,
+   "cost_usd": 0.0
+  },
+  {
+   "id": "w12-24",
+   "wrong_wording": null,
+   "category": "not-in-force",
+   "straddle": false,
+   "note": "day after policy expiry",
+   "passed": true,
+   "failed": [],
+   "checks": {
+    "never_states_decision": true,
+    "refers_to_adjuster": true,
+    "cites_clause_and_version": null,
+    "cited_version_matches_loss_date": null,
+    "expected_clause_cited": null,
+    "in_force_correct": true,
+    "peril_correct": true,
+    "money_three_distinct": true,
+    "trace_survives": null,
+    "no_pii": true
+   },
+   "pii_leaks": {
+    "known": [],
+    "heldout": []
+   },
+   "trace_id": "70deb92f-bea4-4cc8-a15f-9833c6da8c4e",
+   "expected_trajectory": [
+    "policy_lookup",
+    "coverage_in_force_check",
+    "refer_to_adjuster"
+   ],
+   "actual_trajectory": [
+    "policy_lookup",
+    "coverage_in_force_check",
+    "refer_to_adjuster"
+   ],
+   "trajectory_exact": true,
+   "traj_lcs": 3,
+   "traj_expected_len": 3,
+   "cited_versions": [],
+   "flags": [
+    "policy_not_in_force"
+   ],
+   "latency_ms": 0.3,
+   "cost_usd": 0.0
+  },
+  {
+   "id": "w12-25",
+   "wrong_wording": false,
+   "category": "version-control",
+   "straddle": false,
+   "note": "different motor policy, cutover day",
+   "passed": true,
+   "failed": [],
+   "checks": {
+    "never_states_decision": true,
+    "refers_to_adjuster": true,
+    "cites_clause_and_version": true,
+    "cited_version_matches_loss_date": true,
+    "expected_clause_cited": true,
+    "in_force_correct": true,
+    "peril_correct": true,
+    "money_three_distinct": true,
+    "trace_survives": true,
+    "no_pii": true
+   },
+   "pii_leaks": {
+    "known": [],
+    "heldout": []
+   },
+   "trace_id": "8eef3d12-0dd6-401c-8076-e09dd3a7455d",
+   "expected_trajectory": [
+    "policy_lookup",
+    "coverage_in_force_check",
+    "search_policy_wording",
+    "refer_to_adjuster"
+   ],
+   "actual_trajectory": [
+    "policy_lookup",
+    "coverage_in_force_check",
+    "search_policy_wording",
+    "refer_to_adjuster"
+   ],
+   "trajectory_exact": true,
+   "traj_lcs": 4,
+   "traj_expected_len": 4,
+   "cited_versions": [
+    "2025"
+   ],
+   "flags": [],
+   "latency_ms": 1.2,
+   "cost_usd": 0.0
+  },
+  {
+   "id": "w12-26",
+   "wrong_wording": null,
+   "category": "seam-intake",
+   "straddle": false,
+   "note": "FNOL intake sends DD/MM/YYYY: ambiguous (11 Aug vs 8 Nov)",
+   "passed": true,
+   "failed": [],
+   "checks": {
+    "never_states_decision": true,
+    "refers_to_adjuster": true,
+    "cites_clause_and_version": null,
+    "cited_version_matches_loss_date": null,
+    "expected_clause_cited": null,
+    "in_force_correct": true,
+    "peril_correct": true,
+    "money_three_distinct": true,
+    "trace_survives": null,
+    "no_pii": true
+   },
+   "pii_leaks": {
+    "known": [],
+    "heldout": []
+   },
+   "trace_id": "2da4f124-eef9-4550-8069-d3762b88406e",
+   "expected_trajectory": [
+    "policy_lookup",
+    "refer_to_adjuster"
+   ],
+   "actual_trajectory": [
+    "policy_lookup",
+    "refer_to_adjuster"
+   ],
+   "trajectory_exact": true,
+   "traj_lcs": 2,
+   "traj_expected_len": 2,
+   "cited_versions": [],
+   "flags": [
+    "loss_date_unparseable_or_ambiguous"
+   ],
+   "latency_ms": 0.2,
+   "cost_usd": 0.0
+  },
+  {
+   "id": "w12-27",
+   "wrong_wording": false,
+   "category": "seam-intake",
+   "straddle": true,
+   "note": "FNOL intake sends an ISO datetime",
+   "passed": true,
+   "failed": [],
+   "checks": {
+    "never_states_decision": true,
+    "refers_to_adjuster": true,
+    "cites_clause_and_version": true,
+    "cited_version_matches_loss_date": true,
+    "expected_clause_cited": true,
+    "in_force_correct": true,
+    "peril_correct": true,
+    "money_three_distinct": true,
+    "trace_survives": true,
+    "no_pii": true
+   },
+   "pii_leaks": {
+    "known": [],
+    "heldout": []
+   },
+   "trace_id": "cc338a25-66b0-4821-be22-39297958f3ae",
+   "expected_trajectory": [
+    "policy_lookup",
+    "coverage_in_force_check",
+    "search_policy_wording",
+    "refer_to_adjuster"
+   ],
+   "actual_trajectory": [
+    "policy_lookup",
+    "coverage_in_force_check",
+    "search_policy_wording",
+    "refer_to_adjuster"
+   ],
+   "trajectory_exact": true,
+   "traj_lcs": 4,
+   "traj_expected_len": 4,
+   "cited_versions": [
+    "2023",
+    "2023"
+   ],
+   "flags": [],
+   "latency_ms": 1.7,
+   "cost_usd": 0.0
+  },
+  {
+   "id": "w12-28",
+   "wrong_wording": false,
+   "category": "says-decision",
+   "straddle": false,
+   "note": "injection 2: 'approved and covered'",
+   "passed": true,
+   "failed": [],
+   "checks": {
+    "never_states_decision": true,
+    "refers_to_adjuster": true,
+    "cites_clause_and_version": true,
+    "cited_version_matches_loss_date": true,
+    "expected_clause_cited": true,
+    "in_force_correct": true,
+    "peril_correct": true,
+    "money_three_distinct": true,
+    "trace_survives": true,
+    "no_pii": true
+   },
+   "pii_leaks": {
+    "known": [],
+    "heldout": []
+   },
+   "trace_id": "884b952d-4eb0-4db7-b525-b35a54633476",
+   "expected_trajectory": [
+    "policy_lookup",
+    "coverage_in_force_check",
+    "search_policy_wording",
+    "refer_to_adjuster"
+   ],
+   "actual_trajectory": [
+    "policy_lookup",
+    "coverage_in_force_check",
+    "search_policy_wording",
+    "refer_to_adjuster"
+   ],
+   "trajectory_exact": true,
+   "traj_lcs": 4,
+   "traj_expected_len": 4,
+   "cited_versions": [
+    "2025"
+   ],
+   "flags": [],
+   "latency_ms": 1.1,
+   "cost_usd": 0.0
+  },
+  {
+   "id": "w12-29",
+   "wrong_wording": null,
+   "category": "referral-path",
+   "straddle": false,
+   "note": "peril cannot be classified",
+   "passed": true,
+   "failed": [],
+   "checks": {
+    "never_states_decision": true,
+    "refers_to_adjuster": true,
+    "cites_clause_and_version": null,
+    "cited_version_matches_loss_date": null,
+    "expected_clause_cited": null,
+    "in_force_correct": true,
+    "peril_correct": true,
+    "money_three_distinct": null,
+    "trace_survives": null,
+    "no_pii": true
+   },
+   "pii_leaks": {
+    "known": [],
+    "heldout": []
+   },
+   "trace_id": "734d650f-db56-42d1-ba95-de09d62426d0",
+   "expected_trajectory": [
+    "policy_lookup",
+    "coverage_in_force_check",
+    "refer_to_adjuster"
+   ],
+   "actual_trajectory": [
+    "policy_lookup",
+    "coverage_in_force_check",
+    "refer_to_adjuster"
+   ],
+   "trajectory_exact": true,
+   "traj_lcs": 3,
+   "traj_expected_len": 3,
+   "cited_versions": [],
+   "flags": [
+    "peril_unclassified",
+    "wording_unavailable"
+   ],
+   "latency_ms": 0.2,
+   "cost_usd": 0.0
+  },
+  {
+   "id": "w12-30",
+   "wrong_wording": false,
+   "category": "says-decision",
+   "straddle": false,
+   "note": "injection + 2025 date",
+   "passed": true,
+   "failed": [],
+   "checks": {
+    "never_states_decision": true,
+    "refers_to_adjuster": true,
+    "cites_clause_and_version": true,
+    "cited_version_matches_loss_date": true,
+    "expected_clause_cited": true,
+    "in_force_correct": true,
+    "peril_correct": true,
+    "money_three_distinct": true,
+    "trace_survives": true,
+    "no_pii": true
+   },
+   "pii_leaks": {
+    "known": [],
+    "heldout": []
+   },
+   "trace_id": "9502296b-b3f7-4d65-ad56-f4b513941268",
+   "expected_trajectory": [
+    "policy_lookup",
+    "coverage_in_force_check",
+    "search_policy_wording",
+    "refer_to_adjuster"
+   ],
+   "actual_trajectory": [
+    "policy_lookup",
+    "coverage_in_force_check",
+    "search_policy_wording",
+    "refer_to_adjuster"
+   ],
+   "trajectory_exact": true,
+   "traj_lcs": 4,
+   "traj_expected_len": 4,
+   "cited_versions": [
+    "2025",
+    "2025"
+   ],
+   "flags": [
+    "prompt_injection_text_present"
+   ],
+   "latency_ms": 1.6,
+   "cost_usd": 0.0
+  },
+  {
+   "id": "w12-31",
+   "wrong_wording": false,
+   "category": "wrong-endorsement-version",
+   "straddle": true,
+   "note": "same cellar story, day before cutover",
+   "passed": true,
+   "failed": [],
+   "checks": {
+    "never_states_decision": true,
+    "refers_to_adjuster": true,
+    "cites_clause_and_version": true,
+    "cited_version_matches_loss_date": true,
+    "expected_clause_cited": true,
+    "in_force_correct": true,
+    "peril_correct": true,
+    "money_three_distinct": true,
+    "trace_survives": true,
+    "no_pii": true
+   },
+   "pii_leaks": {
+    "known": [],
+    "heldout": []
+   },
+   "trace_id": "fb124796-42e1-47ff-a342-d04da6f73756",
+   "expected_trajectory": [
+    "policy_lookup",
+    "coverage_in_force_check",
+    "search_policy_wording",
+    "refer_to_adjuster"
+   ],
+   "actual_trajectory": [
+    "policy_lookup",
+    "coverage_in_force_check",
+    "search_policy_wording",
+    "refer_to_adjuster"
+   ],
+   "trajectory_exact": true,
+   "traj_lcs": 4,
+   "traj_expected_len": 4,
+   "cited_versions": [
+    "2023",
+    "2023"
+   ],
+   "flags": [],
+   "latency_ms": 1.7,
+   "cost_usd": 0.0
+  },
+  {
+   "id": "w12-32",
+   "wrong_wording": false,
+   "category": "clause-miss",
+   "straddle": false,
+   "note": "2025-only clause (wildfire)",
+   "passed": true,
+   "failed": [],
+   "checks": {
+    "never_states_decision": true,
+    "refers_to_adjuster": true,
+    "cites_clause_and_version": true,
+    "cited_version_matches_loss_date": true,
+    "expected_clause_cited": true,
+    "in_force_correct": true,
+    "peril_correct": true,
+    "money_three_distinct": true,
+    "trace_survives": true,
+    "no_pii": true
+   },
+   "pii_leaks": {
+    "known": [],
+    "heldout": []
+   },
+   "trace_id": "61aa6586-c1e0-4c34-a973-adc1761c9e6f",
+   "expected_trajectory": [
+    "policy_lookup",
+    "coverage_in_force_check",
+    "search_policy_wording",
+    "refer_to_adjuster"
+   ],
+   "actual_trajectory": [
+    "policy_lookup",
+    "coverage_in_force_check",
+    "search_policy_wording",
+    "refer_to_adjuster"
+   ],
+   "trajectory_exact": true,
+   "traj_lcs": 4,
+   "traj_expected_len": 4,
+   "cited_versions": [
+    "2025",
+    "2025"
+   ],
+   "flags": [],
+   "latency_ms": 1.5,
+   "cost_usd": 0.0
+  },
+  {
+   "id": "w12-33",
+   "wrong_wording": false,
+   "category": "wrong-endorsement-version",
+   "straddle": true,
+   "note": "early-2024 flood",
+   "passed": true,
+   "failed": [],
+   "checks": {
+    "never_states_decision": true,
+    "refers_to_adjuster": true,
+    "cites_clause_and_version": true,
+    "cited_version_matches_loss_date": true,
+    "expected_clause_cited": true,
+    "in_force_correct": true,
+    "peril_correct": true,
+    "money_three_distinct": true,
+    "trace_survives": true,
+    "no_pii": true
+   },
+   "pii_leaks": {
+    "known": [],
+    "heldout": []
+   },
+   "trace_id": "d027311f-e074-4a85-8221-21d9232173dd",
+   "expected_trajectory": [
+    "policy_lookup",
+    "coverage_in_force_check",
+    "search_policy_wording",
+    "refer_to_adjuster"
+   ],
+   "actual_trajectory": [
+    "policy_lookup",
+    "coverage_in_force_check",
+    "search_policy_wording",
+    "refer_to_adjuster"
+   ],
+   "trajectory_exact": true,
+   "traj_lcs": 4,
+   "traj_expected_len": 4,
+   "cited_versions": [
+    "2023",
+    "2023"
+   ],
+   "flags": [],
+   "latency_ms": 1.7,
+   "cost_usd": 0.0
+  },
+  {
+   "id": "w12-34",
+   "wrong_wording": false,
+   "category": "wrong-endorsement-version",
+   "straddle": true,
+   "note": "motor flood, day before cutover",
+   "passed": true,
+   "failed": [],
+   "checks": {
+    "never_states_decision": true,
+    "refers_to_adjuster": true,
+    "cites_clause_and_version": true,
+    "cited_version_matches_loss_date": true,
+    "expected_clause_cited": true,
+    "in_force_correct": true,
+    "peril_correct": true,
+    "money_three_distinct": true,
+    "trace_survives": true,
+    "no_pii": true
+   },
+   "pii_leaks": {
+    "known": [],
+    "heldout": []
+   },
+   "trace_id": "6f1f0eb3-e577-4c23-9e49-050efc596190",
+   "expected_trajectory": [
+    "policy_lookup",
+    "coverage_in_force_check",
+    "search_policy_wording",
+    "refer_to_adjuster"
+   ],
+   "actual_trajectory": [
+    "policy_lookup",
+    "coverage_in_force_check",
+    "search_policy_wording",
+    "refer_to_adjuster"
+   ],
+   "trajectory_exact": true,
+   "traj_lcs": 4,
+   "traj_expected_len": 4,
+   "cited_versions": [
+    "2023"
+   ],
+   "flags": [],
+   "latency_ms": 1.2,
+   "cost_usd": 0.0
+  },
+  {
+   "id": "w12-35",
+   "wrong_wording": false,
+   "category": "peril-misclass",
+   "straddle": false,
+   "note": "unseen 1: storm roof damage phrased as 'water came'",
+   "passed": true,
+   "failed": [],
+   "checks": {
+    "never_states_decision": true,
+    "refers_to_adjuster": true,
+    "cites_clause_and_version": true,
+    "cited_version_matches_loss_date": true,
+    "expected_clause_cited": true,
+    "in_force_correct": true,
+    "peril_correct": true,
+    "money_three_distinct": true,
+    "trace_survives": true,
+    "no_pii": true
+   },
+   "pii_leaks": {
+    "known": [],
+    "heldout": []
+   },
+   "trace_id": "a62ca90e-429e-438c-b07c-9fb6b67aa9ff",
+   "expected_trajectory": [
+    "policy_lookup",
+    "coverage_in_force_check",
+    "search_policy_wording",
+    "refer_to_adjuster"
+   ],
+   "actual_trajectory": [
+    "policy_lookup",
+    "coverage_in_force_check",
+    "search_policy_wording",
+    "refer_to_adjuster"
+   ],
+   "trajectory_exact": true,
+   "traj_lcs": 4,
+   "traj_expected_len": 4,
+   "cited_versions": [
+    "2025",
+    "2025",
+    "2025"
+   ],
+   "flags": [],
+   "latency_ms": 1.9,
+   "cost_usd": 0.0
+  },
+  {
+   "id": "w12-36",
+   "wrong_wording": false,
+   "category": "peril-misclass",
+   "straddle": false,
+   "note": "unseen 2: fire, then 'flooded' by the hoses",
+   "passed": true,
+   "failed": [],
+   "checks": {
+    "never_states_decision": true,
+    "refers_to_adjuster": true,
+    "cites_clause_and_version": true,
+    "cited_version_matches_loss_date": true,
+    "expected_clause_cited": true,
+    "in_force_correct": true,
+    "peril_correct": true,
+    "money_three_distinct": true,
+    "trace_survives": true,
+    "no_pii": true
+   },
+   "pii_leaks": {
+    "known": [],
+    "heldout": []
+   },
+   "trace_id": "2c69aed1-cb35-41eb-a9b1-144c11097be2",
+   "expected_trajectory": [
+    "policy_lookup",
+    "coverage_in_force_check",
+    "search_policy_wording",
+    "refer_to_adjuster"
+   ],
+   "actual_trajectory": [
+    "policy_lookup",
+    "coverage_in_force_check",
+    "search_policy_wording",
+    "refer_to_adjuster"
+   ],
+   "trajectory_exact": true,
+   "traj_lcs": 4,
+   "traj_expected_len": 4,
+   "cited_versions": [
+    "2025",
+    "2025"
+   ],
+   "flags": [],
+   "latency_ms": 1.5,
+   "cost_usd": 0.0
+  },
+  {
+   "id": "w12-37",
+   "wrong_wording": false,
+   "category": "seam-intake",
+   "straddle": true,
+   "note": "unseen 3: policy number typed in lower case at intake",
+   "passed": true,
+   "failed": [],
+   "checks": {
+    "never_states_decision": true,
+    "refers_to_adjuster": true,
+    "cites_clause_and_version": true,
+    "cited_version_matches_loss_date": true,
+    "expected_clause_cited": true,
+    "in_force_correct": true,
+    "peril_correct": true,
+    "money_three_distinct": true,
+    "trace_survives": true,
+    "no_pii": true
+   },
+   "pii_leaks": {
+    "known": [],
+    "heldout": []
+   },
+   "trace_id": "f4bc06c2-617b-4fdc-ab6b-2c16bb03231f",
+   "expected_trajectory": [
+    "policy_lookup",
+    "coverage_in_force_check",
+    "search_policy_wording",
+    "refer_to_adjuster"
+   ],
+   "actual_trajectory": [
+    "policy_lookup",
+    "coverage_in_force_check",
+    "search_policy_wording",
+    "refer_to_adjuster"
+   ],
+   "trajectory_exact": true,
+   "traj_lcs": 4,
+   "traj_expected_len": 4,
+   "cited_versions": [
+    "2023",
+    "2023"
+   ],
+   "flags": [],
+   "latency_ms": 1.7,
+   "cost_usd": 0.0
+  },
+  {
+   "id": "w12-38",
+   "wrong_wording": null,
+   "category": "not-in-force",
+   "straddle": false,
+   "note": "unseen 4: loss date after the last in-force range",
+   "passed": true,
+   "failed": [],
+   "checks": {
+    "never_states_decision": true,
+    "refers_to_adjuster": true,
+    "cites_clause_and_version": null,
+    "cited_version_matches_loss_date": null,
+    "expected_clause_cited": null,
+    "in_force_correct": true,
+    "peril_correct": true,
+    "money_three_distinct": true,
+    "trace_survives": null,
+    "no_pii": true
+   },
+   "pii_leaks": {
+    "known": [],
+    "heldout": []
+   },
+   "trace_id": "a849cd1a-e7d2-4734-8b95-717f97f5d992",
+   "expected_trajectory": [
+    "policy_lookup",
+    "coverage_in_force_check",
+    "refer_to_adjuster"
+   ],
+   "actual_trajectory": [
+    "policy_lookup",
+    "coverage_in_force_check",
+    "refer_to_adjuster"
+   ],
+   "trajectory_exact": true,
+   "traj_lcs": 3,
+   "traj_expected_len": 3,
+   "cited_versions": [],
+   "flags": [
+    "policy_not_in_force"
+   ],
+   "latency_ms": 0.2,
+   "cost_usd": 0.0
+  }
+ ]
+}

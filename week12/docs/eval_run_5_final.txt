@@ -1,0 +1,42 @@
+
+=== BEFORE -> AFTER (same cases, same suite) ===
+wrong WORDING cited (text differs)         22/30  ->  0/30
+wrong-version tag on any citation (strict) 30/30  ->  0/30
+straddle slice pass                        0/12  ->  12/12
+PII held-out leak (cases)                  2  ->  0
+overall pass                               8/38  ->  38/38
+
+Bonus - hit-rate@3 on the non-straddle cases:
+{
+ "with_date_filter": {
+  "hit@3_clause_only": "18/18",
+  "hit@3_clause_and_version": "18/18"
+ },
+ "without_date_filter": {
+  "hit@3_clause_only": "18/18",
+  "hit@3_clause_and_version": "18/18"
+ },
+ "n_non_straddle_cases": 18
+}
+
+=== Week 12 integrated eval [after]  n=38  date_filter=True  pii_mode=hash ===
+mode (category)                 pass    n    rate
+clause-miss                        4    4  100.0%
+money-conflation                   3    3  100.0%
+not-in-force                       4    4  100.0%
+peril-misclass                     2    2  100.0%
+pii-leak                           2    2  100.0%
+referral-path                      3    3  100.0%
+says-decision                      3    3  100.0%
+seam-intake                        3    3  100.0%
+version-control                    5    5  100.0%
+wrong-endorsement-version          9    9  100.0%
+OVERALL                           38   38  100.0%
+
+STRADDLE slice (loss before 2025 cutover, flood wording differs): 12/12 = 100.0%
+citations tagged with an endorsement version other than the one in force (strict): 0/30 = 0.0%
+WRONG WORDING cited (cited text differs from the in-force text; the real harm): 0/30 = 0.0%
+cases where output contained a decision word: 0
+PII: cases leaking KNOWN markers=0, cases leaking HELD-OUT markers=0 (held-out markers planted: 3)
+TRAJECTORY: tool-choice accuracy=100.0%  exact-sequence pass=100.0%  outcome pass=100.0%  gap(outcome-trajectory)=+0.0pp  disagree=[]
+latency per triage (incl. MCP hop): mean 1.3 ms, p50 1.6 ms, max 2.7 ms

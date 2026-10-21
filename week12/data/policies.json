@@ -1,0 +1,17 @@
+{
+  "_note": "SYNTHETIC. holder/address are planted PII. in_force is a list of ranges (inclusive); gaps are lapses.",
+  "policies": [
+    {"policy_no": "HH-10001", "product": "household", "holder": "Priya Natarajan", "address": "14 Elm Street, Brookvale", "in_force": [["2023-03-01", "2025-02-28"]]},
+    {"policy_no": "HH-10002", "product": "household", "holder": "Marcus Lindqvist", "address": "7 Harbour Road, Eastport", "in_force": [["2024-01-01", "2025-12-31"]]},
+    {"policy_no": "HH-10003", "product": "household", "holder": "Fatima Al-Sayed", "address": "88 Orchard Lane, Westmere", "in_force": [["2023-06-01", "2024-05-31"], ["2024-09-01", "2026-08-31"]]},
+    {"policy_no": "HH-10004", "product": "household", "holder": "Owen Treloar", "address": "3 Quarry Close, Stonehaven", "in_force": [["2025-02-01", "2026-01-31"]]},
+    {"policy_no": "HH-10005", "product": "household", "holder": "Grace Whitfield", "address": "21 Mill Race, Ashby", "in_force": [["2023-01-01", "2026-12-31"]]},
+    {"policy_no": "HH-10006", "product": "household", "holder": "Daniel Okoye", "address": "56 Canal Walk, Riverside", "in_force": [["2024-03-15", "2025-03-14"]]},
+    {"policy_no": "MT-20001", "product": "motor", "holder": "Helena Vasquez", "address": "92 Ridge Avenue, Northgate", "in_force": [["2024-02-01", "2026-01-31"]]},
+    {"policy_no": "MT-20002", "product": "motor", "holder": "Kwame Boateng", "address": "5 Beacon Court, Highfield", "in_force": [["2023-09-10", "2025-09-09"]]},
+    {"policy_no": "MT-20003", "product": "motor", "holder": "Sven Gundersen", "address": "40 Bridge Street, Calder", "in_force": [["2024-06-01", "2025-05-31"]]},
+    {"policy_no": "MT-20004", "product": "motor", "holder": "Aoife Brennan", "address": "11 Chapel Row, Dunmore", "in_force": [["2025-03-01", "2026-02-28"]]},
+    {"policy_no": "POL-2024-88120", "product": "household", "holder": "A. Marchetti", "address": "unknown", "in_force": [["2024-01-01", "2024-12-31"]]},
+    {"policy_no": "POL-2024-88123", "product": "household", "holder": "D. Rose", "address": "unknown", "in_force": [["2024-01-01", "2024-12-31"]]}
+  ]
+}

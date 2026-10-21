@@ -1,0 +1,7 @@
+{
+  "_note": "SYNTHETIC. Two endorsement sets per product. The flood wording was rewritten in the 2025 set. Cutover date is an assumption (2025-01-01) pending confirmation.",
+  "versions": [
+    {"version": "2023", "effective_from": "2023-01-01", "effective_to": "2024-12-31"},
+    {"version": "2025", "effective_from": "2025-01-01", "effective_to": null}
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "mcpServers": {
+    "policy-wording": {
+      "command": "python",
+      "args": [
+        "week12/servers/wording_server.py"
+      ]
+    },
+    "claims-system": {
+      "command": "python",
+      "args": [
+        "week12/servers/run_vendored.py",
+        "week9_mcp/claims_thirdparty/claims_server.py"
+      ]
+    }
+  }
+}

@@ -139,3 +139,28 @@ python debugger.py inspect "What is the main fuse rating?" rerank
 # Interactive chat with a chosen retrieval mode:
 python main.py --mode=hybrid_mmr --inspect
 ```
+
+
+## Week 12 capstone — Claims Triage & Coverage Assistant (Variant D)
+
+One entry point, stdlib only for everything except the optional flags. Runs on Python 3.9+.
+
+```bash
+python capstone.py triage F-01           # FNOL in -> triage packet + referral out; prints per-span cost/latency + trace id
+python capstone.py triage F-01 --before  # same claim with the date filter OFF: reproduces the 2024-loss/2025-wording failure
+python capstone.py eval --compare        # 38-case integrated suite, before -> after (writes week12/runtime/)
+python capstone.py selftest              # 22 tests, no network, no key
+python capstone.py trace <trace_id>      # open a trace (traces.jsonl, week12/docs/evidence_traces.jsonl, runtime)
+python capstone.py replay <trace_id>     # re-run its inputs, compare packet hash (refuses if data files changed)
+python capstone.py cost                  # cost per claim + 10x/hailstorm plan with the arithmetic
+python capstone.py demo                  # the four-part demo
+```
+
+Optional: `--rerank` (Week-4 cross-encoder after the date filter; needs `pip install -r requirements.txt`), `--llm` / `--planner llm` (needs `AI_API_KEY` in `.env`).
+HTTP: `uvicorn api:app` also serves `POST /api/triage` and `GET /api/week12/wording/{chunk_id}` (the target of every citation link).
+
+What it does: classifies the peril, looks up the policy, checks it was **in force on the loss date**, retrieves the policy wording **in force on that date** (a code-enforced filter, not a prompt hint) through our own MCP server, cites the clause by **clause id + endorsement version + loss date**, reports **deductible, sub-limit and policy limit as three separate numbers**, and always ends in `refer_to_adjuster`. It never states a coverage decision: the packet is composed by code and `week12/packet.py` + `week12/assertions.py:never_states_decision` enforce that.
+
+Read next, in order: `week12/docs/architecture.md`, `eval_report.md` (history, numbers, what is *not* covered), `taxonomy_rescored.md`, `trajectory.md`, `seams.md`, `weaknesses.md`, `cost_10x.md`, `demo_script.md`. `fresh_eyes.md` is an unfilled placeholder.
+
+Honest limits: the corpus is a small **synthetic** slice (`week12/data/`), the eval makes no model call, and the Week 6 judge gate (≥85%) is **not met** (committed files recompute to 64%/60%, not the documented 84%).

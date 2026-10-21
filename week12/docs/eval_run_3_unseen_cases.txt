@@ -1,0 +1,50 @@
+
+=== BEFORE -> AFTER (same 34 cases) ===
+wrong WORDING cited (text differs)         22/29  ->  0/29
+wrong-version tag on any citation (strict) 30/30  ->  1/30
+straddle slice pass                        0/12  ->  11/12
+PII held-out leak (cases)                  2  ->  0
+overall pass                               8/38  ->  35/38
+
+Bonus - hit-rate@3 on the non-straddle cases:
+{
+ "with_date_filter": {
+  "hit@3_clause_only": "16/18",
+  "hit@3_clause_and_version": "16/18"
+ },
+ "without_date_filter": {
+  "hit@3_clause_only": "16/18",
+  "hit@3_clause_and_version": "16/18"
+ },
+ "n_non_straddle_cases": 18
+}
+
+=== Week 12 integrated eval [after]  n=38  date_filter=True  pii_mode=hash ===
+mode (category)                 pass    n    rate
+clause-miss                        4    4  100.0%
+money-conflation                   3    3  100.0%
+not-in-force                       4    4  100.0%
+peril-misclass                     0    2    0.0%
+pii-leak                           2    2  100.0%
+referral-path                      3    3  100.0%
+says-decision                      3    3  100.0%
+seam-intake                        2    3   66.7%
+version-control                    5    5  100.0%
+wrong-endorsement-version          9    9  100.0%
+OVERALL                           35   38   92.1%
+
+STRADDLE slice (loss before 2025 cutover, flood wording differs): 11/12 = 91.7%
+citations tagged with an endorsement version other than the one in force (strict): 1/30 = 3.3%
+WRONG WORDING cited (cited text differs from the in-force text; the real harm): 0/29 = 0.0%
+cases where output contained a decision word: 0
+PII: cases leaking KNOWN markers=0, cases leaking HELD-OUT markers=0 (held-out markers planted: 3)
+TRAJECTORY: tool-choice accuracy=98.6%  exact-sequence pass=97.4%  outcome pass=92.1%  gap(outcome-trajectory)=-5.3pp  disagree=['w12-35', 'w12-36']
+latency per triage (incl. MCP hop): mean 1.4 ms, p50 1.7 ms, max 3.1 ms
+
+FAILED CASES:
+  w12-35 [peril-misclass] unseen 1: storm roof damage phrased as 'water came'
+      failed=['expected_clause_cited', 'peril_correct', 'money_three_distinct'] versions=['2025', '2025'] trace=5b499b58-65a4-4d6c-a09f-223dab45f9f7
+  w12-36 [peril-misclass] unseen 2: fire, then 'flooded' by the hoses
+      failed=['expected_clause_cited', 'peril_correct', 'money_three_distinct'] versions=['2025', '2025'] trace=ad7f9c91-a437-4c00-8da6-b60bf47f8b85
+  w12-37 [seam-intake] unseen 3: policy number typed in lower case at intake
+      failed=['cites_clause_and_version', 'cited_version_matches_loss_date', 'expected_clause_cited', 'in_force_correct', 'money_three_distinct'] versions=[] trace=aae3fb49-ba3c-4aab-8d0a-536c4d15e969

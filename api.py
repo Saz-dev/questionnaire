@@ -366,6 +366,12 @@ app.add_middleware(
 
 app.include_router(week11_router)
 
+try:  # Week 12 capstone: clickable citations + /api/triage
+    from week12.api_router import router as week12_router
+    app.include_router(week12_router)
+except Exception as _exc:  # keep the older weeks' app bootable if the capstone package is unavailable
+    print(f"week12 router not mounted: {_exc}")
+
 
 @app.on_event("startup")
 def _startup():

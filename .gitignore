@@ -6,3 +6,5 @@ qdrant_storage/
 __pycache__/
 traces.db
 week11/.drill_sealed.json
+week12/runtime/server_log.jsonl
+.venv

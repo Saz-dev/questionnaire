@@ -1,0 +1,264 @@
+{
+ "note": "One end-to-end trace: FNOL F-01 in -> referral out. One trace_id; cost + latency per span; MCP server echoed the same id (server_echo). FNOL free text is NOT stored (sha+len only).",
+ "trace": {
+  "schema_version": 2,
+  "trace_id": "7a03a1e6-6d4e-4722-bf67-04a72aeef0cb",
+  "timestamp": "2026-10-20T07:09:23.026173+00:00",
+  "source": "triage",
+  "user_id": "adjuster-desk",
+  "session_id": null,
+  "input_type": "other",
+  "prompt_version": "triage-rules-v1",
+  "model": null,
+  "mode": null,
+  "question": "[FNOL-TEXT-WITHHELD sha256=f38db1e5ff len=235]",
+  "answer": "[REDACTED-CLAIM-NUMBER] was in force on the loss date 2024-08-11. The loss was classified as: flood. Wording resolved for loss date 2024-08-11: endorsement 2023 (clauses cited: H-3.4, H-4.2). The claim is referred to an adjuster, who decides.",
+  "raw_output_sha256": "bcc3b786162f2ac2",
+  "retrieved_context_ids": [
+   "household/2023/H-3.4",
+   "household/2023/H-4.2"
+  ],
+  "tools_called": [
+   "policy_lookup",
+   "coverage_in_force_check",
+   "search_policy_wording",
+   "refer_to_adjuster"
+  ],
+  "spans": [
+   {
+    "name": "tool.policy_lookup",
+    "kind": "tools",
+    "start_ms": 0.6,
+    "duration_ms": 0.0,
+    "tokens_in": 0,
+    "tokens_out": 0,
+    "cost_usd": 0.0,
+    "attrs": {
+     "side": "local"
+    }
+   },
+   {
+    "name": "tool.coverage_in_force_check",
+    "kind": "tools",
+    "start_ms": 1.2,
+    "duration_ms": 0.0,
+    "tokens_in": 0,
+    "tokens_out": 0,
+    "cost_usd": 0.0,
+    "attrs": {
+     "side": "local"
+    }
+   },
+   {
+    "name": "mcp.transport.search_policy_wording",
+    "kind": "tools",
+    "start_ms": 2.7,
+    "duration_ms": 0.2,
+    "tokens_in": 0,
+    "tokens_out": 0,
+    "cost_usd": 0.0,
+    "attrs": {
+     "side": "client",
+     "server": "policy-wording",
+     "trace_id": "7a03a1e6-6d4e-4722-bf67-04a72aeef0cb"
+    }
+   },
+   {
+    "name": "mcp.server.search_policy_wording",
+    "kind": "retrieval",
+    "start_ms": 1.5,
+    "duration_ms": 1.4,
+    "tokens_in": 0,
+    "tokens_out": 0,
+    "cost_usd": 0.0,
+    "attrs": {
+     "side": "server",
+     "server": "policy-wording",
+     "trace_id": "7a03a1e6-6d4e-4722-bf67-04a72aeef0cb"
+    }
+   },
+   {
+    "name": "tool.refer_to_adjuster",
+    "kind": "tools",
+    "start_ms": 3.6,
+    "duration_ms": 0.0,
+    "tokens_in": 0,
+    "tokens_out": 0,
+    "cost_usd": 0.0,
+    "attrs": {
+     "side": "local"
+    }
+   }
+  ],
+  "totals": {
+   "latency_ms": 1.6,
+   "tokens_in": 0,
+   "tokens_out": 0,
+   "cost_usd": 0.0,
+   "cost_by_stage": {
+    "retrieval": 0.0,
+    "generation": 0.0,
+    "tools": 0.0
+   }
+  },
+  "says_covered": false,
+  "says_not_covered": false,
+  "cites_exclusion": false,
+  "error": null,
+  "fnol_id": "F-01",
+  "planner": "rules",
+  "enforce_date": true,
+  "loss_date": "2024-08-11",
+  "wording_version": "2023",
+  "data_hash": "4609aa87a4cb",
+  "packet_sha": "95ab057292f230bb",
+  "flags": [],
+  "server_echo": [
+   {
+    "tool": "search_policy_wording",
+    "server": "policy-wording",
+    "echo_trace_id": "7a03a1e6-6d4e-4722-bf67-04a72aeef0cb"
+   }
+  ],
+  "trace_gap": [],
+  "mcp_servers": {
+   "policy-wording": [
+    "search_policy_wording"
+   ],
+   "claims-system": [
+    "claim_status",
+    "claim_adjuster_notes"
+   ]
+  },
+  "trajectory": [
+   {
+    "tool": "policy_lookup",
+    "args": {
+     "policy_no": "HH-10001"
+    },
+    "error": false
+   },
+   {
+    "tool": "coverage_in_force_check",
+    "args": {
+     "policy_no": "HH-10001",
+     "loss_date": "2024-08-11"
+    },
+    "error": false
+   },
+   {
+    "tool": "search_policy_wording",
+    "args": {
+     "query": "flood exclusion flooding surface water river rising groundwater water entering",
+     "product": "household",
+     "as_of": "2024-08-11"
+    },
+    "error": false
+   },
+   {
+    "tool": "refer_to_adjuster",
+    "args": {
+     "reason": "routine referral: adjuster to assess the cited wording against the facts"
+    },
+    "error": false
+   }
+  ],
+  "fnol_ref": {
+   "fnol_id": "F-01"
+  }
+ },
+ "trajectory": [
+  {
+   "tool": "policy_lookup",
+   "args": {
+    "policy_no": "HH-10001"
+   },
+   "error": false
+  },
+  {
+   "tool": "coverage_in_force_check",
+   "args": {
+    "policy_no": "HH-10001",
+    "loss_date": "2024-08-11"
+   },
+   "error": false
+  },
+  {
+   "tool": "search_policy_wording",
+   "args": {
+    "query": "flood exclusion flooding surface water river rising groundwater water entering",
+    "product": "household",
+    "as_of": "2024-08-11"
+   },
+   "error": false
+  },
+  {
+   "tool": "refer_to_adjuster",
+   "args": {
+    "reason": "routine referral: adjuster to assess the cited wording against the facts"
+   },
+   "error": false
+  }
+ ],
+ "packet_without_text": {
+  "trace_id": "7a03a1e6-6d4e-4722-bf67-04a72aeef0cb",
+  "fnol_id": "F-01",
+  "policy_no": "HH-10001",
+  "loss_date": "2024-08-11",
+  "peril": "flood",
+  "product": "household",
+  "in_force": true,
+  "in_force_range": [
+   "2023-03-01",
+   "2025-02-28"
+  ],
+  "wording": {
+   "resolved_version": "2023",
+   "as_of": "2024-08-11",
+   "date_filter": true,
+   "server_resolved_version": "2023"
+  },
+  "citations": [
+   {
+    "chunk_id": "household/2023/H-3.4",
+    "clause_id": "H-3.4",
+    "title": "Flood",
+    "endorsement_version": "2023",
+    "effective_from": "2023-01-01",
+    "effective_to": "2024-12-31",
+    "resolved_for_loss_date": "2024-08-11",
+    "text": "We insure loss or damage to the buildings and contents caused by flood, meaning water entering the home from an overflowing river or from surface water, subject to the flood sub-limit and the flood deductible in the Schedule.",
+    "link": "/api/week12/wording/household/2023/H-3.4"
+   },
+   {
+    "chunk_id": "household/2023/H-4.2",
+    "clause_id": "H-4.2",
+    "title": "Escape of water",
+    "endorsement_version": "2023",
+    "effective_from": "2023-01-01",
+    "effective_to": "2024-12-31",
+    "resolved_for_loss_date": "2024-08-11",
+    "text": "We insure loss or damage caused by the sudden escape of water from a fixed tank, pipe or domestic appliance, up to the escape of water sub-limit in the Schedule. Water that enters the home from outside is not an escape of water.",
+    "link": "/api/week12/wording/household/2023/H-4.2"
+   }
+  ],
+  "money": {
+   "deductible": 1500,
+   "sub_limit": 15000,
+   "policy_limit": 250000,
+   "applies_to": "flood"
+  },
+  "referral": {
+   "referred": true,
+   "queue": "adjuster-review",
+   "reason": "routine referral: adjuster to assess the cited wording against the facts",
+   "evidence_ids": [
+    "household/2023/H-3.4",
+    "household/2023/H-4.2"
+   ]
+  },
+  "flags": [],
+  "narrative": "Policy HH-10001 was in force on the loss date 2024-08-11. The loss was classified as: flood. Wording resolved for loss date 2024-08-11: endorsement 2023 (clauses cited: H-3.4, H-4.2). The claim is referred to an adjuster, who decides.",
+  "sha": "95ab057292f230bb"
+ }
+}

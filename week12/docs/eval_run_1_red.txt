@@ -1,0 +1,51 @@
+
+=== BEFORE -> AFTER (same 34 cases) ===
+wrong WORDING cited (text differs)         19/25  ->  0/25
+wrong-version tag on any citation (strict) 27/27  ->  2/27
+straddle slice pass                        0/11  ->  9/11
+PII held-out leak (cases)                  2  ->  0
+overall pass                               7/34  ->  30/34
+
+Bonus - hit-rate@3 on the non-straddle cases:
+{
+ "with_date_filter": {
+  "hit@3_clause_only": "15/16",
+  "hit@3_clause_and_version": "15/16"
+ },
+ "without_date_filter": {
+  "hit@3_clause_only": "15/16",
+  "hit@3_clause_and_version": "15/16"
+ },
+ "n_non_straddle_cases": 16
+}
+
+=== Week 12 integrated eval [after]  n=34  date_filter=True  pii_mode=hash ===
+mode (category)                 pass    n    rate
+clause-miss                        2    4   50.0%
+money-conflation                   3    3  100.0%
+not-in-force                       3    3  100.0%
+pii-leak                           2    2  100.0%
+referral-path                      3    3  100.0%
+says-decision                      3    3  100.0%
+seam-intake                        1    2   50.0%
+version-control                    5    5  100.0%
+wrong-endorsement-version          8    9   88.9%
+OVERALL                           30   34   88.2%
+
+STRADDLE slice (loss before 2025 cutover, flood wording differs): 9/11 = 81.8%
+citations tagged with an endorsement version other than the one in force (strict): 2/27 = 7.4%
+WRONG WORDING cited (cited text differs from the in-force text; the real harm): 0/25 = 0.0%
+cases where output contained a decision word: 0
+PII: cases leaking KNOWN markers=0, cases leaking HELD-OUT markers=0 (held-out markers planted: 3)
+TRAJECTORY: tool-choice accuracy=98.4%  exact-sequence pass=91.2%  outcome pass=88.2%  gap(outcome-trajectory)=-2.9pp  disagree=['w12-20', 'w12-21', 'w12-26']
+latency per triage (incl. MCP hop): mean 1.4 ms, p50 1.5 ms, max 3.1 ms
+
+FAILED CASES:
+  w12-20 [wrong-endorsement-version] claim-number path (third-party MCP claim_status)
+      failed=['trace_survives'] versions=['2023', '2023'] trace=f2196d1f-9f85-4d79-a686-c9c0d53712b8
+  w12-21 [clause-miss] claim-number path; pipe burst that 'caused flooding'
+      failed=['trace_survives'] versions=['2023', '2023'] trace=dc4c997e-2314-40e7-81c5-27db272a3d5f
+  w12-27 [seam-intake] FNOL intake sends an ISO datetime
+      failed=['cites_clause_and_version', 'cited_version_matches_loss_date', 'expected_clause_cited', 'in_force_correct'] versions=[] trace=e97fd58d-7575-4272-9eca-76f844c40e45
+  w12-32 [clause-miss] 2025-only clause (wildfire)
+      failed=['cites_clause_and_version', 'cited_version_matches_loss_date', 'expected_clause_cited', 'peril_correct', 'money_three_distinct'] versions=[] trace=3d047bc7-c164-4c47-a4c5-e069dbb4b305
